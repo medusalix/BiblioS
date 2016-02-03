@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<?import de.medusalix.biblios.controls.RestrictedTextField?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView layoutX="15.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/student.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="nameField" layoutX="65.0" layoutY="15.0" prefHeight="25.0" prefWidth="220.0" promptText="Name">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <ImageView layoutX="15.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/grade.png" />
+         </image>
+      </ImageView>
+      <RestrictedTextField fx:id="gradeField" layoutX="65.0" layoutY="80.0" prefHeight="25.0" prefWidth="220.0" promptText="Klasse">
+         <font>
+            <Font size="16.0" />
+         </font></RestrictedTextField>
+   </children>
+</AnchorPane>

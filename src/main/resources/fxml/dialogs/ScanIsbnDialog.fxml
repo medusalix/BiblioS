@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<?import de.medusalix.biblios.controls.RestrictedTextField?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView layoutX="15.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/images/dialogs/isbn.png" />
+            </image>
+        </ImageView>
+        <RestrictedTextField fx:id="isbnField" layoutX="65.0" layoutY="70.0" prefHeight="25.0" prefWidth="220.0" promptText="ISBN (ohne Bindestriche)">
+         <font>
+            <Font size="16.0" />
+         </font></RestrictedTextField>
+      <Label layoutX="17.0" layoutY="14.0" prefWidth="267.0" text="Bitte scannen sie ein Buch oder geben die ISBN manuell ein" wrapText="true" />
+    </children>
+</AnchorPane>

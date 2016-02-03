@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<?import de.medusalix.biblios.controls.RestrictedTextField?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/isbn.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="isbnField" disable="true" layoutX="65.0" layoutY="13.0" prefHeight="25.0" prefWidth="220.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <Separator layoutY="69.0" prefWidth="300.0" />
+      <ImageView layoutX="15.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/book.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="titleField" layoutX="65.0" layoutY="90.0" prefHeight="25.0" prefWidth="220.0" promptText="Titel">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <ImageView layoutX="15.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/author.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="authorField" layoutX="65.0" layoutY="155.0" prefHeight="25.0" prefWidth="220.0" promptText="Autor">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <ImageView layoutX="15.0" layoutY="223.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/publisher.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="publisherField" layoutX="65.0" layoutY="220.0" prefHeight="25.0" prefWidth="220.0" promptText="Verlag">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <ImageView layoutX="15.0" layoutY="288.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/publishedDate.png" />
+         </image>
+      </ImageView>
+      <RestrictedTextField fx:id="publishedDateField" layoutX="65.0" layoutY="285.0" prefHeight="25.0" prefWidth="220.0" promptText="Herausgabedatum">
+         <font>
+            <Font size="16.0" />
+         </font></RestrictedTextField>
+      <ImageView layoutX="15.0" layoutY="353.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/dialogs/additionalInfo.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="additionalInfoField" layoutX="65.0" layoutY="350.0" prefHeight="25.0" prefWidth="220.0" promptText="Zusatzinfo (Optional)">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+   </children>
+</AnchorPane>
