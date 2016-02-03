@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane id="AnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.StatsController">
+   <children>
+       <Accordion prefHeight="372.0" prefWidth="600.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <panes>
+             <TitledPane fx:id="chartPane" text="Diagramm">
+                <content>
+                    <PieChart fx:id="chart" labelLineLength="10.0" legendSide="LEFT" />
+                </content>
+               <font>
+                  <Font size="16.0" />
+               </font>
+             </TitledPane>
+             <TitledPane text="Zahlen">
+                <content>
+                    <AnchorPane>
+                       <children>
+                           <Label layoutX="15.0" layoutY="15.0" text="Gesamtanzahl an Schülern:">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label layoutX="15.0" layoutY="65.0" text="Gesamtanzahl an Büchern:">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label layoutX="15.0" layoutY="115.0" text="Anzahl der zurzeit ausgeliehenen Bücher:">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label layoutX="15.0" layoutY="165.0" text="Schüler, der zurzeit am meisten Bücher ausgeliehen hat:">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label layoutX="15.0" layoutY="215.0" text="Anzahl an vorhandenen Backups:">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label fx:id="studentCountLabel" layoutX="357.0" layoutY="15.0" text="0">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label fx:id="bookCountLabel" layoutX="357.0" layoutY="65.0" text="0">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label fx:id="borrowedBookCountLabel" layoutX="534.0" layoutY="115.0" text="0">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label fx:id="mostBorrowedLabel" layoutX="719.0" layoutY="165.0" text="/">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                           <Label fx:id="backupCountLabel" layoutX="435.0" layoutY="215.0" text="0">
+                               <font>
+                                   <Font name="System Bold" size="26.0" />
+                               </font>
+                           </Label>
+                       </children>
+                    </AnchorPane>
+                </content>
+               <font>
+                  <Font size="16.0" />
+               </font>
+             </TitledPane>
+         </panes>
+       </Accordion>
+   </children>
+</AnchorPane>
