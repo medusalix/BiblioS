@@ -1,0 +1,82 @@
+package de.medusalix.biblios.helpers;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.pojos.GoogleBook;
+import de.medusalix.biblios.pojos.GoogleBookQuery;
+import de.medusalix.biblios.managers.ReportManager;
+import de.medusalix.biblios.pojos.GoogleBook;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class GoogleBooksHelper
+{
+    public static String readApiKey()
+    {
+        Path apiKeyPath = Paths.get(Consts.Resources.API_KEY_PATH);
+
+        if (Files.exists(apiKeyPath))
+        {
+            try
+            {
+                return Files.readAllLines(apiKeyPath).get(0);
+            }
+
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    public static void saveApiKey(String apiKey)
+    {
+        try
+        {
+            Files.write(Paths.get(Consts.Resources.API_KEY_PATH), apiKey.getBytes());
+        }
+
+        catch (IOException e)
+        {
+            ReportManager.reportException(e);
+        }
+    }
+
+    public static GoogleBook.VolumeInfo getVolumeInfoFromIsbn(String isbn)
+    {
+        String apiKey = readApiKey();
+
+        try (InputStream queryInputStream = new URL(String.format(Consts.GoogleBooks.GET_VOLUMES_BY_ISBN_URL, isbn, apiKey)).openStream())
+        {
+            ObjectMapper mapper = new ObjectMapper();
+
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            List<GoogleBook> items = mapper.readValue(queryInputStream, GoogleBookQuery.class).getItems();
+
+            if (items != null)
+            {
+                try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS, items.get(0).getSelfLink(), apiKey)).openStream())
+                {
+                    return mapper.readValue(volumeInputStream, GoogleBook.class).getVolumeInfo();
+                }
+            }
+        }
+
+        catch (IOException e)
+        {
+            ReportManager.reportException(e);
+        }
+
+        return null;
+    }
+}

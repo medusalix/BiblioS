@@ -1,0 +1,15 @@
+.list-cell
+{
+    -fx-font-size: 16px;
+}
+
+.table-view .table-column
+{
+	-fx-alignment: CENTER;
+    -fx-font-size: 16px;
+}
+
+.chart-pie-label
+{
+	-fx-font-size: 20px;
+}

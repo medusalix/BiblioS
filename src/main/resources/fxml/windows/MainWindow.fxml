@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.MainWindowController">
+   <children>
+      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+            <Menu mnemonicParsing="false" text="Funktionen">
+              <items>
+                <MenuItem fx:id="fullscreenMenuItem" mnemonicParsing="false" onAction="#onFullscreenClick" text="Vollbildmodus" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Hilfe">
+            <items>
+              <MenuItem fx:id="reportProblemMenuItem" mnemonicParsing="false" onAction="#onReportProblemClick" text="Problem melden" />
+                  <MenuItem fx:id="suggestFeatureMenuItem" mnemonicParsing="false" onAction="#onSuggestFeatureClick" text="Funktion vorschlagen" />
+                  <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#onAboutClick" text="Über" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ImageView layoutX="13.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/search.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="studentSearchField" layoutX="53.0" layoutY="39.0" prefHeight="37.0" prefWidth="194.0" promptText="Schüler suchen">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <Label fx:id="studentLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="275.0" layoutY="42.0" prefHeight="30.0" prefWidth="910.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="15.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <ListView fx:id="studentListView" layoutX="13.0" layoutY="88.0" prefHeight="296.0" prefWidth="234.0" AnchorPane.topAnchor="88.0" />
+      <TableView fx:id="borrowedBookTableView" layoutX="274.0" layoutY="88.0" prefHeight="296.0" prefWidth="910.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="88.0">
+        <columns>
+          <TableColumn fx:id="bookColumn" prefWidth="75.0" text="Buch" />
+          <TableColumn fx:id="borrowDateColumn" prefWidth="75.0" text="Ausleihdatum" />
+            <TableColumn fx:id="returnDateColumn" prefWidth="75.0" text="Rückgabedatum" />
+            <TableColumn fx:id="exceededColumn" prefWidth="75.0" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <ImageView layoutX="14.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/search.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="bookSearchField" layoutX="53.0" layoutY="412.0" prefHeight="32.0" prefWidth="1132.0" promptText="Buch suchen" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="15.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <TableView fx:id="bookTableView" layoutX="13.0" layoutY="461.0" prefHeight="303.0" prefWidth="1172.0" AnchorPane.bottomAnchor="66.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="461.0">
+        <columns>
+          <TableColumn fx:id="titleColumn" maxWidth="6000.0" prefWidth="75.0" text="Titel" />
+            <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Autor" />
+          <TableColumn fx:id="isbnColumn" prefWidth="75.0" text="ISBN" />
+            <TableColumn fx:id="publisherColumn" prefWidth="75.0" text="Verlag" />
+            <TableColumn fx:id="publishedDateColumn" prefWidth="75.0" text="Herausgabedatum" />
+            <TableColumn fx:id="additionalInfoColumn" maxWidth="4000.0" prefWidth="75.0" text="Zusatzinfo" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Button layoutX="14.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAdministrationClick" text="Administration" AnchorPane.bottomAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <Button layoutX="161.0" layoutY="779.0" mnemonicParsing="false" onAction="#onStatsClick" text="Statistik" AnchorPane.bottomAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <Button layoutX="260.0" layoutY="749.0" mnemonicParsing="false" onAction="#onBorrowListClick" text="Ausgeliehene Bücher" AnchorPane.bottomAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button layoutX="638.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAddStudentClick" text="Schüler hinzufügen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="404.0">
+          <font>
+            <Font size="16.0" />
+         </font></Button>
+      <Button layoutX="1046.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAddBookClick" text="Buch hinzufügen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="13.0">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <Button layoutX="818.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAddBookWithIsbnClick" text="Buch per ISBN hinzufügen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="175.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
