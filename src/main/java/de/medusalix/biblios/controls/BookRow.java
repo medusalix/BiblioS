@@ -2,7 +2,7 @@ package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.pojos.Book;
+import de.medusalix.biblios.dto.Book;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.core.Dialogs;
@@ -18,15 +18,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.util.Pair;
-import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.managers.ReportManager;
-import de.medusalix.biblios.pojos.Book;
-import de.medusalix.biblios.pojos.BookTableItem;
-import de.medusalix.biblios.sql.operator.WhereOperator;
-import de.medusalix.biblios.sql.query.general.DeleteQuery;
 
 import java.sql.Connection;
 import java.sql.SQLException;

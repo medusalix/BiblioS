@@ -1,5 +1,7 @@
 package de.medusalix.biblios.core;
 
+import de.medusalix.biblios.dao.StudentDao;
+import de.medusalix.biblios.dto.Student;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.managers.UpdateManager;
@@ -15,6 +17,8 @@ import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.managers.ReportManager;
 import de.medusalix.biblios.managers.UpdateManager;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.Handle;
 
 import java.io.*;
 import java.time.DateTimeException;
@@ -26,8 +30,14 @@ public class BiblioS extends Application
     {
 		try
 		{
+            DBI dbi = new DBI("jdbc:h2:file:./test");
+            StudentDao dao = dbi.onDemand(StudentDao.class);
+
+            dao.createTable();
+            dao.insert(new Student("Severin", "9a"));
+
             UpdateManager.update();
-			DatabaseManager.init();
+			//DatabaseManager.init();
             BackupManager.init();
 
             prepareAndShowMainWindow(primaryStage);
