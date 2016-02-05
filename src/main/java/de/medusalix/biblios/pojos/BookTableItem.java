@@ -1,5 +1,7 @@
 package de.medusalix.biblios.pojos;
 
+import de.medusalix.biblios.dto.Book;
+
 public class BookTableItem implements Searchable
 {
     private int id;

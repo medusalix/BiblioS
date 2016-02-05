@@ -1,4 +1,4 @@
-package de.medusalix.biblios.pojos;
+package de.medusalix.biblios.dto;
 
 public class Book
 {

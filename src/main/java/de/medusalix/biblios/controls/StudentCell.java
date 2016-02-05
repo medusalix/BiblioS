@@ -2,7 +2,7 @@ package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.pojos.Student;
+import de.medusalix.biblios.dto.Student;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.core.Dialogs;
 import de.medusalix.biblios.managers.ReportManager;
@@ -14,13 +14,6 @@ import de.medusalix.biblios.sql.query.general.UpdateQuery;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.util.Pair;
-import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.pojos.Student;
-import de.medusalix.biblios.sql.operator.WhereOperator;
-import de.medusalix.biblios.sql.query.general.DeleteQuery;
 
 import java.sql.Connection;
 import java.sql.SQLException;
