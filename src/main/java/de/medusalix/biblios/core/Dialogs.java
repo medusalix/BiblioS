@@ -1,14 +1,14 @@
 package de.medusalix.biblios.core;
 
 import de.medusalix.biblios.controls.RestrictedTextField;
+import de.medusalix.biblios.dto.Book;
+import de.medusalix.biblios.dto.Student;
 import de.medusalix.biblios.helpers.DialogHelper;
 import de.medusalix.biblios.helpers.GoogleBooksHelper;
 import de.medusalix.biblios.helpers.ProgressHelper;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import de.medusalix.biblios.helpers.GoogleBooksHelper;
-import de.medusalix.biblios.helpers.ProgressHelper;
 import de.medusalix.biblios.pojos.*;
 
 public class Dialogs

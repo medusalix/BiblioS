@@ -1,5 +1,7 @@
 package de.medusalix.biblios.pojos;
 
+import de.medusalix.biblios.dto.Student;
+
 public class StudentListItem implements Searchable
 {
     private int id;

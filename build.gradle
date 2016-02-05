@@ -25,7 +25,9 @@ repositories {
 }
 
 dependencies {
-    compile group: "org.xerial", name: "sqlite-jdbc", version: "3.8.11.2"
+    compile group: "com.h2database", name: "h2", version: "1.4.191"
+    compile group: "org.jdbi", name: "jdbi", version: "2.71"
+
     compile group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.6.4"
     compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.6.4"
 

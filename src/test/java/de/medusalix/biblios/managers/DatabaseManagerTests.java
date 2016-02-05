@@ -1,15 +1,11 @@
 package de.medusalix.biblios.managers;
 
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.pojos.Book;
-import de.medusalix.biblios.pojos.Student;
-import de.medusalix.biblios.sql.operator.WhereOperator;
-import de.medusalix.biblios.sql.query.base.ActionQuery;
+import de.medusalix.biblios.dto.Book;
+import de.medusalix.biblios.dto.Student;
 import de.medusalix.biblios.sql.query.base.ResultQuery;
 import de.medusalix.biblios.sql.query.general.InsertQuery;
 import de.medusalix.biblios.sql.query.general.SelectQuery;
-import de.medusalix.biblios.sql.query.specific.IncrementQuery;
-import de.medusalix.biblios.sql.query.specific.InsertOrIgnoreQuery;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -18,9 +14,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseManagerTests
