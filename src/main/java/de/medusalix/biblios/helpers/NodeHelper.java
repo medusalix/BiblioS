@@ -26,14 +26,10 @@ public class NodeHelper
         if (focusNode != null)
         {
             if (focusNode instanceof TextField)
-            {
                 ((TextField)focusNode).selectAll();
-            }
 
             else if (focusNode instanceof ComboBox<?>)
-            {
                 ((ComboBox<?>)focusNode).getEditor().selectAll();
-            }
         }
     }
 
@@ -47,8 +43,6 @@ public class NodeHelper
         timeline.play();
 
         if (focusNode != null)
-        {
             focusNode.requestFocus();
-        }
     }
 }

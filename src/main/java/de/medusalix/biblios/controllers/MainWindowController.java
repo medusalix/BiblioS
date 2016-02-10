@@ -5,25 +5,23 @@ import de.medusalix.biblios.controls.BorrowedBookRow;
 import de.medusalix.biblios.controls.ExceededCell;
 import de.medusalix.biblios.controls.StudentCell;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.dto.Book;
-import de.medusalix.biblios.dto.Student;
+import de.medusalix.biblios.database.access.Books;
+import de.medusalix.biblios.database.access.BorrowedBooks;
+import de.medusalix.biblios.database.access.Stats;
+import de.medusalix.biblios.database.access.Students;
+import de.medusalix.biblios.database.objects.Book;
+import de.medusalix.biblios.database.objects.BorrowedBook;
+import de.medusalix.biblios.database.objects.Stat;
+import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.managers.ReportManager;
+import de.medusalix.biblios.managers.ExceptionManager;
 import de.medusalix.biblios.pojos.*;
-import de.medusalix.biblios.sql.operator.JoinOnOperator;
-import de.medusalix.biblios.sql.operator.WhereOperator;
-import de.medusalix.biblios.sql.query.base.ActionQuery;
-import de.medusalix.biblios.sql.query.base.ResultQuery;
-import de.medusalix.biblios.sql.query.general.DeleteQuery;
-import de.medusalix.biblios.sql.query.general.InsertQuery;
-import de.medusalix.biblios.sql.query.general.SelectQuery;
-import de.medusalix.biblios.sql.query.specific.IncrementQuery;
-import de.medusalix.biblios.sql.query.specific.InsertOrIgnoreQuery;
 import de.medusalix.biblios.helpers.ProgressHelper;
 import de.medusalix.biblios.helpers.WindowHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,19 +33,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.skife.jdbi.v2.exceptions.DBIException;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainWindowController implements UpdatableController
 {
+    private Logger logger = LogManager.getLogger(MainWindowController.class);
+
     @FXML
-    private MenuItem fullscreenMenuItem, reportProblemMenuItem, suggestFeatureMenuItem, aboutMenuItem;
+    private MenuItem fullscreenMenuItem, aboutMenuItem;
 
     @FXML
     private TextField studentSearchField, bookSearchField;
@@ -71,15 +71,26 @@ public class MainWindowController implements UpdatableController
     private TableView<BookTableItem> bookTableView;
 
     @FXML
-    private TableColumn<BookTableItem, String> titleColumn, authorColumn, isbnColumn, publisherColumn, publishedDateColumn, additionalInfoColumn;
+    private TableColumn<BookTableItem, String> titleColumn, authorColumn, publisherColumn, additionalInfoColumn;
+
+    @FXML
+    private TableColumn<BookTableItem, Long> isbnColumn;
+
+    @FXML
+    private TableColumn<BookTableItem, Short> publishedDateColumn;
 
     private ObservableList<StudentListItem> originalStudentList = FXCollections.observableArrayList();
     private ObservableList<BookTableItem> originalBookList = FXCollections.observableArrayList();
 
+    private Students students = DatabaseManager.createDao(Students.class);
+    private Books books = DatabaseManager.createDao(Books.class);
+    private BorrowedBooks borrowedBooks = DatabaseManager.createDao(BorrowedBooks.class);
+    private Stats stats = DatabaseManager.createDao(Stats.class);
+
     @FXML
     private void initialize()
     {
-        ProgressHelper.showDialog(Consts.Messages.PROGRESS_LOADING_DATABASE_TITLE);
+        ProgressHelper.showDialog(Consts.Dialogs.LOADING_DATABASE_TITLE);
 
         initMenuItems();
         initStudentListView();
@@ -93,53 +104,67 @@ public class MainWindowController implements UpdatableController
         ProgressHelper.hideDialog();
     }
 
-    private List<HashMap<String, Object>> getBorrowedBooks(Connection connection)
+    private List<BorrowedBook> getBorrowedBooks()
     {
-        ResultQuery borrowedBookQuery = new SelectQuery(Consts.Database.BORROWED_BOOKS_TABLE_NAME, Consts.Database.BOOK_ID_COLUMN_NAME, Consts.Database.NAME_COLUMN_NAME);
+        try
+        {
+            return borrowedBooks.findAllWithStudentName();
+        }
 
-        borrowedBookQuery.addOperator(new JoinOnOperator(Consts.Database.STUDENTS_TABLE_NAME, Consts.Database.STUDENT_ID_COLUMN_NAME, Consts.Database.ID_COLUMN_NAME));
+        catch (DBIException e)
+        {
+            ExceptionManager.log(e);
+        }
 
-        return borrowedBookQuery.execute(connection);
+        return null;
     }
 
-    private void updateStudents(Connection connection, List<HashMap<String, Object>> borrowedBooks)
+    private void updateStudents(List<BorrowedBook> borrowedBooks)
     {
-        ResultQuery studentQuery = new SelectQuery(Consts.Database.STUDENTS_TABLE_NAME, Consts.Database.ID_COLUMN_NAME, Consts.Database.NAME_COLUMN_NAME, Consts.Database.GRADE_COLUMN_NAME);
-
-        List<Student> studentResults = studentQuery.execute(connection, Student.class);
-
-        for (Student student : studentResults)
+        try
         {
-            int id = student.getId();
+            List<Student> studentResults = students.findAll();
 
-            boolean hasBorrowedBooks = borrowedBooks.stream().filter(borrowedBook -> (int)borrowedBook.get(Consts.Database.BOOK_ID_COLUMN_NAME) == id).findFirst().isPresent();
+            for (Student student : studentResults)
+            {
+                long id = student.getId();
 
-            StudentListItem item = new StudentListItem(student, hasBorrowedBooks);
+                boolean hasBorrowedBooks = borrowedBooks.stream().filter(borrowedBook -> borrowedBook.getBookId() == id).findFirst().isPresent();
 
-            originalStudentList.add(item);
+                StudentListItem item = new StudentListItem(student, hasBorrowedBooks);
+
+                originalStudentList.add(item);
+            }
+        }
+
+        catch (DBIException e)
+        {
+            ExceptionManager.log(e);
         }
     }
 
-    private void updateBooks(Connection connection, List<HashMap<String, Object>> borrowedBooks)
+    private void updateBooks(List<BorrowedBook> borrowedBooks)
     {
-        ResultQuery bookQuery = new SelectQuery(Consts.Database.BOOKS_TABLE_NAME, Consts.Database.ID_COLUMN_NAME, Consts.Database.TITLE_COLUMN_NAME, Consts.Database.AUTHOR_COLUMN_NAME, Consts.Database.ISBN_COLUMN_NAME, Consts.Database.PUBLISHER_COLUMN_NAME, Consts.Database.PUBLISHED_DATE_COLUMN_NAME, Consts.Database.ADDITIONAL_INFO_COLUMN_NAME);
-
-        List<Book> bookResults = bookQuery.execute(connection, Book.class);
-
-        for (Book book : bookResults)
+        try
         {
-            int id = book.getId();
+            List<Book> bookResults = books.findAll();
 
-            HashMap<String, Object> borrowedBook = borrowedBooks.stream().filter(borrowedBook2 -> (int)borrowedBook2.get(Consts.Database.BOOK_ID_COLUMN_NAME) == id).findFirst().orElse(null);
-
-            BookTableItem item = new BookTableItem(book);
-
-            if (borrowedBook != null)
+            for (Book book : bookResults)
             {
-                item.setBorrowedBy(borrowedBook.get(Consts.Database.NAME_COLUMN_NAME).toString());
-            }
+                BorrowedBook borrowedBook = borrowedBooks.stream().filter(borrowedBook2 -> borrowedBook2.getBookId() == book.getId()).findFirst().orElse(null);
 
-            originalBookList.add(item);
+                BookTableItem item = new BookTableItem(book);
+
+                if (borrowedBook != null)
+                    item.setBorrowedBy(borrowedBook.getStudentName());
+
+                originalBookList.add(item);
+            }
+        }
+
+        catch (DBIException e)
+        {
+            ExceptionManager.log(e);
         }
     }
 
@@ -149,14 +174,14 @@ public class MainWindowController implements UpdatableController
         originalStudentList.clear();
         originalBookList.clear();
 
-        try (Connection connection = DatabaseManager.openConnection())
+        List<TableColumn<BookTableItem, ?>> bookSortOrder = new ArrayList<>(bookTableView.getSortOrder());
+
+        List<BorrowedBook> borrowedBooks = getBorrowedBooks();
+
+        if (borrowedBooks != null)
         {
-            List<TableColumn<BookTableItem, ?>> bookSortOrder = new ArrayList<>(bookTableView.getSortOrder());
-
-            List<HashMap<String, Object>> borrowedBooks = getBorrowedBooks(connection);
-
-            updateStudents(connection, borrowedBooks);
-            updateBooks(connection, borrowedBooks);
+            updateStudents(borrowedBooks);
+            updateBooks(borrowedBooks);
 
             int selectedIndex = studentListView.getSelectionModel().getSelectedIndex();
 
@@ -168,31 +193,31 @@ public class MainWindowController implements UpdatableController
             onStudentSelected();
 
             bookTableView.getSortOrder().setAll(bookSortOrder);
-        }
 
-        catch (SQLException e)
-        {
-            ReportManager.reportException(e);
+            logger.info("Data updated");
         }
     }
 
     private void initMenuItems()
     {
         fullscreenMenuItem.setGraphic(new ImageView(Consts.Images.FULLSCREEN_MENU_ITEM_IMAGE));
-        reportProblemMenuItem.setGraphic(new ImageView(Consts.Images.REPORT_PROBLEM_MENU_ITEM_IMAGE));
-        suggestFeatureMenuItem.setGraphic(new ImageView(Consts.Images.SUGGEST_FEATURE_MENU_ITEM_IMAGE));
         aboutMenuItem.setGraphic(new ImageView(Consts.Images.ABOUT_MENU_ITEM_IMAGE));
     }
 
     private void initStudentListView()
     {
+        Label studentListViewLabel = new Label(Consts.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
+
+        studentListViewLabel.setFont(Font.font(16));
+
+        studentListView.setPlaceholder(studentListViewLabel);
         studentListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(this::onStudentSelected));
     }
 
     private void initTableViews()
     {
-        Label borrowedBookTableViewLabel = new Label(Consts.Messages.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
-        Label bookTableViewLabel = new Label(Consts.Messages.BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label borrowedBookTableViewLabel = new Label(Consts.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label bookTableViewLabel = new Label(Consts.Strings.BOOK_TABLE_VIEW_PLACEHOLDER);
 
         borrowedBookTableViewLabel.setFont(Font.font(16));
         bookTableViewLabel.setFont(Font.font(16));
@@ -209,17 +234,17 @@ public class MainWindowController implements UpdatableController
 
         titleColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
         authorColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getAuthor()));
-        isbnColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getIsbn()));
+        isbnColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getIsbn()));
         publisherColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPublisher()));
-        publishedDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getPublishedDate()));
+        publishedDateColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getPublishedDate()));
         additionalInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getAdditionalInfo()));
     }
 
     private void initFactories()
     {
-        studentListView.setCellFactory(param -> new StudentCell(this));
-        borrowedBookTableView.setRowFactory(param -> new BorrowedBookRow(this));
-        bookTableView.setRowFactory(param -> new BookRow(this, studentSearchField, studentListView));
+        studentListView.setCellFactory(param -> new StudentCell(this, students));
+        borrowedBookTableView.setRowFactory(param -> new BorrowedBookRow(this, borrowedBooks));
+        bookTableView.setRowFactory(param -> new BookRow(this, books, stats, studentSearchField, studentListView));
     }
 
     private void initDragAndDrop()
@@ -227,50 +252,74 @@ public class MainWindowController implements UpdatableController
         borrowedBookTableView.setOnDragOver(event ->
         {
             if (event.getDragboard().hasString() && !(event.getGestureSource() instanceof BorrowedBookRow) && !studentListView.getSelectionModel().isEmpty())
-            {
                 event.acceptTransferModes(TransferMode.MOVE);
-            }
         });
 
         borrowedBookTableView.setOnDragDropped(event ->
         {
             event.setDropCompleted(true);
 
-            int bookId = Integer.parseInt(event.getDragboard().getString());
-            StudentListItem selectedStudent = studentListView.getSelectionModel().getSelectedItem();
+            long studentId = studentListView.getSelectionModel().getSelectedItem().getId();
+            long bookId = Long.parseLong(event.getDragboard().getString());
 
-            borrowBook(selectedStudent.getId(), bookId);
+            LocalDate currentDate = LocalDate.now();
+
+            String borrowDate = currentDate.format(Consts.Misc.DATE_FORMATTER);
+            String returnDate = currentDate.plusDays(14).format(Consts.Misc.DATE_FORMATTER);
+
+            try
+            {
+                borrowedBooks.save(new BorrowedBook(studentId, bookId, borrowDate, returnDate));
+
+                if (stats.countByBookId(bookId) == 0)
+                    stats.save(new Stat(bookId, 1));
+
+                else
+                    stats.updateIncrementBorrows(bookId);
+
+                logger.info("Book borrowed");
+
+                updateData();
+            }
+
+            catch (DBIException e)
+            {
+                ExceptionManager.log(e);
+            }
         });
 
         bookTableView.setOnDragOver(event ->
         {
             if (event.getDragboard().hasString() && !(event.getGestureSource() instanceof BookRow))
-            {
                 event.acceptTransferModes(TransferMode.MOVE);
-            }
         });
 
         bookTableView.setOnDragDropped(event ->
         {
             event.setDropCompleted(true);
 
-            int bookId = Integer.parseInt(event.getDragboard().getString());
+            long id = Long.parseLong(event.getDragboard().getString());
 
-            returnBook(bookId);
+            try
+            {
+                borrowedBooks.delete(id);
+
+                logger.info("Book returned");
+
+                updateData();
+            }
+
+            catch (DBIException e)
+            {
+                ExceptionManager.log(e);
+            }
         });
     }
 
     private void initSearchFields()
     {
-        studentSearchField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            reloadStudentSearchItems();
-        });
-
-        bookSearchField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            reloadBookSearchItems();
-        });
+        studentSearchField.textProperty().addListener((observable, oldValue, newValue) -> reloadStudentSearchItems());
+        bookSearchField.textProperty().addListener((observable, oldValue, newValue) -> reloadBookSearchItems());
     }
 
     private void onStudentSelected()
@@ -279,34 +328,29 @@ public class MainWindowController implements UpdatableController
 
         if (student != null)
         {
-            try (Connection connection = DatabaseManager.openConnection())
+            if (student.getGrade().isEmpty())
+                studentLabel.setText(student.getName());
+
+            else
+                studentLabel.setText(String.format("%s (%s)", student.getName(), student.getGrade()));
+
+            List<TableColumn<BorrowedBookTableItem, ?>> borrowedBookSortOrder = new ArrayList<>(borrowedBookTableView.getSortOrder());
+
+            try
             {
-                if (student.getGrade().isEmpty())
-                {
-                    studentLabel.setText(student.getName());
-                }
+                List<BorrowedBook> studentBooks = borrowedBooks.findAllWithBookTitleFromStudentId(student.getId());
 
-                else
-                {
-                    studentLabel.setText(String.format("%s (%s)", student.getName(), student.getGrade()));
-                }
-
-                List<TableColumn<BorrowedBookTableItem, ?>> borrowedBookSortOrder = new ArrayList<>(borrowedBookTableView.getSortOrder());
-
-                ResultQuery borrowedBookQuery = new SelectQuery(Consts.Database.BORROWED_BOOKS_TABLE_NAME, Consts.Database.BOOK_ID_COLUMN_NAME, Consts.Database.TITLE_COLUMN_NAME, Consts.Database.BORROW_DATE_COLUMN_NAME, Consts.Database.RETURN_DATE_COLUMN_NAME);
-
-                borrowedBookQuery.addOperator(new JoinOnOperator(Consts.Database.BOOKS_TABLE_NAME, Consts.Database.BOOK_ID_COLUMN_NAME, Consts.Database.ID_COLUMN_NAME));
-                borrowedBookQuery.addOperator(new WhereOperator(Consts.Database.STUDENT_ID_COLUMN_NAME, student.getId()));
-
-                borrowedBookTableView.getItems().setAll(borrowedBookQuery.execute(connection, BorrowedBookTableItem.class));
+                borrowedBookTableView.getItems().setAll(studentBooks.stream().map(BorrowedBookTableItem::new).collect(Collectors.toList()));
                 borrowedBookTableView.getSortOrder().setAll(borrowedBookSortOrder);
             }
 
-            catch (SQLException e)
+            catch (DBIException e)
             {
-                ReportManager.reportException(e);
+                ExceptionManager.log(e);
             }
         }
+
+        logger.debug("Student selected");
     }
 
     private void reloadStudentSearchItems()
@@ -332,36 +376,12 @@ public class MainWindowController implements UpdatableController
     }
 
     @FXML
-    private void onReportProblemClick()
-    {
-        String text = Dialogs.showReportProblemDialog();
-
-        if (text != null)
-        {
-            ReportManager.reportProblem(text);
-        }
-    }
-
-    @FXML
-    private void onSuggestFeatureClick()
-    {
-        String text = Dialogs.showSuggestFeatureDialog();
-
-        if (text != null)
-        {
-            ReportManager.suggestFeature(text);
-        }
-    }
-
-    @FXML
     private void onAboutClick(ActionEvent event)
     {
-        Stage stage = WindowHelper.openUtilityWindow(((MenuItem)event.getSource()).getText(), Consts.Resources.ABOUT_WINDOW_PATH);
+        Stage stage = WindowHelper.openUtilityWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
 
         if (stage != null)
-        {
             stage.setResizable(false);
-        }
     }
 
     @FXML
@@ -370,40 +390,40 @@ public class MainWindowController implements UpdatableController
         String password = Dialogs.showPasswordDialog();
 
         if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
-        {
-            WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Resources.ADMINISTRATION_WINDOW_PATH);
-        }
+            WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Resources.STATS_WINDOW_PATH);
+        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Resources.BORROW_LIST_WINDOW_PATH);
+        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
     }
 
     @FXML
     private void onAddStudentClick()
     {
-        Student student = Dialogs.showStudentDialog(Consts.Messages.ADD_STUDENT_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
+        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
 
         if (student != null)
         {
-            try (Connection connection = DatabaseManager.openConnection())
+            try
             {
-                new InsertQuery(Consts.Database.STUDENTS_TABLE_NAME, student.getName(), student.getGrade()).execute(connection);
+                students.save(student);
+
+                logger.info("Student added");
 
                 updateData();
             }
 
-            catch (SQLException e)
+            catch (DBIException e)
             {
-                ReportManager.reportException(e);
+                ExceptionManager.log(e);
             }
         }
     }
@@ -411,16 +431,28 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAddBookClick()
     {
-        Book book = Dialogs.showBookDialog(Consts.Messages.ADD_BOOK_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
+        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
 
         if (book != null)
         {
-            addBook(book);
+            try
+            {
+                books.save(book);
+
+                logger.info("Book added");
+
+                updateData();
+            }
+
+            catch (DBIException e)
+            {
+                ExceptionManager.log(e);
+            }
         }
     }
 
     @FXML
-    private void onAddBookWithIsbnClick()
+    private void onAddBookByIsbnClick()
     {
         String isbn = Dialogs.showScanIsbnDialog();
 
@@ -430,77 +462,20 @@ public class MainWindowController implements UpdatableController
 
             if (book != null)
             {
-                addBook(book);
-            }
-        }
-    }
-
-    private void addBook(Book book)
-    {
-        try (Connection connection = DatabaseManager.openConnection())
-        {
-            new InsertQuery(Consts.Database.BOOKS_TABLE_NAME, book.getTitle(), book.getAuthor(), book.getIsbn(), book.getPublisher(), book.getPublishedDate(), book.getAdditionalInfo()).execute(connection);
-
-            updateData();
-        }
-
-        catch (SQLException e)
-        {
-            ReportManager.reportException(e);
-        }
-    }
-
-    private void borrowBook(int studentId, int bookId)
-    {
-        Connection connection = DatabaseManager.openConnection();
-
-        ActionQuery insertBookQuery = new InsertQuery(true, Consts.Database.BORROWED_BOOKS_TABLE_NAME, studentId, bookId, LocalDate.now().format(Consts.Misc.DATE_FORMATTER), LocalDate.now().plusDays(14).format(Consts.Misc.DATE_FORMATTER));
-        ActionQuery insertStatQuery = new InsertOrIgnoreQuery(Consts.Database.STATS_TABLE_NAME, bookId, 0);
-        ActionQuery incrementStatQuery = new IncrementQuery(Consts.Database.STATS_TABLE_NAME, Consts.Database.NUMBER_OF_BORROWS_COLUMN_NAME);
-
-        incrementStatQuery.addOperator(new WhereOperator(Consts.Database.BOOK_ID_COLUMN_NAME, bookId));
-
-        insertBookQuery.executeBatchAsync(connection, () ->
-        {
-            try
-            {
-                if (connection != null)
+                try
                 {
-                    connection.close();
+                    books.save(book);
 
-                    Platform.runLater(this::updateData);
-                }
-            }
-
-            catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-        }, insertStatQuery, incrementStatQuery);
-    }
-
-    private void returnBook(int bookId)
-    {
-        Connection connection = DatabaseManager.openConnection();
-
-        ActionQuery deleteQuery = new DeleteQuery(Consts.Database.BORROWED_BOOKS_TABLE_NAME, Consts.Database.BOOK_ID_COLUMN_NAME, bookId);
-
-        deleteQuery.executeAsync(connection, () ->
-        {
-            try
-            {
-                if (connection != null)
-                {
-                    connection.close();
+                    logger.info("Book added by ISBN");
 
                     updateData();
                 }
-            }
 
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                catch (DBIException e)
+                {
+                    ExceptionManager.log(e);
+                }
             }
-        });
+        }
     }
 }
