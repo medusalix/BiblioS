@@ -25,6 +25,9 @@ repositories {
 }
 
 dependencies {
+    compile group: "org.apache.logging.log4j", name: "log4j-api", version: "2.5"
+    compile group: "org.apache.logging.log4j", name: "log4j-core", version: "2.5"
+
     compile group: "com.h2database", name: "h2", version: "1.4.191"
     compile group: "org.jdbi", name: "jdbi", version: "2.71"
 

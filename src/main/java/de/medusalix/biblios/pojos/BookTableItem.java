@@ -1,12 +1,14 @@
 package de.medusalix.biblios.pojos;
 
-import de.medusalix.biblios.dto.Book;
+import de.medusalix.biblios.database.objects.Book;
 
 public class BookTableItem implements Searchable
 {
-    private int id;
+    private long id;
 
-    private String title, author, isbn, publisher, publishedDate, additionalInfo, borrowedBy;
+    private String title, author, publisher, additionalInfo, borrowedBy;
+    private long isbn;
+    private short publishedDate;
 
     public BookTableItem(Book book)
     {
@@ -22,10 +24,10 @@ public class BookTableItem implements Searchable
     @Override
     public boolean searchFor(String text)
     {
-        return getTitle().toLowerCase().contains(text) || getAuthor().toLowerCase().contains(text) || getIsbn().toLowerCase().contains(text) || getPublisher().toLowerCase().contains(text) || getPublishedDate().toLowerCase().contains(text) || getAdditionalInfo().toLowerCase().contains(text);
+        return getTitle().toLowerCase().contains(text) || getAuthor().toLowerCase().contains(text) || String.valueOf(getIsbn()).toLowerCase().contains(text) || getPublisher().toLowerCase().contains(text) || String.valueOf(getPublishedDate()).toLowerCase().contains(text) || getAdditionalInfo().toLowerCase().contains(text);
     }
 
-    public int getId()
+    public long getId()
     {
         return id;
     }
@@ -40,7 +42,7 @@ public class BookTableItem implements Searchable
         return author;
     }
 
-    public String getIsbn()
+    public long getIsbn()
     {
         return isbn;
     }
@@ -50,7 +52,7 @@ public class BookTableItem implements Searchable
         return publisher;
     }
 
-    public String getPublishedDate()
+    public short getPublishedDate()
     {
         return publishedDate;
     }

@@ -1,6 +1,6 @@
 package de.medusalix.biblios.helpers;
 
-import de.medusalix.biblios.managers.ReportManager;
+import de.medusalix.biblios.managers.ExceptionManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -8,7 +8,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.StageStyle;
-import de.medusalix.biblios.managers.ReportManager;
 
 import java.io.IOException;
 
@@ -28,7 +27,7 @@ public class DialogHelper
 
         catch (IOException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
 
         return dialog;
