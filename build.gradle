@@ -1,16 +1,13 @@
 apply plugin: "java"
 apply plugin: "idea"
 
+compileJava.options.encoding = "UTF-8"
+
 test {
     useTestNG()
-    testLogging.exceptionFormat = "full"
-
-    workingDir "build/tmp"
 }
 
 jar {
-    archiveName "BiblioS.jar"
-
     manifest.attributes "Main-Class": "de.medusalix.biblios.core.BiblioS"
 
     from {
