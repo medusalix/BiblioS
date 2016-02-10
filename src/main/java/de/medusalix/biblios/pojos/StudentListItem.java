@@ -1,8 +1,10 @@
 package de.medusalix.biblios.pojos;
 
+import de.medusalix.biblios.database.objects.Student;
+
 public class StudentListItem implements Searchable
 {
-    private int id;
+    private long id;
 
     private String name, grade;
 
@@ -24,7 +26,7 @@ public class StudentListItem implements Searchable
         return getName().toLowerCase().contains(text) || getGrade().toLowerCase().contains(text);
     }
 
-    public int getId()
+    public long getId()
     {
         return id;
     }

@@ -1,58 +1,41 @@
 package de.medusalix.biblios.managers;
 
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.sql.query.base.ActionQuery;
-import de.medusalix.biblios.sql.query.specific.TableCreationQuery;
+import de.medusalix.biblios.database.access.Books;
+import de.medusalix.biblios.database.access.BorrowedBooks;
+import de.medusalix.biblios.database.access.Stats;
+import de.medusalix.biblios.database.access.Students;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.exceptions.DBIException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DatabaseManager
 {
+    private static DBI dbi = new DBI(Consts.Database.CONNECTION_URL);
+
+    public static <T> T createDao(Class<T> daoClass)
+    {
+        return dbi.onDemand(daoClass);
+    }
+
     public static void init()
     {
         try
         {
-            Files.createDirectories(Paths.get(Consts.Resources.DATA_FOLDER_PATH));
+            Files.createDirectories(Paths.get(Consts.Paths.DATA_FOLDER));
 
-            try (Connection connection = openConnection())
-            {
-                ActionQuery studentsQuery = new TableCreationQuery(Consts.Database.CREATE_STUDENTS_TABLE_QUERY);
-                ActionQuery booksQuery = new TableCreationQuery(Consts.Database.CREATE_BOOKS_TABLE_QUERY);
-                ActionQuery borrowedBookQuery = new TableCreationQuery(Consts.Database.CREATE_BORROWED_BOOKS_TABLE_QUERY);
-                ActionQuery statsQuery = new TableCreationQuery(Consts.Database.CREATE_STATS_TABLE_QUERY);
-
-                studentsQuery.executeBatch(connection, booksQuery, borrowedBookQuery, statsQuery);
-            }
+            dbi.onDemand(Students.class).createTable();
+            dbi.onDemand(Books.class).createTable();
+            dbi.onDemand(BorrowedBooks.class).createTable();
+            dbi.onDemand(Stats.class).createTable();
         }
 
-        catch (IOException | SQLException e)
+        catch (IOException | DBIException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
-    }
-
-    public static Connection openConnection()
-    {
-        try
-        {
-            return DriverManager.getConnection(Consts.Database.CONNECTION_URL);
-        }
-
-        catch (SQLException e)
-        {
-            ReportManager.reportException(e);
-        }
-
-        return null;
     }
 }

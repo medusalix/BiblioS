@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.GoogleBookQuery;
-import de.medusalix.biblios.managers.ReportManager;
-import de.medusalix.biblios.pojos.GoogleBook;
+import de.medusalix.biblios.managers.ExceptionManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,9 +19,11 @@ import java.util.List;
 
 public class GoogleBooksHelper
 {
+    private static Logger logger = LogManager.getLogger(GoogleBooksHelper.class);
+
     public static String readApiKey()
     {
-        Path apiKeyPath = Paths.get(Consts.Resources.API_KEY_PATH);
+        Path apiKeyPath = Paths.get(Consts.Paths.API_KEY);
 
         if (Files.exists(apiKeyPath))
         {
@@ -31,7 +34,7 @@ public class GoogleBooksHelper
 
             catch (IOException e)
             {
-                e.printStackTrace();
+                ExceptionManager.log(e);
             }
         }
 
@@ -42,12 +45,12 @@ public class GoogleBooksHelper
     {
         try
         {
-            Files.write(Paths.get(Consts.Resources.API_KEY_PATH), apiKey.getBytes());
+            Files.write(Paths.get(Consts.Paths.API_KEY), apiKey.getBytes());
         }
 
         catch (IOException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
     }
 
@@ -67,6 +70,8 @@ public class GoogleBooksHelper
             {
                 try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS, items.get(0).getSelfLink(), apiKey)).openStream())
                 {
+                    logger.info("Google Books information fetched");
+
                     return mapper.readValue(volumeInputStream, GoogleBook.class).getVolumeInfo();
                 }
             }
@@ -74,7 +79,7 @@ public class GoogleBooksHelper
 
         catch (IOException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
 
         return null;

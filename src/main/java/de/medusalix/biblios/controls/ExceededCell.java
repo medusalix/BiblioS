@@ -4,7 +4,6 @@ import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.pojos.BorrowedBookTableItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.ImageView;
-import de.medusalix.biblios.core.Consts;
 
 public class ExceededCell extends TableCell<BorrowedBookTableItem, Boolean>
 {

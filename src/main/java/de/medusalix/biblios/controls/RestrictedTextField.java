@@ -6,8 +6,7 @@ import java.util.function.Predicate;
 
 public class RestrictedTextField extends TextField
 {
-    private Predicate<String> restriction;
-    private Predicate<String> submitRestriction;
+    private Predicate<String> restriction, submitRestriction;
 
     public void setRestriction(Predicate<String> restriction)
     {
@@ -27,9 +26,7 @@ public class RestrictedTextField extends TextField
     @Override
     public void replaceText(int start, int end, String text)
     {
-        if (text.isEmpty() || restriction.test(text))
-        {
+        if (text.isEmpty() || restriction.test(getText() + text))
             super.replaceText(start, end, text);
-        }
     }
 }

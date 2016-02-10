@@ -7,7 +7,7 @@ import javafx.scene.control.Dialog;
 
 public class ProgressHelper
 {
-    private static Dialog<Void> dialog = DialogHelper.createCustomDialog(Consts.Resources.PROGRESS_DIALOG_PATH);
+    private static Dialog<Void> dialog = DialogHelper.createCustomDialog(Consts.Paths.PROGRESS_DIALOG);
 
     static
     {
