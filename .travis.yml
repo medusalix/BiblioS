@@ -9,17 +9,3 @@ addons:
 
 before_install:
  - chmod +x gradlew
-
-deploy:
-  provider: releases
-  api_key:
-    secure: "RilKfLNFKFRFs9KedwIZ7I3g6eQ6An4GNt9Xu1ViEVOloKA4gZP+XvmJAfNIK6AlbQIBHRQBkrO77AwLiP/w32XdhncfWtfbiAOJeDxSuT463
-     6VQ6f6wiFIjCiy9Qk0pNAGYmD5X6DNVLt4vIRlFenSqrO61R5SDh5BdrVpd3VJLQo4jFfWFXseW/MhKnuRgGphDMhmdnmOK3z+Hefe7xqrlJui3blGVkgjSN
-     ye3A5Fe0a9iESWrFDnrnbSBeHnHmapA52EL4ocYg5qxXKQg3RpKPz/hZv9gGw3CqG9lQRLk3L/XNWSS4XKBhWb4v52u1Qzj76/g7XUC01cBh6/zoRKt2bP5i
-     sh4s2KHwj7aOylhq+yUcqR+U5mfua9YyfDccsEXvkUkX9XCdDp4GKqt3GIB+0Qko9xBpdwORM9mcz8NRejNHlT4d5VioXz45Er0IAZWgnJWc19wayXVWXI8O
-     ma2p6kjvEgq5q++mI4UuMe1izLYwmywGorwE4WaghzjHt8eTPAWxneHp3LJm/YuqbFC33vMBxUZ/ofSSVjTX9y98IZzC8psoJnlltnwe0G4Z8V0ArSobAmwz
-     201AikIIpB16QCyIqu0uOWBi75//SMb81y6HsNo4yvmOVgKdxKd96eEsezIPf0N3yhh0s72InCwqS6v4lHLbKo+XZqBWy8="
-  file: "build/libs/BiblioS.jar"
-  skip_cleanup: true
-  on:
-    tags: true
