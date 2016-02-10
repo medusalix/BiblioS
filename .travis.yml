@@ -21,7 +21,3 @@ deploy:
      201AikIIpB16QCyIqu0uOWBi75//SMb81y6HsNo4yvmOVgKdxKd96eEsezIPf0N3yhh0s72InCwqS6v4lHLbKo+XZqBWy8="
   file: "build/libs/BiblioS.jar"
   skip_cleanup: true
-  on:
-    tags: true
-
-
