@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.MainWindowController">
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.MainWindowController">
    <children>
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -16,8 +19,6 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Hilfe">
             <items>
-              <MenuItem fx:id="reportProblemMenuItem" mnemonicParsing="false" onAction="#onReportProblemClick" text="Problem melden" />
-                  <MenuItem fx:id="suggestFeatureMenuItem" mnemonicParsing="false" onAction="#onSuggestFeatureClick" text="Funktion vorschlagen" />
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#onAboutClick" text="Über" />
             </items>
           </Menu>
@@ -92,7 +93,7 @@
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button layoutX="818.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAddBookWithIsbnClick" text="Buch per ISBN hinzufügen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="175.0">
+      <Button layoutX="818.0" layoutY="779.0" mnemonicParsing="false" onAction="#onAddBookByIsbnClick" text="Buch per ISBN hinzufügen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="175.0">
          <font>
             <Font size="16.0" />
          </font>

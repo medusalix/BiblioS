@@ -1,7 +1,6 @@
 package de.medusalix.biblios.managers;
 
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.core.Consts;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,12 +23,14 @@ public class BackupManager
     {
         try
         {
-            return Files.list(Paths.get(Consts.Database.BACKUP_FOLDER_PATH)).map(backup -> backup.getFileName().toString().replaceAll(Consts.Database.BACKUP_PREFIX + "|.db", ""));
+            return Files.list(Paths.get(Consts.Paths.BACKUP_FOLDER)).map(backup -> backup.getFileName().toString()
+                    .replace(Consts.Database.BACKUP_PREFIX, "")
+                    .replace(Consts.Database.SUFFIX, ""));
         }
 
         catch (IOException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
 
         return null;
@@ -40,28 +41,26 @@ public class BackupManager
         Stream<String> backupStream = getBackupStream();
 
         if (backupStream != null)
-        {
             return backupStream.collect(Collectors.toList());
-        }
 
         return null;
     }
 
     public static Path createBackup(String suffix)
     {
-        Path backupPath = Paths.get(Consts.Database.BACKUP_FOLDER_PATH + "/" + Consts.Database.BACKUP_PREFIX + LocalDateTime.now().format(Consts.Misc.DATE_TIME_FORMATTER) + suffix + ".db");
+        Path backupPath = Paths.get(String.format("%s/%s%s%s%s", Consts.Paths.BACKUP_FOLDER, Consts.Database.BACKUP_PREFIX, LocalDateTime.now().format(Consts.Misc.DATE_TIME_FORMATTER), suffix, Consts.Database.SUFFIX));
 
         if (Files.notExists(backupPath))
         {
             try
             {
-                Files.createDirectories(Paths.get(Consts.Database.BACKUP_FOLDER_PATH));
-                Files.copy(Paths.get(Consts.Database.DATABASE_PATH), backupPath);
+                Files.createDirectories(Paths.get(Consts.Paths.BACKUP_FOLDER));
+                Files.copy(Paths.get(Consts.Paths.DATABASE_FULL), backupPath);
             }
 
             catch (IOException e)
             {
-                ReportManager.reportException(e);
+                ExceptionManager.log(e);
             }
         }
 
@@ -72,7 +71,7 @@ public class BackupManager
     {
         try
         {
-            Files.list(Paths.get(Consts.Database.BACKUP_FOLDER_PATH)).forEach(backup ->
+            Files.list(Paths.get(Consts.Paths.BACKUP_FOLDER)).forEach(backup ->
             {
                 try
                 {
@@ -81,14 +80,14 @@ public class BackupManager
 
                 catch (IOException e)
                 {
-                    ReportManager.reportException(e);
+                    ExceptionManager.log(e);
                 }
             });
         }
 
         catch (IOException e)
         {
-            ReportManager.reportException(e);
+            ExceptionManager.log(e);
         }
     }
 
@@ -112,7 +111,7 @@ public class BackupManager
                 {
                     String fullBackupName = backupTime.format(Consts.Misc.DATE_TIME_FORMATTER);
 
-                    Path backupPath = Paths.get(Consts.Database.BACKUP_FOLDER_PATH + "/" + Consts.Database.BACKUP_PREFIX + fullBackupName + ".db");
+                    Path backupPath = Paths.get(String.format("%s/%s%s%s", Consts.Paths.BACKUP_FOLDER, Consts.Database.BACKUP_PREFIX, fullBackupName, Consts.Database.SUFFIX));
 
                     try
                     {
@@ -121,7 +120,7 @@ public class BackupManager
 
                     catch (IOException e)
                     {
-                        ReportManager.reportException(e);
+                        ExceptionManager.log(e);
                     }
                 });
             }

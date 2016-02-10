@@ -1,29 +1,27 @@
 package de.medusalix.biblios.pojos;
 
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.database.objects.BorrowedBook;
 
 import java.time.LocalDate;
 
 public class BorrowedBookTableItem
 {
-    private int bookId;
+    private long id;
 
     private String title, borrowDate, returnDate;
 
-    public BorrowedBookTableItem() {}
-
-    public BorrowedBookTableItem(int bookId, String title, String borrowDate, String returnDate)
+    public BorrowedBookTableItem(BorrowedBook borrowedBook)
     {
-        this.bookId = bookId;
-        this.title = title;
-        this.borrowDate = borrowDate;
-        this.returnDate = returnDate;
+        id = borrowedBook.getId();
+        title = borrowedBook.getBookTitle();
+        borrowDate = borrowedBook.getBorrowDate();
+        returnDate = borrowedBook.getReturnDate();
     }
 
-    public int getBookId()
+    public long getId()
     {
-        return bookId;
+        return id;
     }
 
     public String getTitle()

@@ -14,7 +14,7 @@ public class GoogleBooksHelperTests
         Assert.assertNotNull(volumeInfo);
         Assert.assertEquals(volumeInfo.getTitle(), "Java ist auch eine Insel");
         Assert.assertEquals(volumeInfo.getAuthors(), "Christian Ullenboom");
-        Assert.assertEquals(volumeInfo.getPublisher(), "Rheinwerk Verlag GmbH");
+        Assert.assertEquals(volumeInfo.getPublisher(), "Galileo Press");
         Assert.assertEquals(volumeInfo.getPublishedDate(), "2014");
     }
 }
