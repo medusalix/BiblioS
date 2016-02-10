@@ -22,4 +22,4 @@ deploy:
   file: "build/libs/BiblioS.jar"
   skip_cleanup: true
   on:
-    tags: false
+    tags: true
