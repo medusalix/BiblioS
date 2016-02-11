@@ -1,14 +1,14 @@
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
 
 addons:
   apt:
     packages:
-    - oracle-java8-installer
+      - oracle-java8-installer
 
 before_install:
-- chmod +x gradlew
+  - chmod +x gradlew
 
 deploy:
   provider: releases
