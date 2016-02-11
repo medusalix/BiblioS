@@ -200,8 +200,8 @@ public class MainWindowController implements UpdatableController
 
     private void initMenuItems()
     {
-        fullscreenMenuItem.setGraphic(new ImageView(Consts.Images.FULLSCREEN_MENU_ITEM_IMAGE));
-        aboutMenuItem.setGraphic(new ImageView(Consts.Images.ABOUT_MENU_ITEM_IMAGE));
+        fullscreenMenuItem.setGraphic(new ImageView(Consts.Images.FULLSCREEN_MENU_ITEM));
+        aboutMenuItem.setGraphic(new ImageView(Consts.Images.ABOUT_MENU_ITEM));
     }
 
     private void initStudentListView()
@@ -229,7 +229,7 @@ public class MainWindowController implements UpdatableController
         borrowDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBorrowDate()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
-        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN_IMAGE));
+        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
         exceededColumn.setCellFactory(param -> new ExceededCell());
 
         titleColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
@@ -408,7 +408,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAddStudentClick()
     {
-        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
+        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
 
         if (student != null)
         {
@@ -431,7 +431,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAddBookClick()
     {
-        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_HEADER_IMAGE, null);
+        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
 
         if (book != null)
         {
