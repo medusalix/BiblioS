@@ -18,8 +18,14 @@ public class Consts
     public static class Paths
     {
         private static final String FXML_FOLDER = "/fxml/";
+        private static final String IMAGE_FOLDER = "images/";
+
         private static final String WINDOW_FOLDER = FXML_FOLDER + "windows/";
         private static final String DIALOG_FOLDER = FXML_FOLDER + "dialogs/";
+
+        private static final String MENU_ITEM_IMAGE_FOLDER = IMAGE_FOLDER + "menuItems/";
+        private static final String DIALOG_HEADER_IMAGE_FOLDER = IMAGE_FOLDER + "dialogs/headers/";
+
         public static final String STYLESHEET = "/style.css";
 
         public static final String MAIN_WINDOW = WINDOW_FOLDER + "MainWindow.fxml";
@@ -105,48 +111,44 @@ public class Consts
 
     public static class Images
     {
-        public static final String BASE_IMAGE_PATH = "images/";
-        public static final String MENU_ITEM_BASE_IMAGE_PATH = BASE_IMAGE_PATH + "menuItems/";
-        public static final String DIALOG_HEADER_BASE_PATH = BASE_IMAGE_PATH + "dialogs/headers/";
+        public static final Image FAVICON = new Image(Paths.IMAGE_FOLDER + "favicon.png");
 
-        public static final String FAVICON_IMAGE_PATH = BASE_IMAGE_PATH + "favicon.png";
+        public static final Image FULLSCREEN_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "fullscreen.png");
+        public static final Image ABOUT_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "about.png");
+        public static final Image CHANGE_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "change.png");
+        public static final Image DELETE_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "delete.png");
+        public static final Image SHOW_STUDENT_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "showStudent.png");
+        public static final Image EXTEND_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "extend.png");
 
-        public static final Image FULLSCREEN_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "fullscreen.png");
-        public static final Image ABOUT_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "about.png");
-        public static final Image CHANGE_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "change.png");
-        public static final Image DELETE_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "delete.png");
-        public static final Image SHOW_STUDENT_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "showStudent.png");
-        public static final Image EXTEND_MENU_ITEM_IMAGE = new Image(MENU_ITEM_BASE_IMAGE_PATH + "extend.png");
+        public static final Image PASSWORD_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "password.png");
+        public static final Image CHANGE_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "change.png");
+        public static final Image ADD_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "add.png");
+        public static final Image FETCH_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "fetch.png");
 
-        public static final Image PASSWORD_HEADER_IMAGE = new Image(DIALOG_HEADER_BASE_PATH + "password.png");
-        public static final Image CHANGE_HEADER_IMAGE = new Image(DIALOG_HEADER_BASE_PATH + "change.png");
-        public static final Image ADD_HEADER_IMAGE = new Image(DIALOG_HEADER_BASE_PATH + "add.png");
-        public static final Image FETCH_HEADER_IMAGE = new Image(DIALOG_HEADER_BASE_PATH + "fetch.png");
-
-        public static final Image EXCEEDED_COLUMN_IMAGE = new Image(BASE_IMAGE_PATH + "exceededColumn.png");
-        public static final Image NOT_EXCEEDED_IMAGE = new Image(BASE_IMAGE_PATH + "notExceeded.png");
-        public static final Image EXCEEDED_IMAGE = new Image(BASE_IMAGE_PATH + "exceeded.png");
+        public static final Image EXCEEDED_COLUMN = new Image(Paths.IMAGE_FOLDER + "exceededColumn.png");
+        public static final Image NOT_EXCEEDED = new Image(Paths.IMAGE_FOLDER + "notExceeded.png");
+        public static final Image EXCEEDED = new Image(Paths.IMAGE_FOLDER + "exceeded.png");
     }
 
     public static class FxIds
     {
-        public static final String PASSWORD_FIELD_ID = "#passwordField";
+        public static final String PASSWORD_FIELD = "#passwordField";
 
-        public static final String NAME_FIELD_ID = "#nameField";
-        public static final String GRADE_FIELD_ID = "#gradeField";
+        public static final String NAME_FIELD = "#nameField";
+        public static final String GRADE_FIELD = "#gradeField";
 
-        public static final String TITLE_FIELD_ID = "#titleField";
-        public static final String AUTHOR_FIELD_ID = "#authorField";
-        public static final String ISBN_FIELD_ID = "#isbnField";
-        public static final String PUBLISHER_FIELD_ID = "#publisherField";
-        public static final String PUBLISHED_DATE_FIELD_ID = "#publishedDateField";
-        public static final String ADDITIONAL_INFO_FIELD_ID = "#additionalInfoField";
+        public static final String TITLE_FIELD = "#titleField";
+        public static final String AUTHOR_FIELD = "#authorField";
+        public static final String ISBN_FIELD = "#isbnField";
+        public static final String PUBLISHER_FIELD = "#publisherField";
+        public static final String PUBLISHED_DATE_FIELD = "#publishedDateField";
+        public static final String ADDITIONAL_INFO_FIELD = "#additionalInfoField";
     }
 
     public static class GoogleBooks
     {
         public static final String GET_VOLUMES_BY_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=ISBN:%s&fields=items/selfLink&key=%s";
-        public static final String VOLUME_INFO_FIELDS = "%s?fields=volumeInfo(title,subtitle,authors,publisher,publishedDate)&key=%s";
+        public static final String VOLUME_INFO_FIELDS_URL = "%s?fields=volumeInfo(title,subtitle,authors,publisher,publishedDate)&key=%s";
     }
 
     public static class Misc

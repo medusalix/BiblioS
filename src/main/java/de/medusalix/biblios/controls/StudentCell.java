@@ -17,8 +17,8 @@ public class StudentCell extends ListCell<StudentListItem>
 {
     private Logger logger = LogManager.getLogger(StudentCell.class);
 
-    private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM_IMAGE));
-    private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM_IMAGE));
+    private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
+    private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(changeStudentItem, deleteStudentItem);
 
@@ -26,7 +26,7 @@ public class StudentCell extends ListCell<StudentListItem>
     {
         changeStudentItem.setOnAction(event ->
         {
-            Student student = Dialogs.showStudentDialog(Consts.Dialogs.CHANGE_STUDENT_TEXT, Consts.Images.CHANGE_HEADER_IMAGE, getItem());
+            Student student = Dialogs.showStudentDialog(Consts.Dialogs.CHANGE_STUDENT_TEXT, Consts.Images.CHANGE_DIALOG_HEADER, getItem());
 
             if (student != null)
             {

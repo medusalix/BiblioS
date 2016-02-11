@@ -22,9 +22,9 @@ public class BookRow extends TableRow<BookTableItem>
 {
     private Logger logger = LogManager.getLogger(BookRow.class);
 
-    private MenuItem changeBookItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM_IMAGE));
-    private MenuItem deleteBookItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM_IMAGE));
-    private MenuItem showStudentItem = new MenuItem(Consts.Strings.SHOW_STUDENT_MENU_ITEM_TEXT, new ImageView(Consts.Images.SHOW_STUDENT_MENU_ITEM_IMAGE));
+    private MenuItem changeBookItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
+    private MenuItem deleteBookItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
+    private MenuItem showStudentItem = new MenuItem(Consts.Strings.SHOW_STUDENT_MENU_ITEM_TEXT, new ImageView(Consts.Images.SHOW_STUDENT_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(changeBookItem, deleteBookItem, showStudentItem);
 
@@ -45,7 +45,7 @@ public class BookRow extends TableRow<BookTableItem>
 
         changeBookItem.setOnAction(event ->
         {
-            Book book = Dialogs.showBookDialog(Consts.Dialogs.CHANGE_BOOK_TEXT, Consts.Images.CHANGE_HEADER_IMAGE, getItem());
+            Book book = Dialogs.showBookDialog(Consts.Dialogs.CHANGE_BOOK_TEXT, Consts.Images.CHANGE_DIALOG_HEADER, getItem());
 
             if (book != null)
             {

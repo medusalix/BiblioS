@@ -68,7 +68,7 @@ public class GoogleBooksHelper
 
             if (items != null)
             {
-                try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS, items.get(0).getSelfLink(), apiKey)).openStream())
+                try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS_URL, items.get(0).getSelfLink(), apiKey)).openStream())
                 {
                     logger.info("Google Books information fetched");
 

@@ -1,11 +1,19 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
 addons:
   apt:
     packages:
-      - oracle-java8-installer
+    - oracle-java8-installer
 
 before_install:
- - chmod +x gradlew
+- chmod +x gradlew
+
+deploy:
+  provider: releases
+  api_key:
+    secure: ew4KRsY9LrAr0Rhpb1uWRj4dAwGBf5O26NOA51npUPo9EOYtBNVNYQjjpVJctEsuSbUmMwV4jFGwIoJpWPfJnTw4fQhza3Ur6/oAYDov+E76p0joP4xoIk9DoUwVDP14qzCg5aP4bB7GnVxIByD9z+p2kf5GXtKQmR1CZXv2kF15dvBKcRXpO9pU3p2tbG2rrM+Bb0CKFLWS/cDN4NfMiNEmDnTzKJ2tvHkdjBK1cavXdJ2JVmgGeVXzOh/VIQsAmO6az0Gv05+s4+zmeAihWooCPd426tCrh5TKGcCftK3N40BazrtsGrVzMcIAAKD1L326zGOmsAn67kMcr3Sd/6wWobvqFsQWiAcOMuwS1COF1LsblsMqXGTeiCDF+1Pwpkgpi6odYDIpU4GhkqkeSWYn2sZaJC4y7l3nHysi5K4v8tCbUyM5wWusitTaWckM8tP2KWQyeXxm9bnOm1sc7VMDceIIRoShoa3mp4Jpkmbp95DttyMOReaqwBHUOSmXEbB/i60Po551zTPNOCPdsFdQ87qkFpf0wLhuxLMB12RWZZ8R+yuO/HShxlHZol3lbzwaHT16gmJf9YxarRhjVbb/4tuUNGYZFW3P2rtbrLXvWEb2It1+Oq+upNIN5spzZZ6VsO/b0o2y9uqy2XZcwiA+8t3UX2nQFNGArHRQwaA=
+  file: "build/libs/BiblioS.jar"
+  on:
+    tags: true

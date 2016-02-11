@@ -18,7 +18,7 @@ public class BorrowListExceededCell extends TableCell<BorrowListTableItem, Boole
         {
             setGraphic(imageView);
 
-            imageView.setImage(item ? Consts.Images.EXCEEDED_IMAGE : Consts.Images.NOT_EXCEEDED_IMAGE);
+            imageView.setImage(item ? Consts.Images.EXCEEDED : Consts.Images.NOT_EXCEEDED);
         }
 
         else

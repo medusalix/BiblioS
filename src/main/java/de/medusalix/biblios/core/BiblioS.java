@@ -40,7 +40,7 @@ public class BiblioS extends Application
         scene.getStylesheets().add(getClass().getResource(Consts.Paths.STYLESHEET).toExternalForm());
         
         stage.setTitle(Consts.TITLE);
-        stage.getIcons().add(new Image(Consts.Images.FAVICON_IMAGE_PATH));
+        stage.getIcons().add(Consts.Images.FAVICON);
         stage.setMaximized(RuntimeHelper.isRelease());
     	stage.setScene(scene);
         stage.show();

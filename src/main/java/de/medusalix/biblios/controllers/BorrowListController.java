@@ -71,7 +71,7 @@ public class BorrowListController
         bookColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBookTitle()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
-        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN_IMAGE));
+        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
         exceededColumn.setCellFactory(param -> new BorrowListExceededCell());
     }
 }
