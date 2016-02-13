@@ -378,10 +378,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAboutClick(ActionEvent event)
     {
-        Stage stage = WindowHelper.openUtilityWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
-
-        if (stage != null)
-            stage.setResizable(false);
+        WindowHelper.openWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
     }
 
     @FXML
@@ -390,19 +387,19 @@ public class MainWindowController implements UpdatableController
         String password = Dialogs.showPasswordDialog();
 
         if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
-            WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
+            WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
+        WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        WindowHelper.openUtilityWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
+        WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
     }
 
     @FXML

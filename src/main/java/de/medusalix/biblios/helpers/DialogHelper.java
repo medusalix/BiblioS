@@ -1,5 +1,6 @@
 package de.medusalix.biblios.helpers;
 
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.managers.ExceptionManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -7,6 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -19,10 +21,10 @@ public class DialogHelper
 
         try
         {
-            dialog.initStyle(StageStyle.UTILITY);
             dialog.getDialogPane().setContent(FXMLLoader.load(DialogHelper.class.getResource(fxml)));
 
-            return dialog;
+            // Set the favicon
+            ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(Consts.Images.FAVICON);
         }
 
         catch (IOException e)
@@ -49,7 +51,6 @@ public class DialogHelper
     {
         Alert alert = new Alert(type);
 
-        alert.initStyle(StageStyle.UTILITY);
         alert.setTitle(titleText);
         alert.setHeaderText(titleText);
         alert.setContentText(contentText);
