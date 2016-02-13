@@ -3,9 +3,7 @@ apply plugin: "idea"
 
 compileJava.options.encoding = "UTF-8"
 
-test {
-    useTestNG()
-}
+test.useTestNG()
 
 jar {
     manifest.attributes "Main-Class": "de.medusalix.biblios.core.BiblioS"
