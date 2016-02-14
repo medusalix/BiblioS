@@ -65,7 +65,9 @@ public class AdministrationController
         apiKeyField.focusedProperty().addListener((observable, oldValue, newValue) ->
         {
             if (!newValue)
+            {
                 GoogleBooksHelper.saveApiKey(apiKeyField.getText());
+            }
         });
     }
 

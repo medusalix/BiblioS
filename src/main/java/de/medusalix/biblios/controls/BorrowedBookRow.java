@@ -67,9 +67,13 @@ public class BorrowedBookRow extends TableRow<BorrowedBookTableItem>
         super.updateItem(item, empty);
 
         if (!empty)
+        {
             setContextMenu(contextMenu);
+        }
 
         else
+        {
             setContextMenu(null);
+        }
     }
 }

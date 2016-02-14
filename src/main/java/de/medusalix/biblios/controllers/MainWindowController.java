@@ -156,7 +156,9 @@ public class MainWindowController implements UpdatableController
                 BookTableItem item = new BookTableItem(book);
 
                 if (borrowedBook != null)
+                {
                     item.setBorrowedBy(borrowedBook.getStudentName());
+                }
 
                 originalBookList.add(item);
             }
@@ -252,7 +254,9 @@ public class MainWindowController implements UpdatableController
         borrowedBookTableView.setOnDragOver(event ->
         {
             if (event.getDragboard().hasString() && !(event.getGestureSource() instanceof BorrowedBookRow) && !studentListView.getSelectionModel().isEmpty())
+            {
                 event.acceptTransferModes(TransferMode.MOVE);
+            }
         });
 
         borrowedBookTableView.setOnDragDropped(event ->
@@ -272,10 +276,14 @@ public class MainWindowController implements UpdatableController
                 borrowedBooks.save(new BorrowedBook(studentId, bookId, borrowDate, returnDate));
 
                 if (stats.countByBookId(bookId) == 0)
+                {
                     stats.save(new Stat(bookId, 1));
+                }
 
                 else
+                {
                     stats.updateIncrementBorrows(bookId);
+                }
 
                 logger.info("Book borrowed");
 
@@ -291,7 +299,9 @@ public class MainWindowController implements UpdatableController
         bookTableView.setOnDragOver(event ->
         {
             if (event.getDragboard().hasString() && !(event.getGestureSource() instanceof BookRow))
+            {
                 event.acceptTransferModes(TransferMode.MOVE);
+            }
         });
 
         bookTableView.setOnDragDropped(event ->
@@ -329,10 +339,14 @@ public class MainWindowController implements UpdatableController
         if (student != null)
         {
             if (student.getGrade().isEmpty())
+            {
                 studentLabel.setText(student.getName());
+            }
 
             else
+            {
                 studentLabel.setText(String.format("%s (%s)", student.getName(), student.getGrade()));
+            }
 
             List<TableColumn<BorrowedBookTableItem, ?>> borrowedBookSortOrder = new ArrayList<>(borrowedBookTableView.getSortOrder());
 
@@ -387,7 +401,9 @@ public class MainWindowController implements UpdatableController
         String password = Dialogs.showPasswordDialog();
 
         if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
+        {
             WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
+        }
     }
 
     @FXML

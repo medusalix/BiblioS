@@ -29,7 +29,9 @@ public class Dialogs
         passwordField.requestFocus();
 
         if (dialog.showAndWait().get() == ButtonType.OK)
+        {
             return passwordField.getText();
+        }
 
         return null;
     }
@@ -64,7 +66,9 @@ public class Dialogs
         nameField.requestFocus();
 
         if (dialog.showAndWait().get() == ButtonType.OK)
+        {
             return new Student(nameField.getText(), gradeField.getText());
+        }
 
         return null;
     }
@@ -112,7 +116,9 @@ public class Dialogs
         titleField.requestFocus();
 
         if (dialog.showAndWait().get() == ButtonType.OK)
+        {
             return new Book(titleField.getText(), authorField.getText(), Long.parseLong(isbnField.getText()), publisherField.getText(), Short.parseShort(publishedDateField.getText()), additionalInfoField.getText());
+        }
 
         return null;
     }
@@ -133,7 +139,9 @@ public class Dialogs
         isbnField.requestFocus();
 
         if (dialog.showAndWait().orElse(null) == ButtonType.OK)
+        {
             return isbnField.getText();
+        }
 
         return null;
     }
@@ -182,7 +190,9 @@ public class Dialogs
         }
 
         if (dialog.showAndWait().get() == ButtonType.OK)
+        {
             return new Book(titleField.getText(), authorField.getText(), Long.parseLong(isbnField.getText()), publisherField.getText(), Short.parseShort(publishedDateField.getText()), additionalInfoField.getText());
+        }
 
         return null;
     }

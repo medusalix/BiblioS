@@ -13,10 +13,14 @@ public class ExceptionManager
         String message;
 
         if (exception instanceof DBIException)
+        {
             message = "Database error";
+        }
 
         else
+        {
             message = "Error";
+        }
 
         logger.error(message, exception);
     }

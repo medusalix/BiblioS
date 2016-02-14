@@ -27,7 +27,9 @@ public class StatMapper extends BeanMapper<Stat>
             String columnName = metaData.getColumnName(i);
 
             if (columnName.equals("Title"))
+            {
                 stat.setBookTitle(rs.getString(i));
+            }
         }
 
         return stat;
