@@ -27,6 +27,8 @@ public class RestrictedTextField extends TextField
     public void replaceText(int start, int end, String text)
     {
         if (text.isEmpty() || restriction.test(getText() + text))
+        {
             super.replaceText(start, end, text);
+        }
     }
 }

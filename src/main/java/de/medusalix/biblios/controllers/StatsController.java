@@ -91,7 +91,9 @@ public class StatsController
         }
         
         if (chart.getData().isEmpty())
+        {
             chart.getData().add(new PieChart.Data(Consts.Strings.STAT_CHART_PLACEHOLDER, 100));
+        }
 	}
 	
 	private void updateStats()

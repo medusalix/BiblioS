@@ -41,7 +41,9 @@ public class BackupManager
         Stream<String> backupStream = getBackupStream();
 
         if (backupStream != null)
+        {
             return backupStream.collect(Collectors.toList());
+        }
 
         return null;
     }

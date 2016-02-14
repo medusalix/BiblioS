@@ -72,7 +72,9 @@ public class BookRow extends TableRow<BookTableItem>
             try
             {
                 if (stats.countByBookId(id) == 1)
+                {
                     stats.deleteByBookId(id);
+                }
 
                 books.delete(id);
 
