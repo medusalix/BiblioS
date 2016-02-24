@@ -338,7 +338,7 @@ public class MainWindowController implements UpdatableController
 
         if (student != null)
         {
-            if (student.getGrade().isEmpty())
+            if (student.getGrade() == null)
             {
                 studentLabel.setText(student.getName());
             }
