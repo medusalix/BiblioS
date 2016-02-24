@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Consts
 {
-    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.6";
+    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.7";
     public static final String ADMINISTRATION_PASSWORD = "medusalix" + LocalDate.now().getDayOfWeek().getValue();
 
     public static class Paths
@@ -158,9 +158,6 @@ public class Consts
 
         public static final Background BOOK_NOT_BORROWED_BACKGROUND = new Background(new BackgroundFill(Color.valueOf("#99FF99"), CornerRadii.EMPTY, Insets.EMPTY));
         public static final Background BOOK_BORROWED_BACKGROUND = new Background(new BackgroundFill(Color.valueOf("#FF7777"), CornerRadii.EMPTY, Insets.EMPTY));
-
-        // Used when there is no ISBN for a book
-        public static final String ISBN_PLACEHOLDER = "0";
 
         public static final int MAX_BOOKS_IN_STATS = 10;
     }

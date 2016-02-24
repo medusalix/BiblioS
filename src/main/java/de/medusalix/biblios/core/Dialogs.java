@@ -101,7 +101,7 @@ public class Dialogs
         }
 
         isbnField.setRestriction(isbn -> isbn.matches("\\d*") && isbn.length() <= 13);
-        isbnField.setSubmitRestriction(isbn -> isbn.length() == 10 || isbn.length() == 13 || isbn.equals(Consts.Misc.ISBN_PLACEHOLDER));
+        isbnField.setSubmitRestriction(isbn -> isbn.length() == 0 || isbn.length() == 10 || isbn.length() == 13);
         publishedDateField.setRestriction(publishedDate -> publishedDate.matches("\\d*") && publishedDate.length() <= 4);
         publishedDateField.setSubmitRestriction(publishedDate -> publishedDate.length() == 4);
 
