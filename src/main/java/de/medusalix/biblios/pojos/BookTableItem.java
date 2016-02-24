@@ -24,7 +24,14 @@ public class BookTableItem implements Searchable
     @Override
     public boolean searchFor(String text)
     {
-        return getTitle().toLowerCase().contains(text) || getAuthor().toLowerCase().contains(text) || String.valueOf(getIsbn()).toLowerCase().contains(text) || getPublisher().toLowerCase().contains(text) || String.valueOf(getPublishedDate()).toLowerCase().contains(text) || getAdditionalInfo().toLowerCase().contains(text);
+        boolean titleContains = getTitle().toLowerCase().contains(text);
+        boolean authorContains = getAuthor() != null && getAuthor().toLowerCase().contains(text);
+        boolean isbnContains = String.valueOf(getIsbn()).toLowerCase().contains(text);
+        boolean publisherContains = getPublisher() != null && getPublisher().toLowerCase().contains(text);
+        boolean publishedDateContains = String.valueOf(getPublishedDate()).toLowerCase().contains(text);
+        boolean additionalInfoContains = getAdditionalInfo() != null && getAdditionalInfo().toLowerCase().contains(text);
+
+        return titleContains || authorContains || isbnContains || publisherContains || publishedDateContains || additionalInfoContains;
     }
 
     public long getId()
