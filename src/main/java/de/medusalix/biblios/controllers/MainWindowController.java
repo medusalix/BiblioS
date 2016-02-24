@@ -253,7 +253,7 @@ public class MainWindowController implements UpdatableController
     {
         borrowedBookTableView.setOnDragOver(event ->
         {
-            if (event.getDragboard().hasString() && !(event.getGestureSource() instanceof BorrowedBookRow) && !studentListView.getSelectionModel().isEmpty())
+            if (event.getDragboard().hasString() && !studentListView.getSelectionModel().isEmpty() && !(event.getGestureSource() instanceof BorrowedBookRow))
             {
                 event.acceptTransferModes(TransferMode.MOVE);
             }

@@ -55,7 +55,7 @@ public class Consts
 
     public static class Database
     {
-        public static final String NAME = "Database";
+        public static final String NAME = "BiblioS";
         public static final String SUFFIX = ".mv.db";
 
         public static final String CONNECTION_URL = String.format("jdbc:h2:file:./%s;DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0", Paths.DATABASE);
