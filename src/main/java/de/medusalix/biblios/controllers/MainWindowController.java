@@ -17,7 +17,6 @@ import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.core.Dialogs;
 import de.medusalix.biblios.managers.ExceptionManager;
 import de.medusalix.biblios.pojos.*;
-import de.medusalix.biblios.helpers.ProgressHelper;
 import de.medusalix.biblios.helpers.WindowHelper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -90,8 +89,6 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void initialize()
     {
-        ProgressHelper.showDialog(Consts.Dialogs.LOADING_DATABASE_TITLE);
-
         initMenuItems();
         initStudentListView();
         initTableViews();
@@ -100,8 +97,6 @@ public class MainWindowController implements UpdatableController
         initSearchFields();
 
         updateData();
-
-        ProgressHelper.hideDialog();
     }
 
     private List<BorrowedBook> getBorrowedBooks()
@@ -173,6 +168,15 @@ public class MainWindowController implements UpdatableController
     @Override
     public void updateData()
     {
+        try
+        {
+            Thread.sleep(3000);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
         originalStudentList.clear();
         originalBookList.clear();
 

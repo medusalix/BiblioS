@@ -5,7 +5,6 @@ import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.helpers.DialogHelper;
 import de.medusalix.biblios.helpers.GoogleBooksHelper;
-import de.medusalix.biblios.helpers.ProgressHelper;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.StudentListItem;
@@ -173,11 +172,7 @@ public class Dialogs
         publisherField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());
         publishedDateField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());
 
-        ProgressHelper.showDialog(Consts.Dialogs.FETCHING_INFORMATION_TITLE);
-
         GoogleBook.VolumeInfo volumeInfo = GoogleBooksHelper.getVolumeInfoFromIsbn(isbn);
-
-        ProgressHelper.hideDialog();
 
         if (volumeInfo != null)
         {
