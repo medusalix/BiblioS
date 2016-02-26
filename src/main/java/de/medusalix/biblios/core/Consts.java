@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Consts
 {
-    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.7";
+    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.8";
     public static final String ADMINISTRATION_PASSWORD = "medusalix" + LocalDate.now().getDayOfWeek().getValue();
 
     public static class Paths
