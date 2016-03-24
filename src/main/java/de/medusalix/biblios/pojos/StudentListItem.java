@@ -10,8 +10,6 @@ public class StudentListItem implements Searchable
 
     private boolean hasBorrowedBooks;
 
-    public StudentListItem() {}
-
     public StudentListItem(Student student, boolean hasBorrowedBooks)
     {
         this.id = student.getId();
@@ -23,7 +21,10 @@ public class StudentListItem implements Searchable
     @Override
     public boolean searchFor(String text)
     {
-        return getName().toLowerCase().contains(text) || getGrade().toLowerCase().contains(text);
+        boolean nameContains = getName().toLowerCase().contains(text);
+        boolean gradeContains = getGrade() != null && getGrade().toLowerCase().contains(text);
+
+        return nameContains || gradeContains;
     }
 
     public long getId()

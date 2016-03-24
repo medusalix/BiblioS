@@ -1,6 +1,6 @@
 package de.medusalix.biblios.pojos;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 
 import java.time.LocalDate;
@@ -33,6 +33,6 @@ public class BorrowListTableItem
 
     public boolean isExceeded()
     {
-        return LocalDate.now().isAfter(LocalDate.parse(getReturnDate(), Consts.Misc.DATE_FORMATTER));
+        return LocalDate.now().isAfter(LocalDate.parse(getReturnDate(), Reference.Misc.DATE_FORMATTER));
     }
 }

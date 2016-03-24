@@ -10,9 +10,9 @@ import javafx.scene.paint.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Consts
+public class Reference
 {
-    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.7";
+    public static final String TITLE = "BiblioS ©Severin v. W. | Version 1.1.9";
     public static final String ADMINISTRATION_PASSWORD = "medusalix" + LocalDate.now().getDayOfWeek().getValue();
 
     public static class Paths
@@ -58,7 +58,7 @@ public class Consts
         public static final String NAME = "BiblioS";
         public static final String SUFFIX = ".mv.db";
 
-        public static final String CONNECTION_URL = String.format("jdbc:h2:file:./%s;DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0", Paths.DATABASE);
+        public static final String CONNECTION_URL = "jdbc:h2:file:./" + Paths.DATABASE + ";DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0";
 
         public static final String BACKUP_PREFIX = "Backup-";
         public static final String MANUAL_BACKUP_SUFFIX = "-Manual";

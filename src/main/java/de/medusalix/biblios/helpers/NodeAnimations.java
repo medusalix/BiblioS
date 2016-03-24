@@ -7,7 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
-public class NodeHelper
+public class NodeAnimations
 {
     public static void blinkGreen(Node node, Node focusNode)
     {

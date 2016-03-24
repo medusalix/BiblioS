@@ -1,16 +1,12 @@
 package de.medusalix.biblios.core;
 
-import de.medusalix.biblios.helpers.RuntimeHelper;
+import de.medusalix.biblios.helpers.Exceptions;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.managers.ExceptionManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -29,19 +25,19 @@ public class BiblioS extends Application
 
 		catch (IOException e)
 		{
-            ExceptionManager.log(e);
+            Exceptions.log(e);
 		}
 	}
     
     private void prepareAndShowMainWindow(Stage stage) throws IOException
     {
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource(Consts.Paths.MAIN_WINDOW)));
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource(Reference.Paths.MAIN_WINDOW)));
         
-        scene.getStylesheets().add(getClass().getResource(Consts.Paths.STYLESHEET).toExternalForm());
+        scene.getStylesheets().add(getClass().getResource(Reference.Paths.STYLESHEET).toExternalForm());
         
-        stage.setTitle(Consts.TITLE);
-        stage.getIcons().add(Consts.Images.FAVICON);
-        stage.setMaximized(RuntimeHelper.isRelease());
+        stage.setTitle(Reference.TITLE);
+        stage.getIcons().add(Reference.Images.FAVICON);
+        stage.setMaximized(System.getenv("debug") == null);
     	stage.setScene(scene);
         stage.show();
 
