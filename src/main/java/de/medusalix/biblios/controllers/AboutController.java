@@ -1,8 +1,10 @@
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.managers.ExceptionManager;
-import javafx.animation.*;
+import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.helpers.Exceptions;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -65,12 +67,12 @@ public class AboutController
     {
         try
         {
-            Desktop.getDesktop().browse(new URI(Consts.Paths.ICON_PACKAGE_URL));
+            Desktop.getDesktop().browse(new URI(Reference.Paths.ICON_PACKAGE_URL));
         }
 
         catch (URISyntaxException | IOException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
     }
 }

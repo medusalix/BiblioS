@@ -4,7 +4,8 @@ import de.medusalix.biblios.controls.BookRow;
 import de.medusalix.biblios.controls.BorrowedBookRow;
 import de.medusalix.biblios.controls.ExceededCell;
 import de.medusalix.biblios.controls.StudentCell;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Dialogs;
 import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
@@ -13,11 +14,12 @@ import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import de.medusalix.biblios.database.objects.Stat;
 import de.medusalix.biblios.database.objects.Student;
+import de.medusalix.biblios.helpers.Windows;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.managers.ExceptionManager;
-import de.medusalix.biblios.pojos.*;
-import de.medusalix.biblios.helpers.WindowHelper;
+import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.pojos.BookTableItem;
+import de.medusalix.biblios.pojos.BorrowedBookTableItem;
+import de.medusalix.biblios.pojos.StudentListItem;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
@@ -108,7 +109,7 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
 
         return null;
@@ -134,7 +135,7 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
     }
 
@@ -161,22 +162,13 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
     }
 
     @Override
     public void updateData()
     {
-        try
-        {
-            Thread.sleep(3000);
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-
         originalStudentList.clear();
         originalBookList.clear();
 
@@ -206,13 +198,13 @@ public class MainWindowController implements UpdatableController
 
     private void initMenuItems()
     {
-        fullscreenMenuItem.setGraphic(new ImageView(Consts.Images.FULLSCREEN_MENU_ITEM));
-        aboutMenuItem.setGraphic(new ImageView(Consts.Images.ABOUT_MENU_ITEM));
+        fullscreenMenuItem.setGraphic(new ImageView(Reference.Images.FULLSCREEN_MENU_ITEM));
+        aboutMenuItem.setGraphic(new ImageView(Reference.Images.ABOUT_MENU_ITEM));
     }
 
     private void initStudentListView()
     {
-        Label studentListViewLabel = new Label(Consts.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
+        Label studentListViewLabel = new Label(Reference.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
 
         studentListViewLabel.setFont(Font.font(16));
 
@@ -222,8 +214,8 @@ public class MainWindowController implements UpdatableController
 
     private void initTableViews()
     {
-        Label borrowedBookTableViewLabel = new Label(Consts.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
-        Label bookTableViewLabel = new Label(Consts.Strings.BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label borrowedBookTableViewLabel = new Label(Reference.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label bookTableViewLabel = new Label(Reference.Strings.BOOK_TABLE_VIEW_PLACEHOLDER);
 
         borrowedBookTableViewLabel.setFont(Font.font(16));
         bookTableViewLabel.setFont(Font.font(16));
@@ -235,7 +227,7 @@ public class MainWindowController implements UpdatableController
         borrowDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBorrowDate()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
-        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
+        exceededColumn.setGraphic(new ImageView(Reference.Images.EXCEEDED_COLUMN));
         exceededColumn.setCellFactory(param -> new ExceededCell());
 
         titleColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
@@ -272,8 +264,8 @@ public class MainWindowController implements UpdatableController
 
             LocalDate currentDate = LocalDate.now();
 
-            String borrowDate = currentDate.format(Consts.Misc.DATE_FORMATTER);
-            String returnDate = currentDate.plusDays(14).format(Consts.Misc.DATE_FORMATTER);
+            String borrowDate = currentDate.format(Reference.Misc.DATE_FORMATTER);
+            String returnDate = currentDate.plusDays(14).format(Reference.Misc.DATE_FORMATTER);
 
             try
             {
@@ -296,7 +288,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         });
 
@@ -325,7 +317,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         });
     }
@@ -364,7 +356,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         }
 
@@ -396,7 +388,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAboutClick(ActionEvent event)
     {
-        WindowHelper.openWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
+        Windows.openWindow(((MenuItem)event.getSource()).getText(), Reference.Paths.ABOUT_WINDOW);
     }
 
     @FXML
@@ -404,28 +396,28 @@ public class MainWindowController implements UpdatableController
     {
         String password = Dialogs.showPasswordDialog();
 
-        if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
+        if (password != null && password.equals(Reference.ADMINISTRATION_PASSWORD))
         {
-            WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
+            Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.ADMINISTRATION_WINDOW);
         }
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
+        Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.STATS_WINDOW);
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        WindowHelper.openWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
+        Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.BORROW_LIST_WINDOW);
     }
 
     @FXML
     private void onAddStudentClick()
     {
-        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
+        Student student = Dialogs.showStudentDialog(Reference.Dialogs.ADD_STUDENT_TEXT, Reference.Images.ADD_DIALOG_HEADER, null);
 
         if (student != null)
         {
@@ -440,7 +432,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         }
     }
@@ -448,7 +440,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAddBookClick()
     {
-        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
+        Book book = Dialogs.showBookDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.ADD_DIALOG_HEADER, null);
 
         if (book != null)
         {
@@ -463,7 +455,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         }
     }
@@ -490,7 +482,7 @@ public class MainWindowController implements UpdatableController
 
                 catch (DBIException e)
                 {
-                    ExceptionManager.log(e);
+                    Exceptions.log(e);
                 }
             }
         }

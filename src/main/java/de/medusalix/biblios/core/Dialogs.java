@@ -4,23 +4,26 @@ import de.medusalix.biblios.controls.RestrictedTextField;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.helpers.DialogHelper;
-import de.medusalix.biblios.helpers.GoogleBooksHelper;
+import de.medusalix.biblios.helpers.GoogleBooks;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.StudentListItem;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
 public class Dialogs
 {
     public static String showPasswordDialog()
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Consts.Dialogs.PASSWORD_REQUIRED_TEXT, Consts.Images.PASSWORD_DIALOG_HEADER, Consts.Paths.PASSWORD_DIALOG);
+        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.PASSWORD_REQUIRED_TEXT, Reference.Images.PASSWORD_DIALOG_HEADER, Reference.Paths.PASSWORD_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
-        PasswordField passwordField = (PasswordField)dialog.getDialogPane().lookup(Consts.FxIds.PASSWORD_FIELD);
+        PasswordField passwordField = (PasswordField)dialog.getDialogPane().lookup(Reference.FxIds.PASSWORD_FIELD);
 
         button.setDisable(true);
 
@@ -37,12 +40,12 @@ public class Dialogs
 
     public static Student showStudentDialog(String text, Image image, StudentListItem initialValues)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Consts.Paths.STUDENT_DIALOG);
+        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Reference.Paths.STUDENT_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
-        TextField nameField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.NAME_FIELD);
-        RestrictedTextField gradeField = (RestrictedTextField)dialog.getDialogPane().lookup(Consts.FxIds.GRADE_FIELD);
+        TextField nameField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.NAME_FIELD);
+        RestrictedTextField gradeField = (RestrictedTextField)dialog.getDialogPane().lookup(Reference.FxIds.GRADE_FIELD);
 
         button.setDisable(true);
 
@@ -74,16 +77,16 @@ public class Dialogs
 
     public static Book showBookDialog(String text, Image image, BookTableItem initialValues)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Consts.Paths.BOOK_DIALOG);
+        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Reference.Paths.BOOK_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
-        TextField titleField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.TITLE_FIELD);
-        TextField authorField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.AUTHOR_FIELD);
-        RestrictedTextField isbnField = (RestrictedTextField)dialog.getDialogPane().lookup(Consts.FxIds.ISBN_FIELD);
-        TextField publisherField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.PUBLISHER_FIELD);
-        RestrictedTextField publishedDateField = (RestrictedTextField)dialog.getDialogPane().lookup(Consts.FxIds.PUBLISHED_DATE_FIELD);
-        TextField additionalInfoField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.ADDITIONAL_INFO_FIELD);
+        TextField titleField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.TITLE_FIELD);
+        TextField authorField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.AUTHOR_FIELD);
+        RestrictedTextField isbnField = (RestrictedTextField)dialog.getDialogPane().lookup(Reference.FxIds.ISBN_FIELD);
+        TextField publisherField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.PUBLISHER_FIELD);
+        RestrictedTextField publishedDateField = (RestrictedTextField)dialog.getDialogPane().lookup(Reference.FxIds.PUBLISHED_DATE_FIELD);
+        TextField additionalInfoField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.ADDITIONAL_INFO_FIELD);
 
         button.setDisable(true);
 
@@ -100,7 +103,7 @@ public class Dialogs
         }
 
         isbnField.setRestriction(isbn -> isbn.matches("\\d*") && isbn.length() <= 13);
-        isbnField.setSubmitRestriction(isbn -> isbn.length() == 10 || isbn.length() == 13 || isbn.equals(Consts.Misc.ISBN_PLACEHOLDER));
+        isbnField.setSubmitRestriction(isbn -> isbn.length() == 10 || isbn.length() == 13 || isbn.equals(Reference.Misc.ISBN_PLACEHOLDER));
         publishedDateField.setRestriction(publishedDate -> publishedDate.matches("\\d*") && publishedDate.length() <= 4);
         publishedDateField.setSubmitRestriction(publishedDate -> publishedDate.length() == 4);
 
@@ -124,11 +127,11 @@ public class Dialogs
 
     public static String showScanIsbnDialog()
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.FETCH_DIALOG_HEADER, Consts.Paths.SCAN_ISBN_DIALOG);
+        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.SCAN_ISBN_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
-        RestrictedTextField isbnField = (RestrictedTextField)dialog.getDialogPane().lookup(Consts.FxIds.ISBN_FIELD);
+        RestrictedTextField isbnField = (RestrictedTextField)dialog.getDialogPane().lookup(Reference.FxIds.ISBN_FIELD);
 
         button.setDisable(true);
 
@@ -147,16 +150,16 @@ public class Dialogs
 
     public static Book showBookIsbnDialog(String isbn)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.FETCH_DIALOG_HEADER, Consts.Paths.BOOK_ISBN_DIALOG);
+        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.BOOK_ISBN_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
-        TextField isbnField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.ISBN_FIELD);
-        TextField titleField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.TITLE_FIELD);
-        TextField authorField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.AUTHOR_FIELD);
-        TextField publisherField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.PUBLISHER_FIELD);
-        RestrictedTextField publishedDateField = (RestrictedTextField)dialog.getDialogPane().lookup(Consts.FxIds.PUBLISHED_DATE_FIELD);
-        TextField additionalInfoField = (TextField)dialog.getDialogPane().lookup(Consts.FxIds.ADDITIONAL_INFO_FIELD);
+        TextField isbnField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.ISBN_FIELD);
+        TextField titleField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.TITLE_FIELD);
+        TextField authorField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.AUTHOR_FIELD);
+        TextField publisherField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.PUBLISHER_FIELD);
+        RestrictedTextField publishedDateField = (RestrictedTextField)dialog.getDialogPane().lookup(Reference.FxIds.PUBLISHED_DATE_FIELD);
+        TextField additionalInfoField = (TextField)dialog.getDialogPane().lookup(Reference.FxIds.ADDITIONAL_INFO_FIELD);
 
         button.setDisable(true);
 
@@ -172,7 +175,7 @@ public class Dialogs
         publisherField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());
         publishedDateField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());
 
-        GoogleBook.VolumeInfo volumeInfo = GoogleBooksHelper.getVolumeInfoFromIsbn(isbn);
+        GoogleBook.VolumeInfo volumeInfo = GoogleBooks.getVolumeInfoFromIsbn(isbn);
 
         if (volumeInfo != null)
         {

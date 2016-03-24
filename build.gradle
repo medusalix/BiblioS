@@ -6,6 +6,8 @@ compileJava.options.encoding = "UTF-8"
 test.useTestNG()
 
 jar {
+    dependsOn check
+
     manifest.attributes "Main-Class": "de.medusalix.biblios.core.BiblioS"
 
     from {
@@ -24,10 +26,10 @@ dependencies {
     compile group: "org.apache.logging.log4j", name: "log4j-core", version: "2.5"
 
     compile group: "com.h2database", name: "h2", version: "1.4.191"
-    compile group: "org.jdbi", name: "jdbi", version: "2.71"
+    compile group: "org.jdbi", name: "jdbi", version: "2.72"
 
-    compile group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.6.4"
-    compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.6.4"
+    compile group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.7.3"
+    compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.7.3"
 
     testCompile group: "org.testng", name: "testng", version: "6.9.10"
 }

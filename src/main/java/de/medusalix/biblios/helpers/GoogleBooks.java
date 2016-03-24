@@ -2,10 +2,9 @@ package de.medusalix.biblios.helpers;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.GoogleBookQuery;
-import de.medusalix.biblios.managers.ExceptionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,16 +13,15 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
-public class GoogleBooksHelper
+public class GoogleBooks
 {
-    private static Logger logger = LogManager.getLogger(GoogleBooksHelper.class);
+    private static Logger logger = LogManager.getLogger(GoogleBooks.class);
 
     public static String readApiKey()
     {
-        Path apiKeyPath = Paths.get(Consts.Paths.API_KEY);
+        Path apiKeyPath = java.nio.file.Paths.get(Reference.Paths.API_KEY);
 
         if (Files.exists(apiKeyPath))
         {
@@ -34,7 +32,7 @@ public class GoogleBooksHelper
 
             catch (IOException e)
             {
-                ExceptionManager.log(e);
+                Exceptions.log(e);
             }
         }
 
@@ -45,12 +43,12 @@ public class GoogleBooksHelper
     {
         try
         {
-            Files.write(Paths.get(Consts.Paths.API_KEY), apiKey.getBytes());
+            Files.write(java.nio.file.Paths.get(Reference.Paths.API_KEY), apiKey.getBytes());
         }
 
         catch (IOException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
     }
 
@@ -58,7 +56,7 @@ public class GoogleBooksHelper
     {
         String apiKey = readApiKey();
 
-        try (InputStream queryInputStream = new URL(String.format(Consts.GoogleBooks.GET_VOLUMES_BY_ISBN_URL, isbn, apiKey)).openStream())
+        try (InputStream queryInputStream = new URL(String.format(Reference.GoogleBooks.GET_VOLUMES_BY_ISBN_URL, isbn, apiKey)).openStream())
         {
             ObjectMapper mapper = new ObjectMapper();
 
@@ -68,7 +66,7 @@ public class GoogleBooksHelper
 
             if (items != null)
             {
-                try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS_URL, items.get(0).getSelfLink(), apiKey)).openStream())
+                try (InputStream volumeInputStream = new URL(String.format(Reference.GoogleBooks.VOLUME_INFO_FIELDS_URL, items.get(0).getSelfLink(), apiKey)).openStream())
                 {
                     logger.info("Google Books information fetched");
 
@@ -79,7 +77,7 @@ public class GoogleBooksHelper
 
         catch (IOException e)
         {
-            ExceptionManager.log(e);
+            Exceptions.log(e);
         }
 
         return null;

@@ -1,9 +1,5 @@
 package de.medusalix.biblios.database.access;
 
-import de.medusalix.biblios.database.access.Books;
-import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.database.access.Stats;
-import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import de.medusalix.biblios.database.objects.Stat;
