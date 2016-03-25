@@ -4,7 +4,7 @@ import de.medusalix.biblios.controls.BorrowListExceededCell;
 import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import de.medusalix.biblios.pojos.BorrowListTableItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;

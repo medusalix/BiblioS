@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.core.Reference;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;

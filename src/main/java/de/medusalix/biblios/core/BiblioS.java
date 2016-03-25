@@ -1,6 +1,6 @@
 package de.medusalix.biblios.core;
 
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
 import javafx.application.Application;

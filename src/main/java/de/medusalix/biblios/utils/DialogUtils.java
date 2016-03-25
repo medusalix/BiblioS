@@ -1,4 +1,4 @@
-package de.medusalix.biblios.helpers;
+package de.medusalix.biblios.utils;
 
 import de.medusalix.biblios.core.Reference;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DialogHelper
+public class DialogUtils
 {
     public static <T> Dialog<T> createCustomDialog(String fxml)
     {
@@ -19,7 +19,7 @@ public class DialogHelper
 
         try
         {
-            dialog.getDialogPane().setContent(FXMLLoader.load(DialogHelper.class.getResource(fxml)));
+            dialog.getDialogPane().setContent(FXMLLoader.load(DialogUtils.class.getResource(fxml)));
 
             // Set the favicon
             ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(Reference.Images.FAVICON);

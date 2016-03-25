@@ -3,8 +3,8 @@ package de.medusalix.biblios.core;
 import de.medusalix.biblios.controls.RestrictedTextField;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.Student;
-import de.medusalix.biblios.helpers.DialogHelper;
-import de.medusalix.biblios.helpers.GoogleBooks;
+import de.medusalix.biblios.utils.DialogUtils;
+import de.medusalix.biblios.utils.GoogleBooks;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.StudentListItem;
@@ -19,7 +19,7 @@ public class Dialogs
 {
     public static String showPasswordDialog()
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.PASSWORD_REQUIRED_TEXT, Reference.Images.PASSWORD_DIALOG_HEADER, Reference.Paths.PASSWORD_DIALOG);
+        Dialog<ButtonType> dialog = DialogUtils.createStandardDialog(Reference.Dialogs.PASSWORD_REQUIRED_TEXT, Reference.Images.PASSWORD_DIALOG_HEADER, Reference.Paths.PASSWORD_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
@@ -40,7 +40,7 @@ public class Dialogs
 
     public static Student showStudentDialog(String text, Image image, StudentListItem initialValues)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Reference.Paths.STUDENT_DIALOG);
+        Dialog<ButtonType> dialog = DialogUtils.createStandardDialog(text, image, Reference.Paths.STUDENT_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
@@ -77,7 +77,7 @@ public class Dialogs
 
     public static Book showBookDialog(String text, Image image, BookTableItem initialValues)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(text, image, Reference.Paths.BOOK_DIALOG);
+        Dialog<ButtonType> dialog = DialogUtils.createStandardDialog(text, image, Reference.Paths.BOOK_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
@@ -127,7 +127,7 @@ public class Dialogs
 
     public static String showScanIsbnDialog()
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.SCAN_ISBN_DIALOG);
+        Dialog<ButtonType> dialog = DialogUtils.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.SCAN_ISBN_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 
@@ -150,7 +150,7 @@ public class Dialogs
 
     public static Book showBookIsbnDialog(String isbn)
     {
-        Dialog<ButtonType> dialog = DialogHelper.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.BOOK_ISBN_DIALOG);
+        Dialog<ButtonType> dialog = DialogUtils.createStandardDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.FETCH_DIALOG_HEADER, Reference.Paths.BOOK_ISBN_DIALOG);
 
         Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 

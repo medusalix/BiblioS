@@ -4,13 +4,13 @@ import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
-import de.medusalix.biblios.helpers.DialogHelper;
-import de.medusalix.biblios.helpers.GoogleBooks;
-import de.medusalix.biblios.helpers.NodeAnimations;
-import de.medusalix.biblios.helpers.Threads;
+import de.medusalix.biblios.utils.DialogUtils;
+import de.medusalix.biblios.utils.GoogleBooks;
+import de.medusalix.biblios.utils.NodeAnimations;
+import de.medusalix.biblios.utils.Threads;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -109,7 +109,7 @@ public class AdministrationController
     @FXML
     private void onDeleteAllBackupsClick(ActionEvent event)
     {
-        Alert alert = DialogHelper.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.DELETE_ALL_BACKUPS_TITLE, Reference.Dialogs.DELETE_ALL_BACKUPS_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.DELETE_ALL_BACKUPS_TITLE, Reference.Dialogs.DELETE_ALL_BACKUPS_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
@@ -142,7 +142,7 @@ public class AdministrationController
 
                 NodeAnimations.blinkGreen(loadBackupButton);
 
-                DialogHelper.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
+                DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (IOException e)
@@ -174,7 +174,7 @@ public class AdministrationController
     @FXML
     private void onResetStatsClick(ActionEvent event)
     {
-        Alert alert = DialogHelper.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.RESET_STATS_TITLE, Reference.Dialogs.RESET_STATS_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.RESET_STATS_TITLE, Reference.Dialogs.RESET_STATS_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
@@ -196,7 +196,7 @@ public class AdministrationController
     @FXML
     private void onStartOfSchoolClick(ActionEvent event)
 	{
-        Alert alert = DialogHelper.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.START_OF_SCHOOL_TITLE, Reference.Dialogs.START_OF_SCHOOL_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.START_OF_SCHOOL_TITLE, Reference.Dialogs.START_OF_SCHOOL_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
@@ -211,7 +211,7 @@ public class AdministrationController
 
                 NodeAnimations.blinkGreen((Node)event.getSource());
 
-                DialogHelper.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
+                DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (DBIException e)

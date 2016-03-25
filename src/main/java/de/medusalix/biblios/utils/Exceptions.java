@@ -1,4 +1,4 @@
-package de.medusalix.biblios.helpers;
+package de.medusalix.biblios.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
