@@ -1,4 +1,4 @@
-package de.medusalix.biblios.helpers;
+package de.medusalix.biblios.utils;
 
 import de.medusalix.biblios.core.BiblioS;
 import de.medusalix.biblios.core.Reference;

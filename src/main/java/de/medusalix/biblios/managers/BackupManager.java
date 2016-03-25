@@ -1,7 +1,7 @@
 package de.medusalix.biblios.managers;
 
 import de.medusalix.biblios.core.Reference;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 
 import java.io.IOException;
 import java.nio.file.Files;

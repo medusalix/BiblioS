@@ -5,7 +5,7 @@ import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.exceptions.DBIException;
 

@@ -1,4 +1,4 @@
-package de.medusalix.biblios.helpers;
+package de.medusalix.biblios.utils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

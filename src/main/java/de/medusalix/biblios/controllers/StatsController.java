@@ -6,7 +6,7 @@ import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.helpers.Exceptions;
+import de.medusalix.biblios.utils.Exceptions;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
