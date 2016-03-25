@@ -1,14 +1,14 @@
-apply plugin: "java"
-apply plugin: "idea"
+apply plugin: 'java'
+apply plugin: 'idea'
 
-compileJava.options.encoding = "UTF-8"
+compileJava.options.encoding = 'UTF-8'
 
 test.useTestNG()
 
 jar {
     dependsOn check
 
-    manifest.attributes "Main-Class": "de.medusalix.biblios.core.BiblioS"
+    manifest.attributes 'Main-Class': 'de.medusalix.biblios.core.BiblioS'
 
     from {
         configurations.compile.collect {
@@ -22,14 +22,14 @@ repositories {
 }
 
 dependencies {
-    compile group: "org.apache.logging.log4j", name: "log4j-api", version: "2.5"
-    compile group: "org.apache.logging.log4j", name: "log4j-core", version: "2.5"
+    compile 'org.apache.logging.log4j:log4j-api:2.5'
+    compile 'org.apache.logging.log4j:log4j-core:2.5'
 
-    compile group: "com.h2database", name: "h2", version: "1.4.191"
-    compile group: "org.jdbi", name: "jdbi", version: "2.72"
+    compile 'com.h2database:h2:1.4.191'
+    compile 'org.jdbi:jdbi:2.72'
 
-    compile group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.7.3"
-    compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.7.3"
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
 
-    testCompile group: "org.testng", name: "testng", version: "6.9.10"
+    testCompile 'org.testng:testng:6.9.10'
 }
