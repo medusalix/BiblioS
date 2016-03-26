@@ -14,9 +14,9 @@ import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import de.medusalix.biblios.database.objects.Stat;
 import de.medusalix.biblios.database.objects.Student;
-import de.medusalix.biblios.utils.Windows;
+import de.medusalix.biblios.utils.WindowUtils;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.pojos.BorrowedBookTableItem;
 import de.medusalix.biblios.pojos.StudentListItem;
@@ -109,7 +109,7 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         return null;
@@ -135,7 +135,7 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 
@@ -162,7 +162,7 @@ public class MainWindowController implements UpdatableController
 
         catch (DBIException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 
@@ -288,7 +288,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         });
 
@@ -317,7 +317,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         });
     }
@@ -356,7 +356,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
 
@@ -388,7 +388,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAboutClick(ActionEvent event)
     {
-        Windows.openWindow(((MenuItem)event.getSource()).getText(), Reference.Paths.ABOUT_WINDOW);
+        WindowUtils.openWindow(((MenuItem)event.getSource()).getText(), Reference.Paths.ABOUT_WINDOW);
     }
 
     @FXML
@@ -398,20 +398,20 @@ public class MainWindowController implements UpdatableController
 
         if (password != null && password.equals(Reference.ADMINISTRATION_PASSWORD))
         {
-            Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.ADMINISTRATION_WINDOW);
+            WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.ADMINISTRATION_WINDOW);
         }
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.STATS_WINDOW);
+        WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.STATS_WINDOW);
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        Windows.openWindow(((Button)event.getSource()).getText(), Reference.Paths.BORROW_LIST_WINDOW);
+        WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.BORROW_LIST_WINDOW);
     }
 
     @FXML
@@ -432,7 +432,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
     }
@@ -455,7 +455,7 @@ public class MainWindowController implements UpdatableController
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
     }
@@ -482,7 +482,7 @@ public class MainWindowController implements UpdatableController
 
                 catch (DBIException e)
                 {
-                    Exceptions.log(e);
+                    ExceptionUtils.log(e);
                 }
             }
         }

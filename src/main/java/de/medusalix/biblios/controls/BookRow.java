@@ -7,7 +7,7 @@ import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.pojos.StudentListItem;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -60,7 +60,7 @@ public class BookRow extends TableRow<BookTableItem>
 
                 catch (DBIException e)
                 {
-                    Exceptions.log(e);
+                    ExceptionUtils.log(e);
                 }
             }
         });
@@ -85,7 +85,7 @@ public class BookRow extends TableRow<BookTableItem>
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         });
 

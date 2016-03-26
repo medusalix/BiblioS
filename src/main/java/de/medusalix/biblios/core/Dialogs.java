@@ -4,7 +4,6 @@ import de.medusalix.biblios.controls.RestrictedTextField;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.utils.DialogUtils;
-import de.medusalix.biblios.utils.GoogleBooks;
 import de.medusalix.biblios.pojos.BookTableItem;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.StudentListItem;

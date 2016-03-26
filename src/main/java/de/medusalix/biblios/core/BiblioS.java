@@ -1,6 +1,6 @@
 package de.medusalix.biblios.core;
 
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
 import javafx.application.Application;
@@ -25,7 +25,7 @@ public class BiblioS extends Application
 
 		catch (IOException e)
 		{
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
 		}
 	}
     
@@ -35,7 +35,7 @@ public class BiblioS extends Application
         
         scene.getStylesheets().add(getClass().getResource(Reference.Paths.STYLESHEET).toExternalForm());
         
-        stage.setTitle(Reference.TITLE);
+        stage.setTitle(Reference.WINDOW_TITLE);
         stage.getIcons().add(Reference.Images.FAVICON);
         stage.setMaximized(System.getenv("debug") == null);
     	stage.setScene(scene);

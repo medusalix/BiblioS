@@ -3,7 +3,7 @@ package de.medusalix.biblios.controls;
 import de.medusalix.biblios.controllers.UpdatableController;
 import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.pojos.BorrowedBookTableItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -56,7 +56,7 @@ public class BorrowedBookRow extends TableRow<BorrowedBookTableItem>
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         });
     }

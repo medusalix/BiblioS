@@ -9,13 +9,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Windows
+public class WindowUtils
 {
     public static Stage openWindow(String title, String fxmlPath)
     {
         try
         {
-            Scene scene = new Scene(FXMLLoader.load(Windows.class.getResource(fxmlPath)));
+            Scene scene = new Scene(FXMLLoader.load(WindowUtils.class.getResource(fxmlPath)));
 
             scene.getStylesheets().add(BiblioS.class.getResource(Reference.Paths.STYLESHEET).toExternalForm());
 
@@ -37,7 +37,7 @@ public class Windows
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         return null;

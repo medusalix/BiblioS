@@ -1,7 +1,7 @@
 package de.medusalix.biblios.managers;
 
 import de.medusalix.biblios.core.Reference;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,7 @@ public class BackupManager
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         return null;
@@ -62,7 +62,7 @@ public class BackupManager
 
             catch (IOException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
 
@@ -82,14 +82,14 @@ public class BackupManager
 
                 catch (IOException e)
                 {
-                    Exceptions.log(e);
+                    ExceptionUtils.log(e);
                 }
             });
         }
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 
@@ -122,7 +122,7 @@ public class BackupManager
 
                     catch (IOException e)
                     {
-                        Exceptions.log(e);
+                        ExceptionUtils.log(e);
                     }
                 });
             }

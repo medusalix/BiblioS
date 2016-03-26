@@ -27,7 +27,7 @@ public class DialogUtils
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         return dialog;
