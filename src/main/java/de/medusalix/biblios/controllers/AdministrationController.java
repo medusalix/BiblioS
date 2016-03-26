@@ -5,12 +5,12 @@ import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.utils.DialogUtils;
-import de.medusalix.biblios.utils.GoogleBooks;
-import de.medusalix.biblios.utils.NodeAnimations;
-import de.medusalix.biblios.utils.Threads;
+import de.medusalix.biblios.core.GoogleBooks;
+import de.medusalix.biblios.utils.NodeUtils;
+import de.medusalix.biblios.utils.ThreadUtils;
 import de.medusalix.biblios.managers.BackupManager;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -101,7 +101,7 @@ public class AdministrationController
     {
         BackupManager.createBackup(Reference.Database.MANUAL_BACKUP_SUFFIX);
 
-        NodeAnimations.blinkGreen(createBackupButton);
+        NodeUtils.blinkGreen(createBackupButton);
 
         updateBackups();
     }
@@ -113,7 +113,7 @@ public class AdministrationController
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
-            Threads.runThreadAsDaemon(() ->
+            ThreadUtils.runThreadAsDaemon(() ->
             {
                 BackupManager.deleteAllBackups();
 
@@ -121,7 +121,7 @@ public class AdministrationController
                 {
                     updateBackups();
 
-                    NodeAnimations.blinkGreen((Node)event.getSource());
+                    NodeUtils.blinkGreen((Node)event.getSource());
                 });
             });
         }
@@ -140,20 +140,20 @@ public class AdministrationController
 
                 updateBackups();
 
-                NodeAnimations.blinkGreen(loadBackupButton);
+                NodeUtils.blinkGreen(loadBackupButton);
 
                 DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (IOException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
 
         else
         {
-            NodeAnimations.blinkRed(backupBox, backupBox);
+            NodeUtils.blinkRed(backupBox, backupBox);
         }
     }
 
@@ -167,7 +167,7 @@ public class AdministrationController
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 
@@ -183,12 +183,12 @@ public class AdministrationController
                 stats.deleteAll();
                 stats.createTable();
 
-                NodeAnimations.blinkGreen((Node)event.getSource());
+                NodeUtils.blinkGreen((Node)event.getSource());
             }
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
     }
@@ -209,14 +209,14 @@ public class AdministrationController
                 students.deleteWhereGrade12();
                 students.updateIncrementGrade();
 
-                NodeAnimations.blinkGreen((Node)event.getSource());
+                NodeUtils.blinkGreen((Node)event.getSource());
 
                 DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
     }

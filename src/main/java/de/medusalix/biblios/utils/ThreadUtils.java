@@ -1,6 +1,6 @@
 package de.medusalix.biblios.utils;
 
-public class Threads
+public class ThreadUtils
 {
     public static void runThreadAsDaemon(Runnable runnable)
     {

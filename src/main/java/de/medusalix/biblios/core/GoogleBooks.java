@@ -1,10 +1,10 @@
-package de.medusalix.biblios.utils;
+package de.medusalix.biblios.core;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.pojos.GoogleBook;
 import de.medusalix.biblios.pojos.GoogleBookQuery;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,7 @@ public class GoogleBooks
 
             catch (IOException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         }
 
@@ -48,7 +48,7 @@ public class GoogleBooks
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 
@@ -77,7 +77,7 @@ public class GoogleBooks
 
         catch (IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         return null;

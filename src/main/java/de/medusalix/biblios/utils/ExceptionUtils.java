@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.skife.jdbi.v2.exceptions.DBIException;
 
-public class Exceptions
+public class ExceptionUtils
 {
-    private static Logger logger = LogManager.getLogger(Exceptions.class);
+    private static Logger logger = LogManager.getLogger(ExceptionUtils.class);
 
     public static void log(Exception exception)
     {

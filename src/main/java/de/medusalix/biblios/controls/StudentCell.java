@@ -5,7 +5,7 @@ import de.medusalix.biblios.core.Reference;
 import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.pojos.StudentListItem;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -41,7 +41,7 @@ public class StudentCell extends ListCell<StudentListItem>
 
                 catch (DBIException e)
                 {
-                    Exceptions.log(e);
+                    ExceptionUtils.log(e);
                 }
             }
         });
@@ -59,7 +59,7 @@ public class StudentCell extends ListCell<StudentListItem>
 
             catch (DBIException e)
             {
-                Exceptions.log(e);
+                ExceptionUtils.log(e);
             }
         });
     }

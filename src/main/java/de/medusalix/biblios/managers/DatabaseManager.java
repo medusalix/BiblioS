@@ -5,7 +5,7 @@ import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.exceptions.DBIException;
 
@@ -35,7 +35,7 @@ public class DatabaseManager
 
         catch (IOException | DBIException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 }

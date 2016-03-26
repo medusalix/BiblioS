@@ -6,7 +6,7 @@ import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -66,7 +66,7 @@ public class StatsController
 
         catch (DBIException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 
         chart.getData().forEach(stat -> stat.setPieValue(stat.getPieValue() / chart.getData().size() * 100));
@@ -107,7 +107,7 @@ public class StatsController
 
         catch (DBIException | IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
 	}
 }

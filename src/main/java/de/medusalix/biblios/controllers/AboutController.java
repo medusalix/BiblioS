@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.core.Reference;
-import de.medusalix.biblios.utils.Exceptions;
+import de.medusalix.biblios.utils.ExceptionUtils;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -72,7 +72,7 @@ public class AboutController
 
         catch (URISyntaxException | IOException e)
         {
-            Exceptions.log(e);
+            ExceptionUtils.log(e);
         }
     }
 }
