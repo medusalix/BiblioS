@@ -1,6 +1,6 @@
 package de.medusalix.biblios.database.access;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.mappers.StatMapper;
 import de.medusalix.biblios.database.objects.Stat;
 import org.skife.jdbi.v2.sqlobject.Bind;
@@ -23,7 +23,7 @@ public interface Stats
     @SqlQuery("SELECT BookId, NumberOfBorrows FROM Stat")
     List<Stat> findAll();
 
-    @SqlQuery("SELECT NumberOfBorrows, Title FROM Stat JOIN Book ON BookId = Book.Id ORDER BY NumberOfBorrows DESC LIMIT " + Reference.Misc.MAX_BOOKS_IN_STATS)
+    @SqlQuery("SELECT NumberOfBorrows, Title FROM Stat JOIN Book ON BookId = Book.Id ORDER BY NumberOfBorrows DESC LIMIT " + Consts.Misc.MAX_BOOKS_IN_STATS)
     List<Stat> findAllWithBookTitle();
 
     @SqlQuery("SELECT COUNT(*) FROM Stat WHERE BookId = :bookId")

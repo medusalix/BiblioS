@@ -1,6 +1,6 @@
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.utils.ExceptionUtils;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -67,7 +67,7 @@ public class AboutController
     {
         try
         {
-            Desktop.getDesktop().browse(new URI(Reference.Paths.ICON_PACKAGE_URL));
+            Desktop.getDesktop().browse(new URI(Consts.Paths.ICON_PACKAGE_URL));
         }
 
         catch (URISyntaxException | IOException e)

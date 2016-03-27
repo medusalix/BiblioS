@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Reference
+public class Consts
 {
     public static final String WINDOW_TITLE = "BiblioS ©Severin v. W. | Version 1.1.9";
     public static final String ADMINISTRATION_PASSWORD = "medusalix" + LocalDate.now().getDayOfWeek().getValue();

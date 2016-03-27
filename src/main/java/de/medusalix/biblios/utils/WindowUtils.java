@@ -1,7 +1,7 @@
 package de.medusalix.biblios.utils;
 
 import de.medusalix.biblios.core.BiblioS;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -17,13 +17,13 @@ public class WindowUtils
         {
             Scene scene = new Scene(FXMLLoader.load(WindowUtils.class.getResource(fxmlPath)));
 
-            scene.getStylesheets().add(BiblioS.class.getResource(Reference.Paths.STYLESHEET).toExternalForm());
+            scene.getStylesheets().add(BiblioS.class.getResource(Consts.Paths.STYLESHEET).toExternalForm());
 
             Stage stage = new Stage();
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(title);
-            stage.getIcons().add(Reference.Images.FAVICON);
+            stage.getIcons().add(Consts.Images.FAVICON);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();

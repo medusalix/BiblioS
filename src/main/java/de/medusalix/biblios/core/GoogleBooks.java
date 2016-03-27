@@ -21,7 +21,7 @@ public class GoogleBooks
 
     public static String readApiKey()
     {
-        Path apiKeyPath = java.nio.file.Paths.get(Reference.Paths.API_KEY);
+        Path apiKeyPath = java.nio.file.Paths.get(Consts.Paths.API_KEY);
 
         if (Files.exists(apiKeyPath))
         {
@@ -43,7 +43,7 @@ public class GoogleBooks
     {
         try
         {
-            Files.write(java.nio.file.Paths.get(Reference.Paths.API_KEY), apiKey.getBytes());
+            Files.write(java.nio.file.Paths.get(Consts.Paths.API_KEY), apiKey.getBytes());
         }
 
         catch (IOException e)
@@ -56,7 +56,7 @@ public class GoogleBooks
     {
         String apiKey = readApiKey();
 
-        try (InputStream queryInputStream = new URL(String.format(Reference.GoogleBooks.GET_VOLUMES_BY_ISBN_URL, isbn, apiKey)).openStream())
+        try (InputStream queryInputStream = new URL(String.format(Consts.GoogleBooks.GET_VOLUMES_BY_ISBN_URL, isbn, apiKey)).openStream())
         {
             ObjectMapper mapper = new ObjectMapper();
 
@@ -66,7 +66,7 @@ public class GoogleBooks
 
             if (items != null)
             {
-                try (InputStream volumeInputStream = new URL(String.format(Reference.GoogleBooks.VOLUME_INFO_FIELDS_URL, items.get(0).getSelfLink(), apiKey)).openStream())
+                try (InputStream volumeInputStream = new URL(String.format(Consts.GoogleBooks.VOLUME_INFO_FIELDS_URL, items.get(0).getSelfLink(), apiKey)).openStream())
                 {
                     logger.info("Google Books information fetched");
 

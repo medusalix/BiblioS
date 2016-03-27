@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.controls.BorrowListExceededCell;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.managers.DatabaseManager;
 import de.medusalix.biblios.utils.ExceptionUtils;
@@ -61,7 +61,7 @@ public class BorrowListController
 
     private void initBorrowListTableView()
     {
-        Label borrowListTableViewLabel = new Label(Reference.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label borrowListTableViewLabel = new Label(Consts.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
 
         borrowListTableViewLabel.setFont(Font.font(16));
 
@@ -71,7 +71,7 @@ public class BorrowListController
         bookColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBookTitle()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
-        exceededColumn.setGraphic(new ImageView(Reference.Images.EXCEEDED_COLUMN));
+        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
         exceededColumn.setCellFactory(param -> new BorrowListExceededCell());
     }
 }

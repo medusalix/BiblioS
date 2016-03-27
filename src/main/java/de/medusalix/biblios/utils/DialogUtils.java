@@ -1,6 +1,6 @@
 package de.medusalix.biblios.utils;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -22,7 +22,7 @@ public class DialogUtils
             dialog.getDialogPane().setContent(FXMLLoader.load(DialogUtils.class.getResource(fxml)));
 
             // Set the favicon
-            ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(Reference.Images.FAVICON);
+            ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(Consts.Images.FAVICON);
         }
 
         catch (IOException e)

@@ -1,6 +1,6 @@
 package de.medusalix.biblios.managers;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
@@ -14,7 +14,7 @@ import java.nio.file.Files;
 
 public class DatabaseManager
 {
-    private static DBI dbi = new DBI(Reference.Database.CONNECTION_URL);
+    private static DBI dbi = new DBI(Consts.Database.CONNECTION_URL);
 
     public static <T> T createDao(Class<T> daoClass)
     {
@@ -25,7 +25,7 @@ public class DatabaseManager
     {
         try
         {
-            Files.createDirectories(java.nio.file.Paths.get(Reference.Paths.DATA_FOLDER));
+            Files.createDirectories(java.nio.file.Paths.get(Consts.Paths.DATA_FOLDER));
 
             dbi.onDemand(Students.class).createTable();
             dbi.onDemand(Books.class).createTable();

@@ -1,6 +1,6 @@
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.access.Students;
@@ -85,13 +85,13 @@ public class AdministrationController
             if (backupBox.getItems().size() > 0)
             {
                 backupBox.setDisable(false);
-                backupBox.setPromptText(Reference.Strings.CHOOSE_BACKUP_TEXT);
+                backupBox.setPromptText(Consts.Strings.CHOOSE_BACKUP_TEXT);
             }
 
             else
             {
                 backupBox.setDisable(true);
-                backupBox.setPromptText(Reference.Strings.NO_BACKUP_EXISTING_TEXT);
+                backupBox.setPromptText(Consts.Strings.NO_BACKUP_EXISTING_TEXT);
             }
         }
 	}
@@ -99,7 +99,7 @@ public class AdministrationController
     @FXML
     private void onCreateBackupClick()
     {
-        BackupManager.createBackup(Reference.Database.MANUAL_BACKUP_SUFFIX);
+        BackupManager.createBackup(Consts.Database.MANUAL_BACKUP_SUFFIX);
 
         NodeUtils.blinkGreen(createBackupButton);
 
@@ -109,7 +109,7 @@ public class AdministrationController
     @FXML
     private void onDeleteAllBackupsClick(ActionEvent event)
     {
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.DELETE_ALL_BACKUPS_TITLE, Reference.Dialogs.DELETE_ALL_BACKUPS_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.DELETE_ALL_BACKUPS_TITLE, Consts.Dialogs.DELETE_ALL_BACKUPS_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
@@ -134,15 +134,15 @@ public class AdministrationController
         {
             try
             {
-                Path backup = Files.list(java.nio.file.Paths.get(Reference.Paths.BACKUP_FOLDER)).filter(backup2 -> backup2.getFileName().toString().contains(backupBox.getSelectionModel().getSelectedItem())).findFirst().get();
+                Path backup = Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).filter(backup2 -> backup2.getFileName().toString().contains(backupBox.getSelectionModel().getSelectedItem())).findFirst().get();
 
-                Files.move(backup, java.nio.file.Paths.get(Reference.Paths.DATABASE_FULL), StandardCopyOption.REPLACE_EXISTING);
+                Files.move(backup, java.nio.file.Paths.get(Consts.Paths.DATABASE_FULL), StandardCopyOption.REPLACE_EXISTING);
 
                 updateBackups();
 
                 NodeUtils.blinkGreen(loadBackupButton);
 
-                DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
+                DialogUtils.createAlert(Alert.AlertType.WARNING, Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (IOException e)
@@ -162,7 +162,7 @@ public class AdministrationController
     {
     	try
         {
-            Desktop.getDesktop().open(new File(Reference.Paths.DATA_FOLDER));
+            Desktop.getDesktop().open(new File(Consts.Paths.DATA_FOLDER));
         }
 
         catch (IOException e)
@@ -174,7 +174,7 @@ public class AdministrationController
     @FXML
     private void onResetStatsClick(ActionEvent event)
     {
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.RESET_STATS_TITLE, Reference.Dialogs.RESET_STATS_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.RESET_STATS_TITLE, Consts.Dialogs.RESET_STATS_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
@@ -196,13 +196,13 @@ public class AdministrationController
     @FXML
     private void onStartOfSchoolClick(ActionEvent event)
 	{
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Reference.Dialogs.START_OF_SCHOOL_TITLE, Reference.Dialogs.START_OF_SCHOOL_MESSAGE);
+        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.START_OF_SCHOOL_TITLE, Consts.Dialogs.START_OF_SCHOOL_MESSAGE);
 
         if (alert.showAndWait().get() == ButtonType.OK)
         {
             try
             {
-                BackupManager.createBackup(Reference.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
+                BackupManager.createBackup(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
 
                 borrowedBooks.deleteWhereStudentGrade12();
 
@@ -211,7 +211,7 @@ public class AdministrationController
 
                 NodeUtils.blinkGreen((Node)event.getSource());
 
-                DialogUtils.createAlert(Alert.AlertType.WARNING, Reference.Dialogs.RESTART_TITLE, Reference.Dialogs.RESTART_MESSAGE).showAndWait();
+                DialogUtils.createAlert(Alert.AlertType.WARNING, Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE).showAndWait();
             }
 
             catch (DBIException e)
