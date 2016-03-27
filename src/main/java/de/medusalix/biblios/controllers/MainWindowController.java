@@ -4,7 +4,7 @@ import de.medusalix.biblios.controls.BookRow;
 import de.medusalix.biblios.controls.BorrowedBookRow;
 import de.medusalix.biblios.controls.ExceededCell;
 import de.medusalix.biblios.controls.StudentCell;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.core.Dialogs;
 import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
@@ -198,13 +198,13 @@ public class MainWindowController implements UpdatableController
 
     private void initMenuItems()
     {
-        fullscreenMenuItem.setGraphic(new ImageView(Reference.Images.FULLSCREEN_MENU_ITEM));
-        aboutMenuItem.setGraphic(new ImageView(Reference.Images.ABOUT_MENU_ITEM));
+        fullscreenMenuItem.setGraphic(new ImageView(Consts.Images.FULLSCREEN_MENU_ITEM));
+        aboutMenuItem.setGraphic(new ImageView(Consts.Images.ABOUT_MENU_ITEM));
     }
 
     private void initStudentListView()
     {
-        Label studentListViewLabel = new Label(Reference.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
+        Label studentListViewLabel = new Label(Consts.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
 
         studentListViewLabel.setFont(Font.font(16));
 
@@ -214,8 +214,8 @@ public class MainWindowController implements UpdatableController
 
     private void initTableViews()
     {
-        Label borrowedBookTableViewLabel = new Label(Reference.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
-        Label bookTableViewLabel = new Label(Reference.Strings.BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label borrowedBookTableViewLabel = new Label(Consts.Strings.BORROWED_BOOK_TABLE_VIEW_PLACEHOLDER);
+        Label bookTableViewLabel = new Label(Consts.Strings.BOOK_TABLE_VIEW_PLACEHOLDER);
 
         borrowedBookTableViewLabel.setFont(Font.font(16));
         bookTableViewLabel.setFont(Font.font(16));
@@ -227,7 +227,7 @@ public class MainWindowController implements UpdatableController
         borrowDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBorrowDate()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
-        exceededColumn.setGraphic(new ImageView(Reference.Images.EXCEEDED_COLUMN));
+        exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
         exceededColumn.setCellFactory(param -> new ExceededCell());
 
         titleColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
@@ -264,8 +264,8 @@ public class MainWindowController implements UpdatableController
 
             LocalDate currentDate = LocalDate.now();
 
-            String borrowDate = currentDate.format(Reference.Misc.DATE_FORMATTER);
-            String returnDate = currentDate.plusDays(14).format(Reference.Misc.DATE_FORMATTER);
+            String borrowDate = currentDate.format(Consts.Misc.DATE_FORMATTER);
+            String returnDate = currentDate.plusDays(14).format(Consts.Misc.DATE_FORMATTER);
 
             try
             {
@@ -388,7 +388,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAboutClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((MenuItem)event.getSource()).getText(), Reference.Paths.ABOUT_WINDOW);
+        WindowUtils.openWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
     }
 
     @FXML
@@ -396,28 +396,28 @@ public class MainWindowController implements UpdatableController
     {
         String password = Dialogs.showPasswordDialog();
 
-        if (password != null && password.equals(Reference.ADMINISTRATION_PASSWORD))
+        if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
         {
-            WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.ADMINISTRATION_WINDOW);
+            WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
         }
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.STATS_WINDOW);
+        WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((Button)event.getSource()).getText(), Reference.Paths.BORROW_LIST_WINDOW);
+        WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
     }
 
     @FXML
     private void onAddStudentClick()
     {
-        Student student = Dialogs.showStudentDialog(Reference.Dialogs.ADD_STUDENT_TEXT, Reference.Images.ADD_DIALOG_HEADER, null);
+        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
 
         if (student != null)
         {
@@ -440,7 +440,7 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAddBookClick()
     {
-        Book book = Dialogs.showBookDialog(Reference.Dialogs.ADD_BOOK_TEXT, Reference.Images.ADD_DIALOG_HEADER, null);
+        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
 
         if (book != null)
         {

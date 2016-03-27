@@ -31,12 +31,12 @@ public class BiblioS extends Application
     
     private void prepareAndShowMainWindow(Stage stage) throws IOException
     {
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource(Reference.Paths.MAIN_WINDOW)));
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource(Consts.Paths.MAIN_WINDOW)));
         
-        scene.getStylesheets().add(getClass().getResource(Reference.Paths.STYLESHEET).toExternalForm());
+        scene.getStylesheets().add(getClass().getResource(Consts.Paths.STYLESHEET).toExternalForm());
         
-        stage.setTitle(Reference.WINDOW_TITLE);
-        stage.getIcons().add(Reference.Images.FAVICON);
+        stage.setTitle(Consts.WINDOW_TITLE);
+        stage.getIcons().add(Consts.Images.FAVICON);
         stage.setMaximized(System.getenv("debug") == null);
     	stage.setScene(scene);
         stage.show();

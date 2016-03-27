@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.Students;
 import de.medusalix.biblios.database.objects.Student;
 import de.medusalix.biblios.core.Dialogs;
@@ -17,8 +17,8 @@ public class StudentCell extends ListCell<StudentListItem>
 {
     private Logger logger = LogManager.getLogger(StudentCell.class);
 
-    private MenuItem changeStudentItem = new MenuItem(Reference.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Reference.Images.CHANGE_MENU_ITEM));
-    private MenuItem deleteStudentItem = new MenuItem(Reference.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Reference.Images.DELETE_MENU_ITEM));
+    private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
+    private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(changeStudentItem, deleteStudentItem);
 
@@ -26,7 +26,7 @@ public class StudentCell extends ListCell<StudentListItem>
     {
         changeStudentItem.setOnAction(event ->
         {
-            Student student = Dialogs.showStudentDialog(Reference.Dialogs.CHANGE_STUDENT_TEXT, Reference.Images.CHANGE_DIALOG_HEADER, getItem());
+            Student student = Dialogs.showStudentDialog(Consts.Dialogs.CHANGE_STUDENT_TEXT, Consts.Images.CHANGE_DIALOG_HEADER, getItem());
 
             if (student != null)
             {

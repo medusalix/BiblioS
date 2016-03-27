@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.Stats;
 import de.medusalix.biblios.database.objects.Book;
@@ -22,9 +22,9 @@ public class BookRow extends TableRow<BookTableItem>
 {
     private Logger logger = LogManager.getLogger(BookRow.class);
 
-    private MenuItem changeBookItem = new MenuItem(Reference.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Reference.Images.CHANGE_MENU_ITEM));
-    private MenuItem deleteBookItem = new MenuItem(Reference.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Reference.Images.DELETE_MENU_ITEM));
-    private MenuItem showStudentItem = new MenuItem(Reference.Strings.SHOW_STUDENT_MENU_ITEM_TEXT, new ImageView(Reference.Images.SHOW_STUDENT_MENU_ITEM));
+    private MenuItem changeBookItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
+    private MenuItem deleteBookItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
+    private MenuItem showStudentItem = new MenuItem(Consts.Strings.SHOW_STUDENT_MENU_ITEM_TEXT, new ImageView(Consts.Images.SHOW_STUDENT_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(changeBookItem, deleteBookItem, showStudentItem);
 
@@ -45,7 +45,7 @@ public class BookRow extends TableRow<BookTableItem>
 
         changeBookItem.setOnAction(event ->
         {
-            Book book = Dialogs.showBookDialog(Reference.Dialogs.CHANGE_BOOK_TEXT, Reference.Images.CHANGE_DIALOG_HEADER, getItem());
+            Book book = Dialogs.showBookDialog(Consts.Dialogs.CHANGE_BOOK_TEXT, Consts.Images.CHANGE_DIALOG_HEADER, getItem());
 
             if (book != null)
             {
@@ -109,7 +109,7 @@ public class BookRow extends TableRow<BookTableItem>
         {
             if (item.getBorrowedBy() == null)
             {
-                setBackground(Reference.Misc.BOOK_NOT_BORROWED_BACKGROUND);
+                setBackground(Consts.Misc.BOOK_NOT_BORROWED_BACKGROUND);
 
                 deleteBookItem.setDisable(false);
                 showStudentItem.setDisable(true);
@@ -117,7 +117,7 @@ public class BookRow extends TableRow<BookTableItem>
 
             else
             {
-                setBackground(Reference.Misc.BOOK_BORROWED_BACKGROUND);
+                setBackground(Consts.Misc.BOOK_BORROWED_BACKGROUND);
 
                 deleteBookItem.setDisable(true);
                 showStudentItem.setDisable(false);

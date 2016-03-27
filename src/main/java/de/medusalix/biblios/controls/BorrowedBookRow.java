@@ -1,7 +1,7 @@
 package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.utils.ExceptionUtils;
 import de.medusalix.biblios.pojos.BorrowedBookTableItem;
@@ -22,7 +22,7 @@ public class BorrowedBookRow extends TableRow<BorrowedBookTableItem>
 {
     private Logger logger = LogManager.getLogger(BorrowedBookRow.class);
 
-    private MenuItem extendBookItem = new MenuItem(Reference.Strings.EXTEND_MENU_ITEM_TEXT, new ImageView(Reference.Images.EXTEND_MENU_ITEM));
+    private MenuItem extendBookItem = new MenuItem(Consts.Strings.EXTEND_MENU_ITEM_TEXT, new ImageView(Consts.Images.EXTEND_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(extendBookItem);
 
@@ -43,7 +43,7 @@ public class BorrowedBookRow extends TableRow<BorrowedBookTableItem>
 
         extendBookItem.setOnAction(event ->
         {
-            String returnDate = LocalDate.parse(getItem().getReturnDate(), Reference.Misc.DATE_FORMATTER).plusDays(14).format(Reference.Misc.DATE_FORMATTER);
+            String returnDate = LocalDate.parse(getItem().getReturnDate(), Consts.Misc.DATE_FORMATTER).plusDays(14).format(Consts.Misc.DATE_FORMATTER);
 
             try
             {

@@ -1,6 +1,6 @@
 package de.medusalix.biblios.managers;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.utils.ExceptionUtils;
 
 import java.io.IOException;
@@ -23,9 +23,9 @@ public class BackupManager
     {
         try
         {
-            return Files.list(java.nio.file.Paths.get(Reference.Paths.BACKUP_FOLDER)).map(backup -> backup.getFileName().toString()
-                                                                                                          .replace(Reference.Database.BACKUP_PREFIX, "")
-                                                                                                          .replace(Reference.Database.SUFFIX, ""));
+            return Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).map(backup -> backup.getFileName().toString()
+                                                                                                       .replace(Consts.Database.BACKUP_PREFIX, "")
+                                                                                                       .replace(Consts.Database.SUFFIX, ""));
         }
 
         catch (IOException e)
@@ -50,14 +50,14 @@ public class BackupManager
 
     public static Path createBackup(String suffix)
     {
-        Path backupPath = java.nio.file.Paths.get(String.format("%s/%s%s%s%s", Reference.Paths.BACKUP_FOLDER, Reference.Database.BACKUP_PREFIX, LocalDateTime.now().format(Reference.Misc.DATE_TIME_FORMATTER), suffix, Reference.Database.SUFFIX));
+        Path backupPath = java.nio.file.Paths.get(String.format("%s/%s%s%s%s", Consts.Paths.BACKUP_FOLDER, Consts.Database.BACKUP_PREFIX, LocalDateTime.now().format(Consts.Misc.DATE_TIME_FORMATTER), suffix, Consts.Database.SUFFIX));
 
         if (Files.notExists(backupPath))
         {
             try
             {
-                Files.createDirectories(java.nio.file.Paths.get(Reference.Paths.BACKUP_FOLDER));
-                Files.copy(java.nio.file.Paths.get(Reference.Paths.DATABASE_FULL), backupPath);
+                Files.createDirectories(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER));
+                Files.copy(java.nio.file.Paths.get(Consts.Paths.DATABASE_FULL), backupPath);
             }
 
             catch (IOException e)
@@ -73,7 +73,7 @@ public class BackupManager
     {
         try
         {
-            Files.list(java.nio.file.Paths.get(Reference.Paths.BACKUP_FOLDER)).forEach(backup ->
+            Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).forEach(backup ->
             {
                 try
                 {
@@ -99,21 +99,21 @@ public class BackupManager
 
         if (backupStream != null)
         {
-            List<String> backups = backupStream.filter(backup -> !backup.endsWith(Reference.Database.MANUAL_BACKUP_SUFFIX) && !backup.endsWith(Reference.Database.START_OF_SCHOOL_BACKUP_SUFFIX)).collect(Collectors.toList());
+            List<String> backups = backupStream.filter(backup -> !backup.endsWith(Consts.Database.MANUAL_BACKUP_SUFFIX) && !backup.endsWith(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX)).collect(Collectors.toList());
 
             int numberOfBackups = backups.size();
 
-            if (numberOfBackups > Reference.Database.MAX_NUMBER_OF_BACKUPS)
+            if (numberOfBackups > Consts.Database.MAX_NUMBER_OF_BACKUPS)
             {
-                int backupsToDelete = numberOfBackups - Reference.Database.MAX_NUMBER_OF_BACKUPS;
+                int backupsToDelete = numberOfBackups - Consts.Database.MAX_NUMBER_OF_BACKUPS;
 
-                Stream<LocalDateTime> backupTimes = backups.stream().map(backup -> LocalDateTime.parse(backup, Reference.Misc.DATE_TIME_FORMATTER)).sorted();
+                Stream<LocalDateTime> backupTimes = backups.stream().map(backup -> LocalDateTime.parse(backup, Consts.Misc.DATE_TIME_FORMATTER)).sorted();
 
                 backupTimes.limit(backupsToDelete).forEach(backupTime ->
                 {
-                    String fullBackupName = backupTime.format(Reference.Misc.DATE_TIME_FORMATTER);
+                    String fullBackupName = backupTime.format(Consts.Misc.DATE_TIME_FORMATTER);
 
-                    Path backupPath = java.nio.file.Paths.get(String.format("%s/%s%s%s", Reference.Paths.BACKUP_FOLDER, Reference.Database.BACKUP_PREFIX, fullBackupName, Reference.Database.SUFFIX));
+                    Path backupPath = java.nio.file.Paths.get(String.format("%s/%s%s%s", Consts.Paths.BACKUP_FOLDER, Consts.Database.BACKUP_PREFIX, fullBackupName, Consts.Database.SUFFIX));
 
                     try
                     {

@@ -1,6 +1,6 @@
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.access.Books;
 import de.medusalix.biblios.database.access.BorrowedBooks;
 import de.medusalix.biblios.database.access.Stats;
@@ -91,7 +91,7 @@ public class StatsController
         
         if (chart.getData().isEmpty())
         {
-            chart.getData().add(new PieChart.Data(Reference.Strings.STAT_CHART_PLACEHOLDER, 100));
+            chart.getData().add(new PieChart.Data(Consts.Strings.STAT_CHART_PLACEHOLDER, 100));
         }
 	}
 	
@@ -102,7 +102,7 @@ public class StatsController
             studentCountLabel.setText(String.valueOf(students.count()));
             bookCountLabel.setText(String.valueOf(books.count()));
             borrowedBookCountLabel.setText(String.valueOf(borrowedBooks.count()));
-            backupCountLabel.setText(String.valueOf(Files.list(java.nio.file.Paths.get(Reference.Paths.BACKUP_FOLDER)).count()));
+            backupCountLabel.setText(String.valueOf(Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).count()));
         }
 
         catch (DBIException | IOException e)

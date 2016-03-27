@@ -1,6 +1,6 @@
 package de.medusalix.biblios.controls;
 
-import de.medusalix.biblios.core.Reference;
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.pojos.BorrowListTableItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.ImageView;
@@ -18,7 +18,7 @@ public class BorrowListExceededCell extends TableCell<BorrowListTableItem, Boole
         {
             setGraphic(imageView);
 
-            imageView.setImage(item ? Reference.Images.EXCEEDED : Reference.Images.NOT_EXCEEDED);
+            imageView.setImage(item ? Consts.Images.EXCEEDED : Consts.Images.NOT_EXCEEDED);
         }
 
         else
