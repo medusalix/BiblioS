@@ -28,8 +28,7 @@ dependencies {
     compile 'com.h2database:h2:1.4.191'
     compile 'org.jdbi:jdbi:2.72'
 
-    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    compile 'com.google.code.gson:gson:2.6.2'
 
     testCompile 'org.testng:testng:6.9.10'
 }
