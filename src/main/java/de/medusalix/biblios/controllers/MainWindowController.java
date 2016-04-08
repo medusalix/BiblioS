@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 
 public class MainWindowController implements UpdatableController
 {
-    private Logger logger = LogManager.getLogger(MainWindowController.class);
+    private static final Logger logger = LogManager.getLogger(MainWindowController.class);
 
     @FXML
     private MenuItem fullscreenMenuItem, aboutMenuItem;

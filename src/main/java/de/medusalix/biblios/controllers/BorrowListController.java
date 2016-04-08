@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class BorrowListController
 {
-    private Logger logger = LogManager.getLogger(BorrowListController.class);
+    private static final Logger logger = LogManager.getLogger(BorrowListController.class);
 
     @FXML
     private TableView<BorrowListTableItem> borrowListTableView;

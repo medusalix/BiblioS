@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class StatsController
 {
-    private Logger logger = LogManager.getLogger(StatsController.class);
+    private static final Logger logger = LogManager.getLogger(StatsController.class);
 
 	@FXML
 	private TitledPane chartPane;
