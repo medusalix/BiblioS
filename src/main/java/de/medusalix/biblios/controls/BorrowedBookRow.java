@@ -20,7 +20,7 @@ import java.time.LocalDate;
 
 public class BorrowedBookRow extends TableRow<BorrowedBookTableItem>
 {
-    private Logger logger = LogManager.getLogger(BorrowedBookRow.class);
+    private static final Logger logger = LogManager.getLogger(BorrowedBookRow.class);
 
     private MenuItem extendBookItem = new MenuItem(Consts.Strings.EXTEND_MENU_ITEM_TEXT, new ImageView(Consts.Images.EXTEND_MENU_ITEM));
 

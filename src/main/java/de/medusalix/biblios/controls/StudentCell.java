@@ -15,7 +15,7 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 
 public class StudentCell extends ListCell<StudentListItem>
 {
-    private Logger logger = LogManager.getLogger(StudentCell.class);
+    private static final Logger logger = LogManager.getLogger(StudentCell.class);
 
     private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
     private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));

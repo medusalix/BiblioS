@@ -20,7 +20,7 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 
 public class BookRow extends TableRow<BookTableItem>
 {
-    private Logger logger = LogManager.getLogger(BookRow.class);
+    private static final Logger logger = LogManager.getLogger(BookRow.class);
 
     private MenuItem changeBookItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
     private MenuItem deleteBookItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));

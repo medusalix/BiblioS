@@ -34,9 +34,9 @@ import java.util.List;
 
 public class AdministrationController
 {
-    private static final String PASSWORD = "severin" + LocalDate.now().getDayOfWeek().getValue();
+    private static final Logger logger = LogManager.getLogger(AdministrationController.class);
 
-    private Logger logger = LogManager.getLogger(AdministrationController.class);
+    private static final String PASSWORD = "severin" + LocalDate.now().getDayOfWeek().getValue();
 
     @FXML
     private ComboBox<String> backupBox;
