@@ -113,7 +113,7 @@ public class Consts
         public static final Image ABOUT_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "about.png");
         public static final Image CHANGE_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "change.png");
         public static final Image DELETE_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "delete.png");
-        public static final Image SHOW_STUDENT_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "showStudent.png");
+        public static final Image SHOW_STUDENT_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "show_student.png");
         public static final Image EXTEND_MENU_ITEM = new Image(Paths.MENU_ITEM_IMAGE_FOLDER + "extend.png");
 
         public static final Image PASSWORD_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "password.png");
@@ -121,8 +121,8 @@ public class Consts
         public static final Image ADD_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "add.png");
         public static final Image FETCH_DIALOG_HEADER = new Image(Paths.DIALOG_HEADER_IMAGE_FOLDER + "fetch.png");
 
-        public static final Image EXCEEDED_COLUMN = new Image(Paths.IMAGE_FOLDER + "exceededColumn.png");
-        public static final Image NOT_EXCEEDED = new Image(Paths.IMAGE_FOLDER + "notExceeded.png");
+        public static final Image EXCEEDED_COLUMN = new Image(Paths.IMAGE_FOLDER + "exceeded_column.png");
+        public static final Image NOT_EXCEEDED = new Image(Paths.IMAGE_FOLDER + "not_exceeded.png");
         public static final Image EXCEEDED = new Image(Paths.IMAGE_FOLDER + "exceeded.png");
     }
 
