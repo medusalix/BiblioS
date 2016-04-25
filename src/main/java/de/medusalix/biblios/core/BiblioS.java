@@ -15,18 +15,18 @@ public class BiblioS extends Application
     @Override
     public void start(Stage primaryStage)
     {
-		try
-		{
-			DatabaseManager.init();
+        try
+        {
+            DatabaseManager.init();
             BackupManager.init();
 
             prepareAndShowMainWindow(primaryStage);
-		}
+        }
 
-		catch (IOException e)
-		{
+        catch (IOException e)
+        {
             ExceptionUtils.log(e);
-		}
+        }
 	}
     
     private void prepareAndShowMainWindow(Stage stage) throws IOException
@@ -46,7 +46,7 @@ public class BiblioS extends Application
         stage.minHeightProperty().set(stage.getHeight());
     }
 
-	public static void main(String[] args)
+    public static void main(String[] args)
     {
         launch(args);
     }

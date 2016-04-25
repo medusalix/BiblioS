@@ -57,7 +57,7 @@ public class Dialogs
         }
 
         gradeField.setRestriction(grade -> grade.length() <= 3);
-        gradeField.setSubmitRestriction(grade -> grade.matches("([5-9]|1[0-2]{1,2})[a-z]"));
+        gradeField.setSubmitRestriction(grade -> grade != null && grade.matches("([5-9]|1[0-2]{1,2})[a-z]"));
 
         nameField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());
         gradeField.textProperty().addListener((observable, oldValue, newValue) -> enableButton.run());

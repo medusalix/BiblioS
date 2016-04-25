@@ -26,8 +26,8 @@ public interface Students
     long count();
 
     // The id needs to be bound to studentId so it doesn't collide with the bean
-    @SqlUpdate("UPDATE Student SET Name = :name, Grade = :grade WHERE Id = :id")
-    void update(@Bind("studentId") long id, Student student);
+    @SqlUpdate("UPDATE Student SET Name = :name, Grade = :grade WHERE Id = :studentId")
+    void update(@Bind("studentId") long id, @BindBean Student student);
 
     @SqlUpdate("UPDATE Student SET Grade = CONCAT(SUBSTR(Grade, 0, LENGTH(Grade) - 1) + 1, SUBSTR(Grade, LENGTH(Grade))) WHERE Grade != ''")
     void updateIncrementGrade();
