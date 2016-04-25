@@ -36,7 +36,6 @@ public class Consts
         public static final String BORROW_LIST_WINDOW = WINDOW_FOLDER + "BorrowListWindow.fxml";
         public static final String PASSWORD_DIALOG = DIALOG_FOLDER + "PasswordDialog.fxml";
 
-        public static final String PROGRESS_DIALOG = DIALOG_FOLDER + "ProgressDialog.fxml";
         public static final String STUDENT_DIALOG = DIALOG_FOLDER + "StudentDialog.fxml";
         public static final String BOOK_DIALOG = DIALOG_FOLDER + "BookDialog.fxml";
         public static final String SCAN_ISBN_DIALOG = DIALOG_FOLDER + "ScanIsbnDialog.fxml";
@@ -69,9 +68,6 @@ public class Consts
 
     public static class Dialogs
     {
-        public static final String LOADING_DATABASE_TITLE = "Lade Datenbank";
-        public static final String FETCHING_INFORMATION_TITLE = "Informationen abrufen";
-
         public static final String ADD_STUDENT_TEXT = "Schüler hinzufügen";
         public static final String ADD_BOOK_TEXT = "Buch hinzufügen";
         public static final String CHANGE_STUDENT_TEXT = "Schüler bearbeiten";

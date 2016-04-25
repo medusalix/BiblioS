@@ -130,7 +130,7 @@ public class DaoTests
     }
 
     @Test(dependsOnMethods = "borrowedBookShouldBeSaved", expectedExceptions = DBIException.class)
-    private void studentDeleteShouldThrowException()
+    private void deletingStudentShouldThrowException()
     {
         students.delete(1);
     }
