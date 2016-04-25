@@ -91,7 +91,7 @@ public class DaoTests
         Assert.assertEquals(foundBook.getAdditionalInfo(), testBook.getAdditionalInfo());
     }
 
-    @Test(dependsOnMethods = { "studentShouldBeSaved", "bookShouldBeSaved" })
+    @Test(dependsOnMethods = {"studentShouldBeSaved", "bookShouldBeSaved"})
     private void borrowedBookShouldBeSaved()
     {
         BorrowedBook testBorrowedBook = new BorrowedBook(1, 1, "BorrowDate", "ReturnDate");
