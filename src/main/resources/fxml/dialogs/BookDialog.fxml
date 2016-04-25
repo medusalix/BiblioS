@@ -47,7 +47,7 @@
          </font></TextField>
       <ImageView layoutX="15.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@/images/dialogs/publishedDate.png" />
+            <Image url="@/images/dialogs/published_date.png" />
          </image>
       </ImageView>
       <RestrictedTextField fx:id="publishedDateField" layoutX="65.0" layoutY="275.0" prefHeight="25.0" prefWidth="220.0" promptText="Herausgabedatum">
@@ -56,7 +56,7 @@
          </font></RestrictedTextField>
       <ImageView layoutX="15.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@/images/dialogs/additionalInfo.png" />
+            <Image url="@/images/dialogs/additional_info.png" />
          </image>
       </ImageView>
       <TextField fx:id="additionalInfoField" layoutX="65.0" layoutY="340.0" prefHeight="25.0" prefWidth="220.0" promptText="Zusatzinfo (Optional)">
