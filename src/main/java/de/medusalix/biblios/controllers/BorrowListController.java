@@ -1,11 +1,26 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.controls.BorrowListExceededCell;
+import de.medusalix.biblios.controls.BorrowedBookExceededCell;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.ExceptionUtils;
-import de.medusalix.biblios.pojos.BorrowListTableItem;
+import de.medusalix.biblios.database.access.BorrowedBookDatabase;
+import de.medusalix.biblios.database.objects.BorrowedBook;
+import de.medusalix.biblios.database.DatabaseManager;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -16,24 +31,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skife.jdbi.v2.exceptions.DBIException;
-
-import java.util.stream.Collectors;
 
 public class BorrowListController
 {
     private static final Logger logger = LogManager.getLogger(BorrowListController.class);
 
     @FXML
-    private TableView<BorrowListTableItem> borrowListTableView;
+    private TableView<BorrowedBook> borrowListTableView;
 
     @FXML
-    private TableColumn<BorrowListTableItem, String> studentColumn, bookColumn, returnDateColumn;
+    private TableColumn<BorrowedBook, String> studentColumn, bookColumn, returnDateColumn;
 
     @FXML
-    private TableColumn<BorrowListTableItem, Boolean> exceededColumn;
+    private TableColumn<BorrowedBook, Boolean> exceededColumn;
 
-    private BorrowedBooks borrowedBooks = DatabaseManager.createDao(BorrowedBooks.class);
+    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
 
     @FXML
     private void initialize()
@@ -45,18 +57,9 @@ public class BorrowListController
 
     private void updateData()
     {
-        try
-        {
-            borrowListTableView.getItems().setAll(borrowedBooks.findAllWithStudentNameAndBookTitle()
-                    .stream()
-                    .map(BorrowListTableItem::new)
-                    .collect(Collectors.toList()));
-        }
-
-        catch (DBIException e)
-        {
-            ExceptionUtils.log(e);
-        }
+        borrowListTableView
+                .getItems()
+                .setAll(borrowedBookDatabase.findAllWithStudentNameAndBookTitle());
     }
 
     private void initBorrowListTableView()
@@ -72,6 +75,6 @@ public class BorrowListController
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
         exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
-        exceededColumn.setCellFactory(param -> new BorrowListExceededCell());
+        exceededColumn.setCellFactory(param -> new BorrowedBookExceededCell());
     }
 }

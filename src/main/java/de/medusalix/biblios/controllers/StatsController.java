@@ -1,26 +1,38 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.Books;
-import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.database.access.Stats;
-import de.medusalix.biblios.database.access.Students;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.ExceptionUtils;
+import de.medusalix.biblios.database.access.BookDatabase;
+import de.medusalix.biblios.database.access.BorrowedBookDatabase;
+import de.medusalix.biblios.database.access.StatDatabase;
+import de.medusalix.biblios.database.access.StudentDatabase;
+import de.medusalix.biblios.database.DatabaseManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skife.jdbi.v2.exceptions.DBIException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.stream.Collectors;
+import java.nio.file.Paths;
 
 public class StatsController
 {
@@ -35,59 +47,46 @@ public class StatsController
     @FXML
     private Label studentCountLabel, bookCountLabel, borrowedBookCountLabel, backupCountLabel;
 
-    private Students students = DatabaseManager.createDao(Students.class);
-    private Books books = DatabaseManager.createDao(Books.class);
-    private BorrowedBooks borrowedBooks = DatabaseManager.createDao(BorrowedBooks.class);
-    private Stats stats = DatabaseManager.createDao(Stats.class);
+    private StudentDatabase studentDatabase = DatabaseManager.createDao(StudentDatabase.class);
+    private BookDatabase bookDatabase = DatabaseManager.createDao(BookDatabase.class);
+    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
+    private StatDatabase statDatabase = DatabaseManager.createDao(StatDatabase.class);
 
     @FXML
     private void initialize()
     {
-        updateData();
-    }
-
-	private void updateData()
-    {
         Platform.runLater(() -> chartPane.setExpanded(true));
-		
-		updateChart();
-		updateStats();
-	}
+    
+        updateChart();
+        updateStats();
+    }
 	
 	private void updateChart()
     {
-        try
-        {
-            chart.getData().setAll(stats.findAllWithBookTitle()
-                                        .stream()
-                                        .map(stat -> new PieChart.Data(stat.getBookTitle(), stat.getNumberOfBorrows()))
-                                        .collect(Collectors.toList()));
-        }
-
-        catch (DBIException e)
-        {
-            ExceptionUtils.log(e);
-        }
-
-        chart.getData().forEach(stat -> stat.setPieValue(stat.getPieValue() / chart.getData().size() * 100));
+        chart.getData().clear();
         
-        for (Node node : chart.lookupAll(".text.chart-pie-label"))
-        {
-        	Text text = (Text)node;
-        	
-        	PieChart.Data value = chart.getData().stream().filter(value2 -> value2.getName().equals(text.getText())).findFirst().get();
-        	
-        	text.setText(String.valueOf(Math.round(value.getPieValue() / 100 * chart.getData().size())));
-        }
+        statDatabase
+                .findAllWithBookTitle()
+                .stream()
+                .map(stat -> new PieChart.Data(stat.getBookTitle(), stat.getNumberOfBorrows()))
+                .forEach(data -> chart.getData().add(data));
         
-        for (Node node : chart.lookupAll(".label.chart-legend-item"))
-        {
-        	Label label = (Label)node;
-        	
-        	PieChart.Data value = chart.getData().stream().filter(value2 -> value2.getName().equals(label.getText())).findFirst().get();
-        	
-        	label.setText(Math.round(value.getPieValue() / 100 * chart.getData().size()) + "   " + label.getText());
-        }
+        chart
+                .getData()
+                .forEach(data ->
+                {
+                    // Add the number of borrows to the legend
+                    chart
+                            .lookupAll(".label.chart-legend-item")
+                            .stream()
+                            .map(node -> (Label)node)
+                            .filter(label -> label.getText().equals(data.getName()))
+                            .findFirst()
+                            .ifPresent(label -> label.setText((int)data.getPieValue() + "   " + label.getText()));
+    
+                    // Convert the number of borrows into percentage values
+                    data.setPieValue(data.getPieValue() / chart.getData().size() * 100);
+                });
         
         if (chart.getData().isEmpty())
         {
@@ -99,15 +98,15 @@ public class StatsController
 	{
         try
         {
-            studentCountLabel.setText(String.valueOf(students.count()));
-            bookCountLabel.setText(String.valueOf(books.count()));
-            borrowedBookCountLabel.setText(String.valueOf(borrowedBooks.count()));
-            backupCountLabel.setText(String.valueOf(Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).count()));
+            studentCountLabel.setText(String.valueOf(studentDatabase.count()));
+            bookCountLabel.setText(String.valueOf(bookDatabase.count()));
+            borrowedBookCountLabel.setText(String.valueOf(borrowedBookDatabase.count()));
+            backupCountLabel.setText(String.valueOf(Files.list(Paths.get(Consts.Paths.BACKUP_FOLDER)).count()));
         }
 
-        catch (DBIException | IOException e)
+        catch (IOException e)
         {
-            ExceptionUtils.log(e);
+            logger.error("", e);
         }
 	}
 }

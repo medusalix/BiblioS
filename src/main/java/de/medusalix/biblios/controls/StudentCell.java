@@ -1,71 +1,85 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.controls;
 
 import de.medusalix.biblios.controllers.UpdatableController;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.Students;
+import de.medusalix.biblios.database.access.StudentDatabase;
 import de.medusalix.biblios.database.objects.Student;
-import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.utils.ExceptionUtils;
-import de.medusalix.biblios.pojos.StudentListItem;
-import javafx.scene.control.*;
+import de.medusalix.biblios.dialogs.StudentDialog;
+import de.medusalix.biblios.utils.AlertUtils;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skife.jdbi.v2.exceptions.DBIException;
 
-public class StudentCell extends ListCell<StudentListItem>
+public class StudentCell extends ListCell<Student>
 {
     private static final Logger logger = LogManager.getLogger(StudentCell.class);
 
+    private UpdatableController controller;
+    private StudentDatabase studentDatabase;
+    
     private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
     private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
 
     private ContextMenu contextMenu = new ContextMenu(changeStudentItem, deleteStudentItem);
 
-    public StudentCell(UpdatableController controller, Students students)
+    public StudentCell(UpdatableController controller, StudentDatabase studentDatabase)
     {
-        changeStudentItem.setOnAction(event ->
+        this.controller = controller;
+        this.studentDatabase = studentDatabase;
+        
+        changeStudentItem.setOnAction(event -> change());
+        deleteStudentItem.setOnAction(event -> delete());
+    }
+    
+    private void change()
+    {
+        new StudentDialog(getItem()).showAndWait().ifPresent(student ->
         {
-            Student student = Dialogs.showStudentDialog(Consts.Dialogs.CHANGE_STUDENT_TEXT, Consts.Images.CHANGE_DIALOG_HEADER, getItem());
-
-            if (student != null)
-            {
-                try
-                {
-                    students.update(getItem().getId(), student);
-
-                    logger.info("Student information changed");
-
-                    controller.updateData();
-                }
-
-                catch (DBIException e)
-                {
-                    ExceptionUtils.log(e);
-                }
-            }
-        });
-
-        deleteStudentItem.setOnAction(event ->
-        {
-            try
-            {
-                students.delete(getItem().getId());
-
-                logger.info("Student deleted");
-
-                controller.updateData();
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
+            studentDatabase.update(getItem().getId(), student);
+            
+            logger.info("Changed " + getItem());
+            
+            controller.update();
         });
     }
-
+    
+    private void delete()
+    {
+        AlertUtils.showConfirmation(
+                Consts.Dialogs.DELETE_STUDENT_TITLE,
+                Consts.Dialogs.DELETE_STUDENT_MESSAGE,
+                () ->
+                {
+                    studentDatabase.delete(getItem().getId());
+            
+                    logger.info("Deleted " + getItem());
+            
+                    controller.update();
+                }
+        );
+    }
+    
     @Override
-    protected void updateItem(StudentListItem item, boolean empty)
+    protected void updateItem(Student item, boolean empty)
     {
         super.updateItem(item, empty);
 

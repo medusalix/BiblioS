@@ -1,41 +1,52 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.controllers;
 
+import de.medusalix.biblios.controls.BackupCell;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.database.access.Stats;
-import de.medusalix.biblios.database.access.Students;
-import de.medusalix.biblios.utils.DialogUtils;
-import de.medusalix.biblios.core.GoogleBooks;
+import de.medusalix.biblios.database.access.BorrowedBookDatabase;
+import de.medusalix.biblios.database.access.StatDatabase;
+import de.medusalix.biblios.database.access.StudentDatabase;
+import de.medusalix.biblios.database.DatabaseManager;
+import de.medusalix.biblios.utils.AlertUtils;
+import de.medusalix.biblios.utils.BackupUtils;
+import de.medusalix.biblios.utils.FileUtils;
 import de.medusalix.biblios.utils.NodeUtils;
-import de.medusalix.biblios.utils.ThreadUtils;
-import de.medusalix.biblios.managers.BackupManager;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.ExceptionUtils;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skife.jdbi.v2.exceptions.DBIException;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdministrationController
 {
+    private static final Logger logger = LogManager.getLogger(AdministrationController.class);
+    
     @FXML
-    private ComboBox<String> backupBox;
+    private ComboBox<BackupUtils.Backup> backupBox;
     
     @FXML
     private Button createBackupButton, loadBackupButton;
@@ -43,61 +54,102 @@ public class AdministrationController
     @FXML
     private TextField apiKeyField;
 
-    private Students students = DatabaseManager.createDao(Students.class);
-    private BorrowedBooks borrowedBooks = DatabaseManager.createDao(BorrowedBooks.class);
-    private Stats stats = DatabaseManager.createDao(Stats.class);
+    private StudentDatabase studentDatabase = DatabaseManager.createDao(StudentDatabase.class);
+    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
+    private StatDatabase statDatabase = DatabaseManager.createDao(StatDatabase.class);
 
     @FXML
     private void initialize()
     {
+        initBackupBox();
         initApiKeyField();
         updateBackups();
     }
-
+    
+    private void initBackupBox()
+    {
+        backupBox.setCellFactory(param -> new BackupCell());
+    }
+    
     private void initApiKeyField()
     {
-        apiKeyField.setText(GoogleBooks.readApiKey());
-        apiKeyField.focusedProperty().addListener((observable, oldValue, newValue) ->
+        try
         {
-            if (!newValue)
+            apiKeyField.setText(FileUtils.readLine(Consts.Paths.API_KEY));
+        }
+        
+        catch (IOException e)
+        {
+            logger.error("", e);
+        }
+        
+        apiKeyField.focusedProperty().addListener((observable, oldValue, focused) ->
+        {
+            if (!focused)
             {
-                GoogleBooks.saveApiKey(apiKeyField.getText());
+                try
+                {
+                    FileUtils.writeLine(Consts.Paths.API_KEY, apiKeyField.getText());
+                }
+    
+                catch (IOException e)
+                {
+                    logger.error("", e);
+                }
             }
         });
     }
 
 	private void updateBackups()
 	{
-        backupBox.getItems().clear();
-
-        List<String> backups = BackupManager.getBackups();
-
-        if (backups != null)
+        List<BackupUtils.Backup> backups = null;
+        
+        try
         {
-            Collections.reverse(backups);
+            backups = BackupUtils.findBackups();
+        }
+        
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        
+        if (backups == null)
+        {
+            return;
+        }
+        
+        backups.sort(Comparator.comparing(BackupUtils.Backup::getTime).reversed());
+        
+        backupBox.getItems().setAll(backups);
 
-            backupBox.getItems().addAll(backups);
+        if (backupBox.getItems().size() > 0)
+        {
+            backupBox.setDisable(false);
+            backupBox.setPromptText(Consts.Strings.CHOOSE_BACKUP_TEXT);
+        }
 
-            if (backupBox.getItems().size() > 0)
-            {
-                backupBox.setDisable(false);
-                backupBox.setPromptText(Consts.Strings.CHOOSE_BACKUP_TEXT);
-            }
-
-            else
-            {
-                backupBox.setDisable(true);
-                backupBox.setPromptText(Consts.Strings.NO_BACKUP_EXISTING_TEXT);
-            }
+        else
+        {
+            backupBox.setDisable(true);
+            backupBox.setPromptText(Consts.Strings.NO_BACKUPS_EXISTING_TEXT);
         }
 	}
 
     @FXML
     private void onCreateBackupClick()
     {
-        BackupManager.createBackup(Consts.Database.MANUAL_BACKUP_SUFFIX);
-
-        NodeUtils.blinkGreen(createBackupButton);
+        try
+        {
+            BackupUtils.createBackup(Consts.Database.MANUAL_BACKUP_SUFFIX);
+    
+            NodeUtils.blinkGreen(createBackupButton);
+        }
+        
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
         updateBackups();
     }
@@ -105,52 +157,55 @@ public class AdministrationController
     @FXML
     private void onDeleteAllBackupsClick(ActionEvent event)
     {
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.DELETE_ALL_BACKUPS_TITLE, Consts.Dialogs.DELETE_ALL_BACKUPS_MESSAGE);
-
-        if (alert.showAndWait().get() == ButtonType.OK)
-        {
-            ThreadUtils.runThreadAsDaemon(() ->
-            {
-                BackupManager.deleteAllBackups();
-
-                Platform.runLater(() ->
+        AlertUtils.showConfirmation(
+                Consts.Dialogs.DELETE_ALL_BACKUPS_TITLE,
+                Consts.Dialogs.DELETE_ALL_BACKUPS_MESSAGE,
+                () ->
                 {
-                    updateBackups();
+                    try
+                    {
+                        BackupUtils.deleteAllBackups();
+    
+                        NodeUtils.blinkGreen((Node)event.getSource());
+                    }
 
-                    NodeUtils.blinkGreen((Node)event.getSource());
-                });
-            });
-        }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+    
+                    updateBackups();
+                }
+        );
     }
 
     @FXML
     private void onLoadBackupClick()
     {
-        if (backupBox.getSelectionModel().getSelectedItem() != null)
-        {
-            try
-            {
-                Path backup = Files.list(java.nio.file.Paths.get(Consts.Paths.BACKUP_FOLDER)).filter(backup2 -> backup2.getFileName().toString().contains(backupBox.getSelectionModel().getSelectedItem())).findFirst().get();
-
-                Files.move(backup, java.nio.file.Paths.get(Consts.Paths.DATABASE_FULL), StandardCopyOption.REPLACE_EXISTING);
-
-                updateBackups();
-
-                NodeUtils.blinkGreen(loadBackupButton);
-
-                DialogUtils.createAlert(Alert.AlertType.WARNING, Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE).showAndWait();
-            }
-
-            catch (IOException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
-
-        else
+        BackupUtils.Backup selectedBackup = backupBox.getSelectionModel().getSelectedItem();
+        
+        if (selectedBackup == null)
         {
             NodeUtils.blinkRed(backupBox, backupBox);
+            
+            return;
         }
+        
+        try
+        {
+            selectedBackup.restoreDatabase();
+
+            NodeUtils.blinkGreen(loadBackupButton);
+
+            AlertUtils.showWarning(Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE);
+        }
+        
+        catch (IOException e)
+        {
+            logger.error("", e);
+        }
+    
+        updateBackups();
     }
 
     @FXML
@@ -163,57 +218,54 @@ public class AdministrationController
 
         catch (IOException e)
         {
-            ExceptionUtils.log(e);
+            logger.error("", e);
         }
     }
 
     @FXML
     private void onResetStatsClick(ActionEvent event)
     {
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.RESET_STATS_TITLE, Consts.Dialogs.RESET_STATS_MESSAGE);
-
-        if (alert.showAndWait().get() == ButtonType.OK)
-        {
-            try
-            {
-                stats.deleteAll();
-                stats.createTable();
-
-                NodeUtils.blinkGreen((Node)event.getSource());
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
+        AlertUtils.showConfirmation(
+                Consts.Dialogs.RESET_STATS_TITLE,
+                Consts.Dialogs.RESET_STATS_MESSAGE,
+                () ->
+                {
+                    statDatabase.deleteAll();
+                    statDatabase.createTable();
+    
+                    NodeUtils.blinkGreen((Node)event.getSource());
+                }
+        );
     }
 
     @FXML
     private void onStartOfSchoolClick(ActionEvent event)
 	{
-        Alert alert = DialogUtils.createAlert(Alert.AlertType.CONFIRMATION, Consts.Dialogs.START_OF_SCHOOL_TITLE, Consts.Dialogs.START_OF_SCHOOL_MESSAGE);
-
-        if (alert.showAndWait().get() == ButtonType.OK)
-        {
-            try
-            {
-                BackupManager.createBackup(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
-
-                borrowedBooks.deleteWhereStudentGrade12();
-
-                students.deleteWhereGrade12();
-                students.updateIncrementGrade();
-
-                NodeUtils.blinkGreen((Node)event.getSource());
-
-                DialogUtils.createAlert(Alert.AlertType.WARNING, Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE).showAndWait();
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
+        AlertUtils.showConfirmation(
+                Consts.Dialogs.START_OF_SCHOOL_TITLE,
+                Consts.Dialogs.START_OF_SCHOOL_MESSAGE,
+                () ->
+                {
+                    try
+                    {
+                        BackupUtils.createBackup(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
+    
+                        borrowedBookDatabase.deleteWhereStudentGrade12();
+    
+                        studentDatabase.deleteWhereGrade12();
+                        studentDatabase.updateIncrementGradeSimple();
+                        studentDatabase.updateIncrementGradeComplex();
+    
+                        NodeUtils.blinkGreen((Node)event.getSource());
+    
+                        AlertUtils.showWarning(Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE);
+                    }
+                    
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+        );
     }
 }

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.database.access;
 
 import de.medusalix.biblios.database.mappers.BorrowedBookMapper;
@@ -11,25 +27,19 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import java.util.List;
 
 @RegisterMapper(BorrowedBookMapper.class)
-public interface BorrowedBooks
+public interface BorrowedBookDatabase
 {
     @SqlUpdate("CREATE TABLE IF NOT EXISTS BorrowedBook(Id IDENTITY PRIMARY KEY, StudentId INT, BookId INT UNIQUE, BorrowDate VARCHAR(255), ReturnDate VARCHAR(255), FOREIGN KEY(StudentId) REFERENCES Student(Id), FOREIGN KEY(BookId) REFERENCES Book(Id))")
     void createTable();
 
     @SqlUpdate("INSERT INTO BorrowedBook VALUES (NULL, :studentId, :bookId, :borrowDate, :returnDate)")
     void save(@BindBean BorrowedBook borrowedBook);
-
-    @SqlQuery("SELECT Id, StudentId, BookId, BorrowDate, ReturnDate FROM BorrowedBook")
-    List<BorrowedBook> findAll();
-
-    @SqlQuery("SELECT BookId, Name FROM BorrowedBook JOIN Student ON StudentId = Student.Id")
-    List<BorrowedBook> findAllWithStudentName();
-
-    @SqlQuery("SELECT BorrowedBook.Id, BorrowDate, ReturnDate, Title FROM BorrowedBook JOIN Book ON BookId = Book.Id WHERE StudentId = :studentId")
-    List<BorrowedBook> findAllWithBookTitleFromStudentId(@Bind("studentId") long studentId);
-
-    @SqlQuery("SELECT ReturnDate, Name, Title FROM BorrowedBook JOIN Student ON StudentId = Student.Id JOIN Book ON BookId = Book.Id")
+    
+    @SqlQuery("SELECT ReturnDate, Name AS StudentName, Title AS BookTitle FROM BorrowedBook JOIN Student ON StudentId = Student.Id JOIN Book ON BookId = Book.Id")
     List<BorrowedBook> findAllWithStudentNameAndBookTitle();
+
+    @SqlQuery("SELECT BorrowedBook.Id, BorrowDate, ReturnDate, Title AS BookTitle FROM BorrowedBook JOIN Book ON BookId = Book.Id WHERE StudentId = :studentId")
+    List<BorrowedBook> findAllWithBookTitleFromStudentId(@Bind("studentId") long studentId);
 
     @SqlQuery("SELECT COUNT(*) FROM BorrowedBook")
     long count();
