@@ -1,26 +1,40 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.controls.BookRow;
+import de.medusalix.biblios.controls.BorrowedBookExceededCell;
 import de.medusalix.biblios.controls.BorrowedBookRow;
-import de.medusalix.biblios.controls.ExceededCell;
 import de.medusalix.biblios.controls.StudentCell;
 import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.core.Dialogs;
-import de.medusalix.biblios.database.access.Books;
-import de.medusalix.biblios.database.access.BorrowedBooks;
-import de.medusalix.biblios.database.access.Stats;
-import de.medusalix.biblios.database.access.Students;
+import de.medusalix.biblios.database.access.BookDatabase;
+import de.medusalix.biblios.database.access.BorrowedBookDatabase;
+import de.medusalix.biblios.database.access.StatDatabase;
+import de.medusalix.biblios.database.access.StudentDatabase;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import de.medusalix.biblios.database.objects.Stat;
 import de.medusalix.biblios.database.objects.Student;
+import de.medusalix.biblios.dialogs.BookDialog;
+import de.medusalix.biblios.dialogs.IsbnDialog;
+import de.medusalix.biblios.dialogs.PasswordDialog;
+import de.medusalix.biblios.dialogs.StudentDialog;
+import de.medusalix.biblios.database.DatabaseManager;
 import de.medusalix.biblios.utils.WindowUtils;
-import de.medusalix.biblios.managers.DatabaseManager;
-import de.medusalix.biblios.utils.ExceptionUtils;
-import de.medusalix.biblios.pojos.BookTableItem;
-import de.medusalix.biblios.pojos.BorrowedBookTableItem;
-import de.medusalix.biblios.pojos.StudentListItem;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,12 +49,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skife.jdbi.v2.exceptions.DBIException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainWindowController implements UpdatableController
 {
@@ -56,36 +69,36 @@ public class MainWindowController implements UpdatableController
     private Label studentLabel;
 
     @FXML
-    private ListView<StudentListItem> studentListView;
+    private ListView<Student> studentListView;
 
     @FXML
-    private TableView<BorrowedBookTableItem> borrowedBookTableView;
+    private TableView<BorrowedBook> borrowedBookTableView;
 
     @FXML
-    private TableColumn<BorrowedBookTableItem, String> bookColumn, borrowDateColumn, returnDateColumn;
+    private TableColumn<BorrowedBook, String> bookColumn, borrowDateColumn, returnDateColumn;
 
     @FXML
-    private TableColumn<BorrowedBookTableItem, Boolean> exceededColumn;
+    private TableColumn<BorrowedBook, Boolean> exceededColumn;
 
     @FXML
-    private TableView<BookTableItem> bookTableView;
+    private TableView<Book> bookTableView;
 
     @FXML
-    private TableColumn<BookTableItem, String> titleColumn, authorColumn, publisherColumn, additionalInfoColumn;
+    private TableColumn<Book, String> titleColumn, authorColumn, publisherColumn, additionalInfoColumn;
 
     @FXML
-    private TableColumn<BookTableItem, Long> isbnColumn;
+    private TableColumn<Book, Long> isbnColumn;
 
     @FXML
-    private TableColumn<BookTableItem, Short> publishedDateColumn;
+    private TableColumn<Book, Short> publishedDateColumn;
 
-    private ObservableList<StudentListItem> originalStudentList = FXCollections.observableArrayList();
-    private ObservableList<BookTableItem> originalBookList = FXCollections.observableArrayList();
+    private ObservableList<Student> students = FXCollections.observableArrayList();
+    private ObservableList<Book> books = FXCollections.observableArrayList();
 
-    private Students students = DatabaseManager.createDao(Students.class);
-    private Books books = DatabaseManager.createDao(Books.class);
-    private BorrowedBooks borrowedBooks = DatabaseManager.createDao(BorrowedBooks.class);
-    private Stats stats = DatabaseManager.createDao(Stats.class);
+    private StudentDatabase studentDatabase = DatabaseManager.createDao(StudentDatabase.class);
+    private BookDatabase bookDatabase = DatabaseManager.createDao(BookDatabase.class);
+    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
+    private StatDatabase statDatabase = DatabaseManager.createDao(StatDatabase.class);
 
     @FXML
     private void initialize()
@@ -93,107 +106,33 @@ public class MainWindowController implements UpdatableController
         initMenuItems();
         initStudentListView();
         initTableViews();
-        initFactories();
         initDragAndDrop();
         initSearchFields();
 
-        updateData();
-    }
-
-    private List<BorrowedBook> getBorrowedBooks()
-    {
-        try
-        {
-            return borrowedBooks.findAllWithStudentName();
-        }
-
-        catch (DBIException e)
-        {
-            ExceptionUtils.log(e);
-        }
-
-        return null;
-    }
-
-    private void updateStudents(List<BorrowedBook> borrowedBooks)
-    {
-        try
-        {
-            List<Student> studentResults = students.findAll();
-
-            for (Student student : studentResults)
-            {
-                long id = student.getId();
-
-                boolean hasBorrowedBooks = borrowedBooks.stream().filter(borrowedBook -> borrowedBook.getBookId() == id).findFirst().isPresent();
-
-                StudentListItem item = new StudentListItem(student, hasBorrowedBooks);
-
-                originalStudentList.add(item);
-            }
-        }
-
-        catch (DBIException e)
-        {
-            ExceptionUtils.log(e);
-        }
-    }
-
-    private void updateBooks(List<BorrowedBook> borrowedBooks)
-    {
-        try
-        {
-            List<Book> bookResults = books.findAll();
-
-            for (Book book : bookResults)
-            {
-                BorrowedBook borrowedBook = borrowedBooks.stream().filter(borrowedBook2 -> borrowedBook2.getBookId() == book.getId()).findFirst().orElse(null);
-
-                BookTableItem item = new BookTableItem(book);
-
-                if (borrowedBook != null)
-                {
-                    item.setBorrowedBy(borrowedBook.getStudentName());
-                }
-
-                originalBookList.add(item);
-            }
-        }
-
-        catch (DBIException e)
-        {
-            ExceptionUtils.log(e);
-        }
+        update();
     }
 
     @Override
-    public void updateData()
+    public void update()
     {
-        originalStudentList.clear();
-        originalBookList.clear();
+        logger.info("Updating data");
+        
+        studentLabel.setText(null);
 
-        List<TableColumn<BookTableItem, ?>> bookSortOrder = new ArrayList<>(bookTableView.getSortOrder());
+        List<TableColumn<Book, ?>> bookSortOrder = new ArrayList<>(bookTableView.getSortOrder());
+    
+        students.setAll(studentDatabase.findAllWithHasBorrowedBooks());
+        books.setAll(bookDatabase.findAllWithBorrowedBy());
+        
+        // Save the selected index before we update the list view
+        int selectedStudentIndex = studentListView.getSelectionModel().getSelectedIndex();
+        
+        updateStudentSearchItems();
+        updateBookSearchItems();
+        
+        studentListView.getSelectionModel().select(selectedStudentIndex);
 
-        List<BorrowedBook> borrowedBooks = getBorrowedBooks();
-
-        if (borrowedBooks != null)
-        {
-            updateStudents(borrowedBooks);
-            updateBooks(borrowedBooks);
-
-            int selectedIndex = studentListView.getSelectionModel().getSelectedIndex();
-
-            reloadStudentSearchItems();
-            reloadBookSearchItems();
-
-            studentListView.getSelectionModel().select(selectedIndex);
-
-            onStudentSelected();
-
-            bookTableView.getSortOrder().setAll(bookSortOrder);
-
-            logger.info("Data updated");
-        }
+        bookTableView.getSortOrder().setAll(bookSortOrder);
     }
 
     private void initMenuItems()
@@ -207,9 +146,38 @@ public class MainWindowController implements UpdatableController
         Label studentListViewLabel = new Label(Consts.Strings.STUDENT_LIST_VIEW_PLACEHOLDER);
 
         studentListViewLabel.setFont(Font.font(16));
-
+    
+        studentListView.setCellFactory(param -> new StudentCell(this, studentDatabase));
         studentListView.setPlaceholder(studentListViewLabel);
-        studentListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(this::onStudentSelected));
+        studentListView
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, student) ->
+                {
+                    if (student == null)
+                    {
+                        return;
+                    }
+    
+                    if (student.getGrade() == null)
+                    {
+                        studentLabel.setText(student.getName());
+                    }
+    
+                    else
+                    {
+                        studentLabel.setText(student.getName() + " (" + student.getGrade() + ")");
+                    }
+    
+                    List<TableColumn<BorrowedBook, ?>> borrowedBookSortOrder = new ArrayList<>(borrowedBookTableView.getSortOrder());
+                    
+                    List<BorrowedBook> studentBooks = borrowedBookDatabase.findAllWithBookTitleFromStudentId(student.getId());
+    
+                    borrowedBookTableView.getItems().setAll(studentBooks);
+                    borrowedBookTableView.getSortOrder().setAll(borrowedBookSortOrder);
+    
+                    logger.debug("Selected " + student);
+                });
     }
 
     private void initTableViews()
@@ -222,14 +190,18 @@ public class MainWindowController implements UpdatableController
 
         borrowedBookTableView.setPlaceholder(borrowedBookTableViewLabel);
         bookTableView.setPlaceholder(bookTableViewLabel);
-
-        bookColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
+    
+        borrowedBookTableView.setRowFactory(param -> new BorrowedBookRow(this, borrowedBookDatabase));
+        
+        bookColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBookTitle()));
         borrowDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBorrowDate()));
         returnDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReturnDate()));
         exceededColumn.setCellValueFactory(param -> new SimpleBooleanProperty(param.getValue().isExceeded()));
         exceededColumn.setGraphic(new ImageView(Consts.Images.EXCEEDED_COLUMN));
-        exceededColumn.setCellFactory(param -> new ExceededCell());
-
+        exceededColumn.setCellFactory(param -> new BorrowedBookExceededCell());
+    
+        bookTableView.setRowFactory(param -> new BookRow(this, bookDatabase, statDatabase, studentSearchField, studentListView));
+        
         titleColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTitle()));
         authorColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getAuthor()));
         isbnColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getIsbn()));
@@ -238,18 +210,13 @@ public class MainWindowController implements UpdatableController
         additionalInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getAdditionalInfo()));
     }
 
-    private void initFactories()
-    {
-        studentListView.setCellFactory(param -> new StudentCell(this, students));
-        borrowedBookTableView.setRowFactory(param -> new BorrowedBookRow(this, borrowedBooks));
-        bookTableView.setRowFactory(param -> new BookRow(this, books, stats, studentSearchField, studentListView));
-    }
-
     private void initDragAndDrop()
     {
         borrowedBookTableView.setOnDragOver(event ->
         {
-            if (event.getDragboard().hasString() && !studentListView.getSelectionModel().isEmpty() && !(event.getGestureSource() instanceof BorrowedBookRow))
+            if (event.getDragboard().hasString()
+                    && !studentListView.getSelectionModel().isEmpty()
+                    && !(event.getGestureSource() instanceof BorrowedBookRow))
             {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
@@ -266,30 +233,22 @@ public class MainWindowController implements UpdatableController
 
             String borrowDate = currentDate.format(Consts.Misc.DATE_FORMATTER);
             String returnDate = currentDate.plusDays(14).format(Consts.Misc.DATE_FORMATTER);
+            
+            borrowedBookDatabase.save(new BorrowedBook(studentId, bookId, borrowDate, returnDate));
 
-            try
+            if (statDatabase.countByBookId(bookId) == 0)
             {
-                borrowedBooks.save(new BorrowedBook(studentId, bookId, borrowDate, returnDate));
-
-                if (stats.countByBookId(bookId) == 0)
-                {
-                    stats.save(new Stat(bookId, 1));
-                }
-
-                else
-                {
-                    stats.updateIncrementBorrows(bookId);
-                }
-
-                logger.info("Book borrowed");
-
-                updateData();
+                statDatabase.save(new Stat(bookId, 1));
             }
 
-            catch (DBIException e)
+            else
             {
-                ExceptionUtils.log(e);
+                statDatabase.updateIncrementBorrows(bookId);
             }
+
+            logger.info("Borrowed book with ID " + bookId);
+
+            update();
         });
 
         bookTableView.setOnDragOver(event ->
@@ -305,78 +264,45 @@ public class MainWindowController implements UpdatableController
             event.setDropCompleted(true);
 
             long id = Long.parseLong(event.getDragboard().getString());
+            
+            borrowedBookDatabase.delete(id);
 
-            try
-            {
-                borrowedBooks.delete(id);
+            logger.info("Returned book with ID " + id);
 
-                logger.info("Book returned");
-
-                updateData();
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
+            update();
         });
     }
 
     private void initSearchFields()
     {
-        studentSearchField.textProperty().addListener((observable, oldValue, newValue) -> reloadStudentSearchItems());
-        bookSearchField.textProperty().addListener((observable, oldValue, newValue) -> reloadBookSearchItems());
+        studentSearchField.textProperty().addListener((observable, oldValue, newValue) -> updateStudentSearchItems());
+        bookSearchField.textProperty().addListener((observable, oldValue, newValue) -> updateBookSearchItems());
     }
-
-    private void onStudentSelected()
-    {
-        StudentListItem student = studentListView.getSelectionModel().getSelectedItem();
-
-        if (student != null)
-        {
-            if (student.getGrade() == null)
-            {
-                studentLabel.setText(student.getName());
-            }
-
-            else
-            {
-                studentLabel.setText(String.format("%s (%s)", student.getName(), student.getGrade()));
-            }
-
-            List<TableColumn<BorrowedBookTableItem, ?>> borrowedBookSortOrder = new ArrayList<>(borrowedBookTableView.getSortOrder());
-
-            try
-            {
-                List<BorrowedBook> studentBooks = borrowedBooks.findAllWithBookTitleFromStudentId(student.getId());
-
-                borrowedBookTableView.getItems().setAll(studentBooks.stream().map(BorrowedBookTableItem::new).collect(Collectors.toList()));
-                borrowedBookTableView.getSortOrder().setAll(borrowedBookSortOrder);
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
-
-        logger.debug("Student selected");
-    }
-
-    private void reloadStudentSearchItems()
+    
+    private void updateStudentSearchItems()
     {
         String text = studentSearchField.getText().toLowerCase();
-
-        studentListView.getItems().setAll(originalStudentList.stream().filter(student -> student.searchFor(text)).collect(Collectors.toList()));
+    
+        studentListView.getItems().clear();
+    
+        students
+                .stream()
+                .filter(student -> student.contains(text))
+                .forEach(student -> studentListView.getItems().add(student));
     }
 
-    private void reloadBookSearchItems()
+    private void updateBookSearchItems()
     {
         String text = bookSearchField.getText().toLowerCase();
 
-        bookTableView.getItems().setAll(originalBookList.stream().filter(book -> book.searchFor(text)).collect(Collectors.toList()));
+        bookTableView.getItems().clear();
+        
+        books
+                .stream()
+                .filter(book -> book.contains(text))
+                .forEach(book -> bookTableView.getItems().add(book));
     }
-
+    
     @FXML
     private void onFullscreenClick()
     {
@@ -388,103 +314,105 @@ public class MainWindowController implements UpdatableController
     @FXML
     private void onAboutClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
+        try
+        {
+            WindowUtils.openWindow(((MenuItem)event.getSource()).getText(), Consts.Paths.ABOUT_WINDOW);
+        }
+        
+        catch (IOException e)
+        {
+            logger.error("", e);
+        }
     }
 
     @FXML
     private void onAdministrationClick(ActionEvent event)
     {
-        String password = Dialogs.showPasswordDialog();
-
-        if (password != null && password.equals(Consts.ADMINISTRATION_PASSWORD))
-        {
-            WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
-        }
+        new PasswordDialog()
+                .showAndWait()
+                .filter(password -> password.equals(Consts.ADMINISTRATION_PASSWORD))
+                .ifPresent(password ->
+                {
+                    try
+                    {
+                        WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.ADMINISTRATION_WINDOW);
+                    }
+                    
+                    catch (IOException e)
+                    {
+                        logger.error("", e);
+                    }
+                });
     }
 
     @FXML
     private void onStatsClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
+        try
+        {
+            WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.STATS_WINDOW);
+        }
+        
+        catch (IOException e)
+        {
+            logger.error("", e);
+        }
     }
 
     @FXML
     private void onBorrowListClick(ActionEvent event)
     {
-        WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
+        try
+        {
+            WindowUtils.openWindow(((Button)event.getSource()).getText(), Consts.Paths.BORROW_LIST_WINDOW);
+        }
+        
+        catch (IOException e)
+        {
+            logger.error("", e);
+        }
     }
 
     @FXML
     private void onAddStudentClick()
     {
-        Student student = Dialogs.showStudentDialog(Consts.Dialogs.ADD_STUDENT_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
-
-        if (student != null)
+        new StudentDialog().showAndWait().ifPresent(student ->
         {
-            try
-            {
-                students.save(student);
+            studentDatabase.save(student);
 
-                logger.info("Student added");
+            logger.info("Added " + student);
 
-                updateData();
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
+            update();
+        });
     }
 
     @FXML
     private void onAddBookClick()
     {
-        Book book = Dialogs.showBookDialog(Consts.Dialogs.ADD_BOOK_TEXT, Consts.Images.ADD_DIALOG_HEADER, null);
-
-        if (book != null)
+        new BookDialog().showAndWait().ifPresent(book ->
         {
-            try
-            {
-                books.save(book);
-
-                logger.info("Book added");
-
-                updateData();
-            }
-
-            catch (DBIException e)
-            {
-                ExceptionUtils.log(e);
-            }
-        }
+            bookDatabase.save(book);
+    
+            logger.info("Added " + book);
+    
+            update();
+        });
     }
 
     @FXML
     private void onAddBookByIsbnClick()
     {
-        String isbn = Dialogs.showScanIsbnDialog();
-
-        if (isbn != null)
-        {
-            Book book = Dialogs.showBookIsbnDialog(isbn);
-
-            if (book != null)
-            {
-                try
-                {
-                    books.save(book);
-
-                    logger.info("Book added by ISBN");
-
-                    updateData();
-                }
-
-                catch (DBIException e)
-                {
-                    ExceptionUtils.log(e);
-                }
-            }
-        }
+        new IsbnDialog().showAndWait().ifPresent(
+                pair -> new BookDialog(pair.getKey(), pair.getValue()).showAndWait().ifPresent(
+                        book ->
+                        {
+                            bookDatabase.save(book);
+                
+                            logger.info("Added " + book);
+                
+                            update();
+                        }
+                )
+        );
     }
 }

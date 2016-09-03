@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package de.medusalix.biblios.database.mappers;
+package de.medusalix.biblios.database.objects;
 
-import de.medusalix.biblios.database.objects.Student;
-import org.skife.jdbi.v2.BeanMapper;
-
-public class StudentMapper extends BeanMapper<Student>
+public interface Searchable
 {
-    public StudentMapper()
-    {
-        super(Student.class);
-    }
+    boolean contains(String text);
 }

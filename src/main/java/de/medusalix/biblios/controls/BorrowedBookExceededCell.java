@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-package de.medusalix.biblios.database.mappers;
+package de.medusalix.biblios.controls;
 
+import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.objects.BorrowedBook;
-import org.skife.jdbi.v2.BeanMapper;
+import javafx.scene.control.TableCell;
+import javafx.scene.image.ImageView;
 
-public class BorrowedBookMapper extends BeanMapper<BorrowedBook>
+public class BorrowedBookExceededCell extends TableCell<BorrowedBook, Boolean>
 {
-    public BorrowedBookMapper()
+    private ImageView imageView = new ImageView();
+
+    @Override
+    protected void updateItem(Boolean item, boolean empty)
     {
-        super(BorrowedBook.class);
+        super.updateItem(item, empty);
+
+        if (!empty)
+        {
+            setGraphic(imageView);
+
+            imageView.setImage(item ? Consts.Images.EXCEEDED : Consts.Images.NOT_EXCEEDED);
+        }
+
+        else
+        {
+            setGraphic(null);
+        }
     }
 }

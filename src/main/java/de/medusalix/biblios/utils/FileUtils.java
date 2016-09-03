@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package de.medusalix.biblios.database.mappers;
+package de.medusalix.biblios.utils;
 
-import de.medusalix.biblios.database.objects.Student;
-import org.skife.jdbi.v2.BeanMapper;
+import java.io.*;
 
-public class StudentMapper extends BeanMapper<Student>
+public class FileUtils
 {
-    public StudentMapper()
+    public static String readLine(String path) throws IOException
     {
-        super(Student.class);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path))))
+        {
+            return reader.readLine();
+        }
+    }
+    
+    public static void writeLine(String path, String text) throws IOException
+    {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path))))
+        {
+            writer.write(text);
+        }
     }
 }

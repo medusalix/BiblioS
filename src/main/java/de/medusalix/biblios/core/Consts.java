@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2016 Medusalix
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.medusalix.biblios.core;
 
 import javafx.geometry.Insets;
@@ -12,8 +28,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Consts
 {
-    public static final String WINDOW_TITLE = "BiblioS ©Severin v. W. | Version 1.1.9";
-    public static final String ADMINISTRATION_PASSWORD = "medusalix" + LocalDate.now().getDayOfWeek().getValue();
+    public static final String WINDOW_TITLE = "BiblioS ©Severin v. W. | Version 1.2.0";
+    public static final String ADMINISTRATION_PASSWORD = "biblios" + LocalDate.now().getDayOfWeek().getValue();
 
     public static class Paths
     {
@@ -38,14 +54,13 @@ public class Consts
 
         public static final String STUDENT_DIALOG = DIALOG_FOLDER + "StudentDialog.fxml";
         public static final String BOOK_DIALOG = DIALOG_FOLDER + "BookDialog.fxml";
-        public static final String SCAN_ISBN_DIALOG = DIALOG_FOLDER + "ScanIsbnDialog.fxml";
-        public static final String BOOK_ISBN_DIALOG = DIALOG_FOLDER + "BookIsbnDialog.fxml";
+        public static final String ISBN_DIALOG = DIALOG_FOLDER + "IsbnDialog.fxml";
 
         public static final String DATA_FOLDER = "BiblioS/";
         public static final String BACKUP_FOLDER = DATA_FOLDER + "Backups";
 
-        public static final String DATABASE = DATA_FOLDER + Database.NAME;
-        public static final String DATABASE_FULL = DATABASE + Database.SUFFIX;
+        public static final String DATABASE_NO_EXT = DATA_FOLDER + Database.NAME;
+        public static final String DATABASE = DATABASE_NO_EXT + Database.EXTENSION;
 
         public static final String API_KEY = DATA_FOLDER + "Api-Key.txt";
 
@@ -55,23 +70,30 @@ public class Consts
     public static class Database
     {
         public static final String NAME = "BiblioS";
-        public static final String SUFFIX = ".mv.db";
+        public static final String EXTENSION = ".mv.db";
 
-        public static final String CONNECTION_URL = "jdbc:h2:file:./" + Paths.DATABASE + ";DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0";
+        public static final String CONNECTION_URL = "jdbc:h2:file:./" + Paths.DATABASE_NO_EXT + ";DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0";
 
         public static final String BACKUP_PREFIX = "Backup-";
         public static final String MANUAL_BACKUP_SUFFIX = "-Manual";
         public static final String START_OF_SCHOOL_BACKUP_SUFFIX = "-StartOfSchool";
 
-        public static final int MAX_NUMBER_OF_BACKUPS = 10;
+        public static final int BACKUP_LIMIT = 10;
     }
 
     public static class Dialogs
     {
         public static final String ADD_STUDENT_TEXT = "Schüler hinzufügen";
         public static final String ADD_BOOK_TEXT = "Buch hinzufügen";
+        
         public static final String CHANGE_STUDENT_TEXT = "Schüler bearbeiten";
         public static final String CHANGE_BOOK_TEXT = "Buch bearbeiten";
+        
+        public static final String DELETE_STUDENT_TITLE = "Schüler löschen";
+        public static final String DELETE_STUDENT_MESSAGE = "Soll dieser Schüler wirklich gelöscht werden?";
+    
+        public static final String DELETE_BOOK_TITLE = "Buch löschen";
+        public static final String DELETE_BOOK_MESSAGE = "Soll dieses Buch wirklich gelöscht werden?";
 
         public static final String PASSWORD_REQUIRED_TEXT = "Passwort erforderlich";
 
@@ -102,7 +124,7 @@ public class Consts
 
         public static final String CHOOSE_BACKUP_TEXT = "Backup auswählen";
 
-        public static final String NO_BACKUP_EXISTING_TEXT = "Kein Backup vorhanden";
+        public static final String NO_BACKUPS_EXISTING_TEXT = "Keine Backups vorhanden";
     }
 
     public static class Images
@@ -143,21 +165,21 @@ public class Consts
 
     public static class GoogleBooks
     {
-        public static final String GET_VOLUMES_BY_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=ISBN:%s&fields=items/selfLink&key=%s";
-        public static final String VOLUME_INFO_FIELDS_URL = "%s?fields=volumeInfo(title,subtitle,authors,publisher,publishedDate)&key=%s";
+        public static final String VOLUMES_BY_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=ISBN:%s&fields=items/selfLink&key=%s";
+        public static final String VOLUME_INFO_FIELDS_URL = "%s?fields=volumeInfo(title,authors,publisher,publishedDate)&key=%s";
     }
 
     public static class Misc
     {
         public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy'-'HH-mm-ss");
-
+        
         public static final Background BOOK_NOT_BORROWED_BACKGROUND = new Background(new BackgroundFill(Color.valueOf("#99FF99"), CornerRadii.EMPTY, Insets.EMPTY));
         public static final Background BOOK_BORROWED_BACKGROUND = new Background(new BackgroundFill(Color.valueOf("#FF7777"), CornerRadii.EMPTY, Insets.EMPTY));
 
         // Used when there is no ISBN for a book
         public static final String ISBN_PLACEHOLDER = "0";
 
-        public static final int MAX_BOOKS_IN_STATS = 10;
+        public static final int MAX_STATS_TO_DISPLAY = 10;
     }
 }

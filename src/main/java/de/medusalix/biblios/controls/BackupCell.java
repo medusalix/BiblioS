@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package de.medusalix.biblios.database.mappers;
+package de.medusalix.biblios.controls;
 
-import de.medusalix.biblios.database.objects.Student;
-import org.skife.jdbi.v2.BeanMapper;
+import de.medusalix.biblios.utils.BackupUtils;
+import javafx.scene.control.ListCell;
 
-public class StudentMapper extends BeanMapper<Student>
+public class BackupCell extends ListCell<BackupUtils.Backup>
 {
-    public StudentMapper()
+    @Override
+    protected void updateItem(BackupUtils.Backup item, boolean empty)
     {
-        super(Student.class);
+        super.updateItem(item, empty);
+        
+        if (!empty)
+        {
+            setText(item.getName());
+        }
+        
+        else
+        {
+            setText(null);
+        }
     }
 }
