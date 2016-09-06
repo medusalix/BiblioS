@@ -41,7 +41,7 @@ public class DatabaseTests
     private Student testStudent = new Student("Max Mustermann", "7a");
     private Book testBook = new Book("Java ist auch eine Insel", "Christian Ullenboom", 3836228734L, "Galileo Computing", (short)2014, null);
     private BorrowedBook testBorrowedBook = new BorrowedBook(1, 1, "01.04.1985", "11.08.2016");
-    Stat testStat = new Stat(1, 7);
+    private Stat testStat = new Stat(1, 7);
 
     @BeforeClass
     private void beforeClass()
