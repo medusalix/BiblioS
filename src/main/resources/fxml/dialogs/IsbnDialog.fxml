@@ -18,6 +18,6 @@
          <font>
             <Font size="16.0" />
          </font></RestrictedTextField>
-      <Label layoutX="17.0" layoutY="14.0" prefWidth="267.0" text="Bitte scannen sie ein Buch oder geben die ISBN manuell ein" wrapText="true" />
+      <Label layoutX="17.0" layoutY="14.0" prefWidth="267.0" text="Bitte scannen sie ein Buch oder geben die ISBN manuell ein." wrapText="true" />
     </children>
 </AnchorPane>
