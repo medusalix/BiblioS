@@ -1,68 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <?import de.medusalix.biblios.controls.RestrictedTextField?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" vgap="25.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" />
+      <ColumnConstraints hgrow="SOMETIMES" prefWidth="220.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+      <RowConstraints vgrow="SOMETIMES" prefHeight="35" />
+   </rowConstraints>
    <children>
-      <ImageView layoutX="15.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/images/dialogs/book.png" />
          </image>
       </ImageView>
-      <TextField fx:id="titleField" layoutX="65.0" layoutY="15.0" prefHeight="37.0" prefWidth="220.0" promptText="Titel">
-         <font>
-            <Font size="16.0" />
-         </font></TextField>
-      <ImageView layoutX="15.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="titleField" maxHeight="1.7976931348623157E308" promptText="Titel" GridPane.columnIndex="1" />
+      <ImageView pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
          <image>
             <Image url="@/images/dialogs/author.png" />
          </image>
       </ImageView>
-      <TextField fx:id="authorField" layoutX="65.0" layoutY="80.0" prefHeight="25.0" prefWidth="220.0" promptText="Autor">
-         <font>
-            <Font size="16.0" />
-         </font></TextField>
-      <ImageView layoutX="15.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="authorField" maxHeight="1.7976931348623157E308" promptText="Autor" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <ImageView pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
          <image>
             <Image url="@/images/dialogs/isbn.png" />
          </image>
       </ImageView>
-      <RestrictedTextField fx:id="isbnField" layoutX="65.0" layoutY="145.0" prefHeight="25.0" prefWidth="220.0" promptText="ISBN (ohne Bindestriche)">
-         <font>
-            <Font size="16.0" />
-         </font></RestrictedTextField>
-      <ImageView layoutX="15.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
+      <RestrictedTextField fx:id="isbnField" maxHeight="1.7976931348623157E308" promptText="ISBN (ohne Bindestriche)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <ImageView pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
          <image>
             <Image url="@/images/dialogs/publisher.png" />
          </image>
       </ImageView>
-      <TextField fx:id="publisherField" layoutX="65.0" layoutY="210.0" prefHeight="25.0" prefWidth="220.0" promptText="Verlag">
-         <font>
-            <Font size="16.0" />
-         </font></TextField>
-      <ImageView layoutX="15.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="publisherField" maxHeight="1.7976931348623157E308" promptText="Verlag" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <ImageView pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
          <image>
             <Image url="@/images/dialogs/published_date.png" />
          </image>
       </ImageView>
-      <RestrictedTextField fx:id="publishedDateField" layoutX="65.0" layoutY="275.0" prefHeight="25.0" prefWidth="220.0" promptText="Herausgabedatum">
-         <font>
-            <Font size="16.0" />
-         </font></RestrictedTextField>
-      <ImageView layoutX="15.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true">
+      <RestrictedTextField fx:id="publishedDateField" maxHeight="1.7976931348623157E308" promptText="Herausgabedatum" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <ImageView pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5">
          <image>
             <Image url="@/images/dialogs/additional_info.png" />
          </image>
       </ImageView>
-      <TextField fx:id="additionalInfoField" layoutX="65.0" layoutY="340.0" prefHeight="25.0" prefWidth="220.0" promptText="Zusatzinfo (Optional)">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </TextField>
+      <TextField fx:id="additionalInfoField" maxHeight="1.7976931348623157E308" promptText="Zusatzinfo (Optional)" GridPane.columnIndex="1" GridPane.rowIndex="5" />
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="10.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</GridPane>

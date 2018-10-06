@@ -8,32 +8,56 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.AboutController">
-   <children>
-      <ImageView fx:id="faviconView" fitHeight="96.0" fitWidth="96.0" layoutX="152.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@/images/favicon.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="titleLabel" layoutX="152.0" layoutY="152.0" text="BiblioS">
-         <font>
-            <Font name="Harrington" size="30.0" />
-         </font>
-      </Label>
-      <Label fx:id="mainLabel" layoutX="129.0" layoutY="216.0" prefHeight="68.0" prefWidth="144.0" text="Entwickelt, programmiert und designt von Severin v. W." textAlignment="CENTER" wrapText="true">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <TextFlow fx:id="iconPackText" layoutX="147.0" layoutY="369.0">
+<BorderPane maxHeight="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.AboutController">
+   <top>
+      <VBox alignment="CENTER" maxWidth="1.7976931348623157E308">
          <children>
-            <Label text="Icons von" />
-            <Label onMouseClicked="#onIconPackClick" text="Paomedia" textFill="#0000ee" underline="true">
-               <padding>
-                  <Insets left="3.0" />
-               </padding>
-            </Label>
+            <ImageView fx:id="faviconView" fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/images/icon.png" />
+               </image>
+            </ImageView>
+             <Label fx:id="titleLabel" alignment="CENTER" layoutY="152.0" text="BiblioS" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+             </Label>
          </children>
-      </TextFlow>
-   </children>
-</AnchorPane>
+         <BorderPane.margin>
+            <Insets top="30.0" />
+         </BorderPane.margin>
+      </VBox>
+   </top>
+   <center>
+      <Label fx:id="mainLabel" text="Entwickelt,&#13;programmiert&#13;&amp; designt&#13;von Severin v. W." textAlignment="CENTER" />
+   </center>
+   <bottom>
+      <VBox fx:id="attributionBox">
+         <children>
+            <TextFlow fx:id="attributionText" textAlignment="CENTER">
+               <children>
+                  <Label text="Bibliotheken:" />
+                  <Hyperlink onAction="#onAttributionClick" text="Log4j 2" />
+                  <Label text="," />
+                  <Hyperlink onAction="#onAttributionClick" text="Jdbi" />
+                  <Label text="," />
+                  <Hyperlink onAction="#onAttributionClick" text="Gson" />
+                  <Label text="," />
+                  <Hyperlink onAction="#onAttributionClick" text="TestNG" />
+                  <Label text="," />
+                  <Hyperlink onAction="#onAttributionClick" text="H2 Database" />
+               </children>
+            </TextFlow>
+            <TextFlow textAlignment="CENTER">
+               <children>
+                  <Label text="Icons von" />
+                  <Hyperlink onAction="#onAttributionClick" text="Paomedia" />
+               </children>
+            </TextFlow>
+         </children>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </VBox>
+   </bottom>
+</BorderPane>

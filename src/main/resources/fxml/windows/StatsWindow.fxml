@@ -15,60 +15,36 @@
                 <content>
                     <PieChart fx:id="chart" labelLineLength="10.0" legendSide="LEFT" />
                 </content>
-               <font>
-                  <Font size="16.0" />
-               </font>
              </TitledPane>
              <TitledPane text="Zahlen">
                 <content>
                     <AnchorPane>
                        <children>
-                           <Label layoutX="15.0" layoutY="15.0" text="Anzahl an Schülern:">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label fx:id="studentCountLabel" layoutX="264.0" layoutY="15.0" text="0">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label layoutX="15.0" layoutY="65.0" text="Anzahl an Büchern:">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label fx:id="bookCountLabel" layoutX="264.0" layoutY="65.0" text="0">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label layoutX="15.0" layoutY="115.0" text="Anzahl an ausgeliehenen Büchern:">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label fx:id="borrowedBookCountLabel" layoutX="442.0" layoutY="115.0" text="0">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label layoutX="15.0" layoutY="165.0" text="Anzahl an Backups:">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
-                           <Label fx:id="backupCountLabel" layoutX="256.0" layoutY="165.0" text="0">
-                               <font>
-                                   <Font name="System Bold" size="26.0" />
-                               </font>
-                           </Label>
+                        <GridPane hgap="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                            <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                            <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                            <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                                 <Label text="Anzahl an Schülern:" />
+                                 <Label fx:id="studentCountLabel" text="0" GridPane.columnIndex="1" />
+                                 <Label text="Anzahl an Büchern:" GridPane.rowIndex="1" />
+                                 <Label fx:id="bookCountLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 <Label text="Anzahl an ausgeliehenen Büchern:" GridPane.rowIndex="2" />
+                                 <Label fx:id="borrowedBookCountLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 <Label text="Anzahl an Backups:" GridPane.rowIndex="3" />
+                                 <Label fx:id="backupCountLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
                        </children>
                     </AnchorPane>
                 </content>
-               <font>
-                  <Font size="16.0" />
-               </font>
              </TitledPane>
          </panes>
        </Accordion>
