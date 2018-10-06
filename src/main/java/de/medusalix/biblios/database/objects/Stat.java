@@ -16,11 +16,14 @@
 
 package de.medusalix.biblios.database.objects;
 
+import org.jdbi.v3.core.mapper.reflect.ColumnName;
+
 public class Stat
 {
     private long bookId;
     private int numberOfBorrows;
 
+    @ColumnName("Title")
     private String bookTitle;
 
     public Stat() {}
@@ -29,6 +32,16 @@ public class Stat
     {
         this.bookId = bookId;
         this.numberOfBorrows = numberOfBorrows;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Stat{" +
+            "bookId=" + bookId +
+            ", numberOfBorrows=" + numberOfBorrows +
+            ", bookTitle='" + bookTitle + '\'' +
+            '}';
     }
 
     public long getBookId()
@@ -44,20 +57,5 @@ public class Stat
     public String getBookTitle()
     {
         return bookTitle;
-    }
-
-    public void setBookId(long bookId)
-    {
-        this.bookId = bookId;
-    }
-
-    public void setNumberOfBorrows(int numberOfBorrows)
-    {
-        this.numberOfBorrows = numberOfBorrows;
-    }
-
-    public void setBookTitle(String bookTitle)
-    {
-        this.bookTitle = bookTitle;
     }
 }
