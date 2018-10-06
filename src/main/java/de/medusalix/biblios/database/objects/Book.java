@@ -16,62 +16,68 @@
 
 package de.medusalix.biblios.database.objects;
 
-public class Book implements Searchable
+import de.medusalix.biblios.database.SearchHelper;
+import javafx.beans.property.*;
+
+public class Book implements SearchHelper.Searchable
 {
     private long id;
 
-    private String title, author;
-    private long isbn;
+    private StringProperty titleProperty = new SimpleStringProperty();
+    private StringProperty authorProperty = new SimpleStringProperty();
+
+    private LongProperty isbnProperty = new SimpleLongProperty();
+
+    private StringProperty publisherProperty = new SimpleStringProperty();
+    private IntegerProperty publishedDateProperty = new SimpleIntegerProperty();
+
+    private StringProperty additionalInfoProperty = new SimpleStringProperty();
     
-    private String publisher;
-    private short publishedDate;
-    
-    private String additionalInfo;
-    
-    private long borrowedBy;
+    private LongProperty borrowedByProperty = new SimpleLongProperty();
 
     public Book() {}
 
-    public Book(String title, String author, long isbn, String publisher, short publishedDate, String additionalInfo)
+    public Book(String title, String author, long isbn, String publisher, int publishedDate, String additionalInfo)
     {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
+        titleProperty.set(title);
+        authorProperty.set(author);
+
+        isbnProperty.set(isbn);
         
-        this.publisher = publisher;
-        this.publishedDate = publishedDate;
+        publisherProperty.set(publisher);
+        publishedDateProperty.set(publishedDate);
         
-        this.additionalInfo = additionalInfo;
+        additionalInfoProperty.set(additionalInfo);
     }
-    
+
     @Override
-    public boolean contains(String text)
+    public String[] getAttributes()
     {
-        boolean titleContains = getTitle().toLowerCase().contains(text);
-        boolean authorContains = getAuthor() != null && getAuthor().toLowerCase().contains(text);
-        boolean isbnContains = String.valueOf(getIsbn()).toLowerCase().contains(text);
-        boolean publisherContains = getPublisher() != null && getPublisher().toLowerCase().contains(text);
-        boolean publishedDateContains = String.valueOf(getPublishedDate()).toLowerCase().contains(text);
-        boolean additionalInfoContains = getAdditionalInfo() != null && getAdditionalInfo().toLowerCase().contains(text);
-        
-        return titleContains || authorContains || isbnContains || publisherContains || publishedDateContains || additionalInfoContains;
+        return new String[] {
+            titleProperty.get(),
+            authorProperty.get(),
+            String.valueOf(isbnProperty.get()),
+            publisherProperty.get(),
+            String.valueOf(publishedDateProperty.get()),
+            additionalInfoProperty.get()
+        };
     }
-    
+
     @Override
     public String toString()
     {
         return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", isbn=" + isbn +
-                ", publisher='" + publisher + '\'' +
-                ", publishedDate=" + publishedDate +
-                ", additionalInfo='" + additionalInfo + '\'' +
-                ", borrowedBy=" + borrowedBy +
-                '}';
+            "id=" + id +
+            ", title='" + titleProperty.get() + '\'' +
+            ", author='" + authorProperty.get() + '\'' +
+            ", isbn=" + isbnProperty.get() +
+            ", publisher='" + publisherProperty.get() + '\'' +
+            ", publishedDate=" + publishedDateProperty.get() +
+            ", additionalInfo='" + additionalInfoProperty.get() + '\'' +
+            ", borrowedBy=" + borrowedByProperty.get() +
+            '}';
     }
-    
+
     public long getId()
     {
         return id;
@@ -79,37 +85,37 @@ public class Book implements Searchable
 
     public String getTitle()
     {
-        return title;
+        return titleProperty.get();
     }
 
     public String getAuthor()
     {
-        return author;
+        return authorProperty.get();
     }
 
     public long getIsbn()
     {
-        return isbn;
+        return isbnProperty.get();
     }
 
     public String getPublisher()
     {
-        return publisher;
+        return publisherProperty.get();
     }
 
-    public short getPublishedDate()
+    public int getPublishedDate()
     {
-        return publishedDate;
+        return publishedDateProperty.get();
     }
 
     public String getAdditionalInfo()
     {
-        return additionalInfo;
+        return additionalInfoProperty.get();
     }
 
     public long getBorrowedBy()
     {
-        return borrowedBy;
+        return borrowedByProperty.get();
     }
     
     public void setId(long id)
@@ -119,36 +125,71 @@ public class Book implements Searchable
 
     public void setTitle(String title)
     {
-        this.title = title;
+        titleProperty.set(title);
     }
 
     public void setAuthor(String author)
     {
-        this.author = author;
+        authorProperty.set(author);
     }
 
     public void setIsbn(long isbn)
     {
-        this.isbn = isbn;
+        isbnProperty.set(isbn);
     }
 
     public void setPublisher(String publisher)
     {
-        this.publisher = publisher;
+        publisherProperty.set(publisher);
     }
 
-    public void setPublishedDate(short publishedDate)
+    public void setPublishedDate(int publishedDate)
     {
-        this.publishedDate = publishedDate;
+        publishedDateProperty.set(publishedDate);
     }
 
     public void setAdditionalInfo(String additionalInfo)
     {
-        this.additionalInfo = additionalInfo;
+        additionalInfoProperty.set(additionalInfo);
     }
-    
+
     public void setBorrowedBy(long borrowedBy)
     {
-        this.borrowedBy = borrowedBy;
+        borrowedByProperty.set(borrowedBy);
+    }
+
+    public StringProperty titleProperty()
+    {
+        return titleProperty;
+    }
+
+    public StringProperty authorProperty()
+    {
+        return authorProperty;
+    }
+
+    public LongProperty isbnProperty()
+    {
+        return isbnProperty;
+    }
+
+    public StringProperty publisherProperty()
+    {
+        return publisherProperty;
+    }
+
+    public IntegerProperty publishedDateProperty()
+    {
+        return publishedDateProperty;
+    }
+
+    public StringProperty additionalInfoProperty()
+    {
+        return additionalInfoProperty;
+    }
+
+    public LongProperty borrowedByProperty()
+    {
+        return borrowedByProperty;
     }
 }

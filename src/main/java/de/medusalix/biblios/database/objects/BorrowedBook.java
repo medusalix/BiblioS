@@ -16,7 +16,11 @@
 
 package de.medusalix.biblios.database.objects;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.time.LocalDate;
 
@@ -25,25 +29,55 @@ public class BorrowedBook
     private long id;
 
     private long studentId, bookId;
-    private String borrowDate, returnDate;
-    
-    private String studentName, bookTitle;
 
-    public BorrowedBook() {}
+    private StringProperty bookTitleProperty = new SimpleStringProperty();
+    private StringProperty studentNameProperty = new SimpleStringProperty();
+
+    private StringProperty borrowDateProperty = new SimpleStringProperty();
+    private StringProperty returnDateProperty = new SimpleStringProperty();
+
+    private BooleanProperty exceededProperty = new SimpleBooleanProperty();
+
+    public BorrowedBook()
+    {
+        returnDateProperty.addListener(listener ->
+        {
+            LocalDate date = LocalDate.parse(returnDateProperty.get(), Consts.Misc.DATE_FORMATTER);
+
+            exceededProperty.set(LocalDate.now().isAfter(date));
+        });
+    }
 
     public BorrowedBook(long studentId, long bookId, String borrowDate, String returnDate)
     {
+        this();
+
         this.studentId = studentId;
         this.bookId = bookId;
-        this.borrowDate = borrowDate;
-        this.returnDate = returnDate;
+
+        borrowDateProperty.set(borrowDate);
+        returnDateProperty.set(returnDate);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "BorrowedBook{" +
+            "id=" + id +
+            ", studentId=" + studentId +
+            ", bookId=" + bookId +
+            ", borrowDate='" + borrowDateProperty.get() + '\'' +
+            ", returnDate='" + returnDateProperty.get() + '\'' +
+            ", studentName='" + studentNameProperty.get() + '\'' +
+            ", bookTitle='" + bookTitleProperty.get() + '\'' +
+            '}';
     }
 
     public long getId()
     {
         return id;
     }
-    
+
     public long getStudentId()
     {
         return studentId;
@@ -54,29 +88,24 @@ public class BorrowedBook
         return bookId;
     }
 
-    public String getBorrowDate()
+    public String getBookTitle()
     {
-        return borrowDate;
-    }
-
-    public String getReturnDate()
-    {
-        return returnDate;
+        return bookTitleProperty.get();
     }
 
     public String getStudentName()
     {
-        return studentName;
+        return studentNameProperty.get();
     }
 
-    public String getBookTitle()
+    public String getBorrowDate()
     {
-        return bookTitle;
+        return borrowDateProperty.get();
     }
-    
-    public boolean isExceeded()
+
+    public String getReturnDate()
     {
-        return LocalDate.now().isAfter(LocalDate.parse(returnDate, Consts.Misc.DATE_FORMATTER));
+        return returnDateProperty.get();
     }
 
     public void setId(long id)
@@ -94,23 +123,48 @@ public class BorrowedBook
         this.bookId = bookId;
     }
 
-    public void setBorrowDate(String borrowDate)
+    public void setBookTitle(String bookTitle)
     {
-        this.borrowDate = borrowDate;
-    }
-
-    public void setReturnDate(String returnDate)
-    {
-        this.returnDate = returnDate;
+        bookTitleProperty.set(bookTitle);
     }
 
     public void setStudentName(String studentName)
     {
-        this.studentName = studentName;
+        studentNameProperty.set(studentName);
     }
 
-    public void setBookTitle(String bookTitle)
+    public void setBorrowDate(String borrowDate)
     {
-        this.bookTitle = bookTitle;
+        borrowDateProperty.set(borrowDate);
+    }
+
+    public void setReturnDate(String returnDate)
+    {
+        returnDateProperty.set(returnDate);
+    }
+
+    public StringProperty bookTitleProperty()
+    {
+        return bookTitleProperty;
+    }
+
+    public StringProperty studentNameProperty()
+    {
+        return studentNameProperty;
+    }
+
+    public StringProperty borrowDateProperty()
+    {
+        return borrowDateProperty;
+    }
+
+    public StringProperty returnDateProperty()
+    {
+        return returnDateProperty;
+    }
+
+    public BooleanProperty exceededProperty()
+    {
+        return exceededProperty;
     }
 }

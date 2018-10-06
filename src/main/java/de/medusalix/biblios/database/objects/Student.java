@@ -16,42 +16,49 @@
 
 package de.medusalix.biblios.database.objects;
 
-public class Student implements Searchable
+import de.medusalix.biblios.database.SearchHelper;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+public class Student implements SearchHelper.Searchable
 {
     private long id;
 
-    private String name, grade;
-    
-    private boolean hasBorrowedBooks;
+    private StringProperty nameProperty = new SimpleStringProperty();
+    private StringProperty gradeProperty = new SimpleStringProperty();
+
+    private BooleanProperty hasBorrowsProperty = new SimpleBooleanProperty();
 
     public Student() {}
 
     public Student(String name, String grade)
     {
-        this.name = name;
-        this.grade = grade;
+        nameProperty.set(name);
+        gradeProperty.set(grade);
     }
-    
+
     @Override
-    public boolean contains(String text)
+    public String[] getAttributes()
     {
-        boolean nameContains = getName().toLowerCase().contains(text);
-        boolean gradeContains = getGrade() != null && getGrade().toLowerCase().contains(text);
-        
-        return nameContains || gradeContains;
+        return new String[] {
+            nameProperty.get(),
+            gradeProperty.get()
+        };
     }
-    
+
     @Override
     public String toString()
     {
         return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", grade='" + grade + '\'' +
-                ", hasBorrowedBooks=" + hasBorrowedBooks +
-                '}';
+            "id=" + id +
+            ", name='" + nameProperty.get() + '\'' +
+            ", grade='" + gradeProperty.get() + '\'' +
+            ", hasBorrows=" + hasBorrowsProperty.get() +
+            '}';
     }
-    
+
     public long getId()
     {
         return id;
@@ -59,17 +66,17 @@ public class Student implements Searchable
 
     public String getName()
     {
-        return name;
+        return nameProperty.get();
     }
 
     public String getGrade()
     {
-        return grade;
+        return gradeProperty.get();
     }
-    
-    public boolean hasBorrowedBooks()
+
+    public boolean getHasBorrows()
     {
-        return hasBorrowedBooks;
+        return hasBorrowsProperty.get();
     }
     
     public void setId(long id)
@@ -79,16 +86,31 @@ public class Student implements Searchable
 
     public void setName(String name)
     {
-        this.name = name;
+        nameProperty.set(name);
     }
 
     public void setGrade(String grade)
     {
-        this.grade = grade;
+        gradeProperty.set(grade);
     }
-    
-    public void setHasBorrowedBooks(boolean hasBorrowedBooks)
+
+    public void setHasBorrows(boolean hasBorrows)
     {
-        this.hasBorrowedBooks = hasBorrowedBooks;
+        hasBorrowsProperty.set(hasBorrows);
+    }
+
+    public StringProperty nameProperty()
+    {
+        return nameProperty;
+    }
+
+    public StringProperty gradeProperty()
+    {
+        return gradeProperty;
+    }
+
+    public BooleanProperty hasBorrowsProperty()
+    {
+        return hasBorrowsProperty;
     }
 }
