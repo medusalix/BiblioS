@@ -16,8 +16,8 @@
 
 package de.medusalix.biblios.dialogs;
 
-import de.medusalix.biblios.controls.RestrictedTextField;
 import de.medusalix.biblios.Consts;
+import de.medusalix.biblios.controls.RestrictedTextField;
 import de.medusalix.biblios.database.objects.Student;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;

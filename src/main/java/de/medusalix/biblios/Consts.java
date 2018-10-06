@@ -124,7 +124,7 @@ public class Consts
         public static final String SHOW_HISTORY_MENU_ITEM_TEXT = "Verlauf öffnen";
         public static final String EXTEND_MENU_ITEM_TEXT = "Verlängern";
 
-        public static final String MAIN_WINDOW_TITLE = "BiblioS v1.2.1 ©Severin v. W.";
+        public static final String MAIN_WINDOW_TITLE = "BiblioS v1.2.2 ©Severin v. W.";
         public static final String HISTORY_WINDOW_TITLE = "Verlauf für '%s'";
 
         public static final String CHOOSE_BACKUP_TEXT = "Backup auswählen";

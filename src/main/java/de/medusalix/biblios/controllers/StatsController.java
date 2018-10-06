@@ -17,11 +17,11 @@
 package de.medusalix.biblios.controllers;
 
 import de.medusalix.biblios.Consts;
+import de.medusalix.biblios.database.Database;
 import de.medusalix.biblios.database.access.BookDatabase;
 import de.medusalix.biblios.database.access.BorrowedBookDatabase;
 import de.medusalix.biblios.database.access.StatDatabase;
 import de.medusalix.biblios.database.access.StudentDatabase;
-import de.medusalix.biblios.database.Database;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
