@@ -16,8 +16,8 @@
 
 package de.medusalix.biblios.dialogs;
 
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.controls.RestrictedTextField;
-import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.googlebooks.VolumeInfo;
 import javafx.scene.control.TextField;
@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 public class BookDialog extends FormDialog<Book>
 {
+    private Book book;
+
     private TextField titleField = (TextField)lookupNode(Consts.FxIds.TITLE_FIELD);
     private TextField authorField = (TextField)lookupNode(Consts.FxIds.AUTHOR_FIELD);
     private RestrictedTextField isbnField = (RestrictedTextField)lookupNode(Consts.FxIds.ISBN_FIELD);
@@ -41,13 +43,20 @@ public class BookDialog extends FormDialog<Book>
     private BookDialog(Image image, String text)
     {
         super(Consts.Paths.BOOK_DIALOG, image, text);
-    
+
         isbnField.setInputRestriction(isbn -> isbnMatcher.reset(isbn).matches());
         isbnField.setSubmitRestriction(isbn -> isbn.length() == 10 || isbn.length() == 13 || isbn.equals(Consts.Misc.ISBN_PLACEHOLDER));
         publishedDateField.setInputRestriction(publishedDate -> publishedDateMatcher.reset(publishedDate).matches());
         publishedDateField.setSubmitRestriction(publishedDate -> publishedDate.length() == 4);
         
-        addTextFields(new TextField[] { titleField, authorField, isbnField, publisherField, publishedDateField, additionalInfoField });
+        addTextFields(
+            titleField,
+            authorField,
+            isbnField,
+            publisherField,
+            publishedDateField,
+            additionalInfoField
+        );
     }
     
     public BookDialog()
@@ -58,7 +67,9 @@ public class BookDialog extends FormDialog<Book>
     public BookDialog(Book book)
     {
         this(Consts.Images.CHANGE_DIALOG_HEADER, Consts.Dialogs.CHANGE_BOOK_TEXT);
-    
+
+        this.book = book;
+
         titleField.setText(book.getTitle());
         authorField.setText(book.getAuthor());
         isbnField.setText(String.valueOf(book.getIsbn()));
@@ -87,22 +98,27 @@ public class BookDialog extends FormDialog<Book>
     protected boolean isFilled()
     {
         return !titleField.getText().trim().isEmpty()
-                && !authorField.getText().trim().isEmpty()
-                && isbnField.isSubmitRestrictionMet()
-                && !publisherField.getText().trim().isEmpty()
-                && publishedDateField.isSubmitRestrictionMet();
+            && !authorField.getText().trim().isEmpty()
+            && isbnField.isSubmitRestrictionMet()
+            && !publisherField.getText().trim().isEmpty()
+            && publishedDateField.isSubmitRestrictionMet();
     }
     
     @Override
     protected Book getFormResult()
     {
-        return new Book(
-                titleField.getText(),
-                authorField.getText(),
-                Long.parseLong(isbnField.getText()),
-                publisherField.getText(),
-                Short.parseShort(publishedDateField.getText()),
-                additionalInfoField.getText()
-        );
+        if (book == null)
+        {
+            book = new Book();
+        }
+
+        book.setTitle(titleField.getText());
+        book.setAuthor(authorField.getText());
+        book.setIsbn(Long.parseLong(isbnField.getText()));
+        book.setPublisher(publisherField.getText());
+        book.setPublishedDate(Short.parseShort(publishedDateField.getText()));
+        book.setAdditionalInfo(additionalInfoField.getText());
+
+        return book;
     }
 }

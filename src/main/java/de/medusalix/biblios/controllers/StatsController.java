@@ -16,12 +16,12 @@
 
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.database.access.BookDatabase;
 import de.medusalix.biblios.database.access.BorrowedBookDatabase;
 import de.medusalix.biblios.database.access.StatDatabase;
 import de.medusalix.biblios.database.access.StudentDatabase;
-import de.medusalix.biblios.database.DatabaseManager;
+import de.medusalix.biblios.database.Database;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -32,81 +32,77 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class StatsController
 {
     private static final Logger logger = LogManager.getLogger(StatsController.class);
 
-	@FXML
-	private TitledPane chartPane;
-	
+    @FXML
+    private TitledPane chartPane;
+
     @FXML
     private PieChart chart;
 
     @FXML
     private Label studentCountLabel, bookCountLabel, borrowedBookCountLabel, backupCountLabel;
 
-    private StudentDatabase studentDatabase = DatabaseManager.createDao(StudentDatabase.class);
-    private BookDatabase bookDatabase = DatabaseManager.createDao(BookDatabase.class);
-    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
-    private StatDatabase statDatabase = DatabaseManager.createDao(StatDatabase.class);
+    private StudentDatabase studentDatabase = Database.get(StudentDatabase.class);
+    private BookDatabase bookDatabase = Database.get(BookDatabase.class);
+    private BorrowedBookDatabase borrowedBookDatabase = Database.get(BorrowedBookDatabase.class);
+    private StatDatabase statDatabase = Database.get(StatDatabase.class);
 
     @FXML
     private void initialize()
     {
         Platform.runLater(() -> chartPane.setExpanded(true));
-    
+
         updateChart();
         updateStats();
     }
-	
-	private void updateChart()
+
+    private void updateChart()
     {
         chart.getData().clear();
-        
-        statDatabase
-                .findAllWithBookTitle()
-                .stream()
-                .map(stat -> new PieChart.Data(stat.getBookTitle(), stat.getNumberOfBorrows()))
-                .forEach(data -> chart.getData().add(data));
-        
-        chart
-                .getData()
-                .forEach(data ->
-                {
-                    // Add the number of borrows to the legend
-                    chart
-                            .lookupAll(".label.chart-legend-item")
-                            .stream()
-                            .map(node -> (Label)node)
-                            .filter(label -> label.getText().equals(data.getName()))
-                            .findFirst()
-                            .ifPresent(label -> label.setText((int)data.getPieValue() + "   " + label.getText()));
-    
-                    // Convert the number of borrows into percentage values
-                    data.setPieValue(data.getPieValue() / chart.getData().size() * 100);
-                });
-        
+
+        statDatabase.findAllWithBookTitle(Consts.Misc.MAX_STATS_TO_DISPLAY)
+            .stream()
+            .map(stat -> new PieChart.Data(stat.getBookTitle(), stat.getNumberOfBorrows()))
+            .forEach(data -> chart.getData().add(data));
+
+        chart.getData()
+            .forEach(data ->
+            {
+                // Add the number of borrows to the legend
+                chart.lookupAll(".label.chart-legend-item")
+                    .stream()
+                    .map(node -> (Label)node)
+                    .filter(label -> label.getText().equals(data.getName()))
+                    .findFirst()
+                    .ifPresent(label -> label.setText((int)data.getPieValue() + "   " + label.getText()));
+
+                // Convert the number of borrows into percentage values
+                data.setPieValue(data.getPieValue() / chart.getData().size() * 100);
+            });
+
         if (chart.getData().isEmpty())
         {
             chart.getData().add(new PieChart.Data(Consts.Strings.STAT_CHART_PLACEHOLDER, 100));
         }
-	}
-	
-	private void updateStats()
-	{
+    }
+
+    private void updateStats()
+    {
         try
         {
             studentCountLabel.setText(String.valueOf(studentDatabase.count()));
             bookCountLabel.setText(String.valueOf(bookDatabase.count()));
             borrowedBookCountLabel.setText(String.valueOf(borrowedBookDatabase.count()));
-            backupCountLabel.setText(String.valueOf(Files.list(Paths.get(Consts.Paths.BACKUP_FOLDER)).count()));
+            backupCountLabel.setText(String.valueOf(Files.list(Consts.Paths.BACKUP_FOLDER).count()));
         }
 
         catch (IOException e)
         {
             logger.error("", e);
         }
-	}
+    }
 }

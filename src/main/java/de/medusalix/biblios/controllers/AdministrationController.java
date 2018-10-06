@@ -16,28 +16,27 @@
 
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.controls.BackupCell;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.database.access.BorrowedBookDatabase;
 import de.medusalix.biblios.database.access.StatDatabase;
 import de.medusalix.biblios.database.access.StudentDatabase;
-import de.medusalix.biblios.database.DatabaseManager;
+import de.medusalix.biblios.database.Database;
 import de.medusalix.biblios.utils.AlertUtils;
 import de.medusalix.biblios.utils.BackupUtils;
-import de.medusalix.biblios.utils.FileUtils;
 import de.medusalix.biblios.utils.NodeUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Comparator;
 import java.util.List;
 
@@ -54,28 +53,24 @@ public class AdministrationController
     @FXML
     private TextField apiKeyField;
 
-    private StudentDatabase studentDatabase = DatabaseManager.createDao(StudentDatabase.class);
-    private BorrowedBookDatabase borrowedBookDatabase = DatabaseManager.createDao(BorrowedBookDatabase.class);
-    private StatDatabase statDatabase = DatabaseManager.createDao(StatDatabase.class);
+    private StudentDatabase studentDatabase = Database.get(StudentDatabase.class);
+    private BorrowedBookDatabase borrowedBookDatabase = Database.get(BorrowedBookDatabase.class);
+    private StatDatabase statDatabase = Database.get(StatDatabase.class);
 
     @FXML
     private void initialize()
     {
-        initBackupBox();
         initApiKeyField();
         updateBackups();
-    }
-    
-    private void initBackupBox()
-    {
-        backupBox.setCellFactory(param -> new BackupCell());
     }
     
     private void initApiKeyField()
     {
         try
         {
-            apiKeyField.setText(FileUtils.readLine(Consts.Paths.API_KEY));
+            List<String> lines = Files.readAllLines(Consts.Paths.API_KEY);
+
+            apiKeyField.setText(lines.get(0));
         }
         
         catch (IOException e)
@@ -85,24 +80,26 @@ public class AdministrationController
         
         apiKeyField.focusedProperty().addListener((observable, oldValue, focused) ->
         {
-            if (!focused)
+            if (focused)
             {
-                try
-                {
-                    FileUtils.writeLine(Consts.Paths.API_KEY, apiKeyField.getText());
-                }
-    
-                catch (IOException e)
-                {
-                    logger.error("", e);
-                }
+                return;
+            }
+
+            try
+            {
+                Files.write(Consts.Paths.API_KEY, apiKeyField.getText().getBytes());
+            }
+
+            catch (IOException e)
+            {
+                logger.error("", e);
             }
         });
     }
 
 	private void updateBackups()
 	{
-        List<BackupUtils.Backup> backups = null;
+        List<BackupUtils.Backup> backups;
         
         try
         {
@@ -111,11 +108,8 @@ public class AdministrationController
         
         catch (IOException e)
         {
-            e.printStackTrace();
-        }
-        
-        if (backups == null)
-        {
+            logger.error("", e);
+
             return;
         }
         
@@ -148,7 +142,9 @@ public class AdministrationController
         
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.error("", e);
+
+            NodeUtils.blinkRed(createBackupButton);
         }
 
         updateBackups();
@@ -158,31 +154,34 @@ public class AdministrationController
     private void onDeleteAllBackupsClick(ActionEvent event)
     {
         AlertUtils.showConfirmation(
-                Consts.Dialogs.DELETE_ALL_BACKUPS_TITLE,
-                Consts.Dialogs.DELETE_ALL_BACKUPS_MESSAGE,
-                () ->
+            Consts.Dialogs.DELETE_ALL_BACKUPS_TITLE,
+            Consts.Dialogs.DELETE_ALL_BACKUPS_MESSAGE,
+            () ->
+            {
+                try
                 {
-                    try
-                    {
-                        BackupUtils.deleteAllBackups();
-    
-                        NodeUtils.blinkGreen((Node)event.getSource());
-                    }
+                    BackupUtils.deleteAllBackups();
 
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-    
-                    updateBackups();
+                    NodeUtils.blinkGreen((Node)event.getSource());
                 }
+
+                catch (IOException e)
+                {
+                    logger.error("", e);
+
+                    NodeUtils.blinkRed((Node)event.getSource());
+                }
+
+                updateBackups();
+            }
         );
     }
 
     @FXML
     private void onLoadBackupClick()
     {
-        BackupUtils.Backup selectedBackup = backupBox.getSelectionModel().getSelectedItem();
+        BackupUtils.Backup selectedBackup = backupBox.getSelectionModel()
+            .getSelectedItem();
         
         if (selectedBackup == null)
         {
@@ -196,29 +195,36 @@ public class AdministrationController
             selectedBackup.restoreDatabase();
 
             NodeUtils.blinkGreen(loadBackupButton);
-
-            AlertUtils.showWarning(Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE);
         }
         
         catch (IOException e)
         {
             logger.error("", e);
+
+            NodeUtils.blinkRed(loadBackupButton);
         }
-    
-        updateBackups();
+
+        AlertUtils.showWarning(
+            Consts.Dialogs.RESTART_TITLE,
+            Consts.Dialogs.RESTART_MESSAGE
+        );
+
+        Platform.exit();
     }
 
     @FXML
-    private void onOpenDataFolderClick()
+    private void onOpenDataFolderClick(ActionEvent event)
     {
     	try
         {
-            Desktop.getDesktop().open(new File(Consts.Paths.DATA_FOLDER));
+            Desktop.getDesktop().open(Consts.Paths.DATA_FOLDER.toFile());
         }
 
         catch (IOException e)
         {
             logger.error("", e);
+
+            NodeUtils.blinkRed((Node)event.getSource());
         }
     }
 
@@ -226,15 +232,15 @@ public class AdministrationController
     private void onResetStatsClick(ActionEvent event)
     {
         AlertUtils.showConfirmation(
-                Consts.Dialogs.RESET_STATS_TITLE,
-                Consts.Dialogs.RESET_STATS_MESSAGE,
-                () ->
-                {
-                    statDatabase.deleteAll();
-                    statDatabase.createTable();
-    
-                    NodeUtils.blinkGreen((Node)event.getSource());
-                }
+            Consts.Dialogs.RESET_STATS_TITLE,
+            Consts.Dialogs.RESET_STATS_MESSAGE,
+            () ->
+            {
+                statDatabase.deleteAll();
+                statDatabase.createTable();
+
+                NodeUtils.blinkGreen((Node)event.getSource());
+            }
         );
     }
 
@@ -242,30 +248,37 @@ public class AdministrationController
     private void onStartOfSchoolClick(ActionEvent event)
 	{
         AlertUtils.showConfirmation(
-                Consts.Dialogs.START_OF_SCHOOL_TITLE,
-                Consts.Dialogs.START_OF_SCHOOL_MESSAGE,
-                () ->
+            Consts.Dialogs.START_OF_SCHOOL_TITLE,
+            Consts.Dialogs.START_OF_SCHOOL_MESSAGE,
+            () ->
+            {
+                try
                 {
-                    try
-                    {
-                        BackupUtils.createBackup(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
-    
-                        borrowedBookDatabase.deleteWhereStudentGrade12();
-    
-                        studentDatabase.deleteWhereGrade12();
-                        studentDatabase.updateIncrementGradeSimple();
-                        studentDatabase.updateIncrementGradeComplex();
-    
-                        NodeUtils.blinkGreen((Node)event.getSource());
-    
-                        AlertUtils.showWarning(Consts.Dialogs.RESTART_TITLE, Consts.Dialogs.RESTART_MESSAGE);
-                    }
-                    
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    BackupUtils.createBackup(Consts.Database.START_OF_SCHOOL_BACKUP_SUFFIX);
+
+                    borrowedBookDatabase.deleteGraduatedStudents();
+
+                    studentDatabase.deleteWhereGrade12();
+                    studentDatabase.updateIncrementGradeSimple();
+                    studentDatabase.updateIncrementGradeComplex();
+
+                    NodeUtils.blinkGreen((Node)event.getSource());
                 }
+
+                catch (IOException e)
+                {
+                    logger.error("", e);
+
+                    NodeUtils.blinkRed((Node)event.getSource());
+                }
+
+                AlertUtils.showWarning(
+                    Consts.Dialogs.RESTART_TITLE,
+                    Consts.Dialogs.RESTART_MESSAGE
+                );
+
+                Platform.exit();
+            }
         );
     }
 }

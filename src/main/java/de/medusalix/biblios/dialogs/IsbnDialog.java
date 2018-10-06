@@ -16,14 +16,13 @@
 
 package de.medusalix.biblios.dialogs;
 
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.controls.RestrictedTextField;
-import de.medusalix.biblios.core.Consts;
 import de.medusalix.biblios.googlebooks.GoogleBooks;
 import de.medusalix.biblios.googlebooks.VolumeInfo;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.scene.control.TextField;
 import javafx.util.Pair;
 
 import java.util.regex.Matcher;
@@ -37,13 +36,17 @@ public class IsbnDialog extends FormDialog<Pair<String, VolumeInfo>>
     
     public IsbnDialog()
     {
-        super(Consts.Paths.ISBN_DIALOG, Consts.Images.FETCH_DIALOG_HEADER, Consts.Dialogs.ADD_BOOK_TEXT);
+        super(
+            Consts.Paths.ISBN_DIALOG,
+            Consts.Images.FETCH_DIALOG_HEADER,
+            Consts.Dialogs.ADD_BOOK_TEXT
+        );
     
         isbnField.setInputRestriction(isbn -> isbnMatcher.reset(isbn).matches());
         isbnField.setSubmitRestriction(isbn -> isbn.length() == 10 || isbn.length() == 13);
         
         initButtonBehavior();
-        addTextFields(new TextField[] { isbnField });
+        addTextFields(isbnField);
     }
     
     private void initButtonBehavior()
@@ -55,22 +58,22 @@ public class IsbnDialog extends FormDialog<Pair<String, VolumeInfo>>
             getDialogPane().setDisable(true);
             getDialogPane().getScene().getWindow().setOnCloseRequest(Event::consume);
             
-            GoogleBooks.findVolumeInfoForIsbn(
-                    isbnField.getText(),
-                    volumeInfo -> Platform.runLater(() ->
+            GoogleBooks.query(
+                isbnField.getText(),
+                volumeInfo -> Platform.runLater(() ->
+                {
+                    if (volumeInfo != null)
                     {
-                        if (volumeInfo != null)
-                        {
-                            setResult(new Pair<>(isbnField.getText(), volumeInfo));
-                        }
-        
-                        else
-                        {
-                            setResult(new Pair<>(isbnField.getText(), null));
-                        }
-                        
-                        close();
-                    })
+                        setResult(new Pair<>(isbnField.getText(), volumeInfo));
+                    }
+
+                    else
+                    {
+                        setResult(new Pair<>(isbnField.getText(), null));
+                    }
+
+                    close();
+                })
             );
         });
     }

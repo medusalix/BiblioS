@@ -16,19 +16,22 @@
 
 package de.medusalix.biblios.dialogs;
 
-import de.medusalix.biblios.core.Consts;
-import javafx.scene.control.PasswordField;
+import de.medusalix.biblios.Consts;
 import javafx.scene.control.TextField;
 
 public class PasswordDialog extends FormDialog<String>
 {
-    private PasswordField passwordField = (PasswordField)lookupNode(Consts.FxIds.PASSWORD_FIELD);
+    private TextField passwordField = (TextField)lookupNode(Consts.FxIds.PASSWORD_FIELD);
     
     public PasswordDialog()
     {
-        super(Consts.Paths.PASSWORD_DIALOG, Consts.Images.PASSWORD_DIALOG_HEADER, Consts.Dialogs.PASSWORD_REQUIRED_TEXT);
+        super(
+            Consts.Paths.PASSWORD_DIALOG,
+            Consts.Images.PASSWORD_DIALOG_HEADER,
+            Consts.Dialogs.PASSWORD_REQUIRED_TEXT
+        );
         
-        addTextFields(new TextField[] { passwordField });
+        addTextFields(passwordField);
     }
     
     @Override

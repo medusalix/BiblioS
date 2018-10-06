@@ -17,7 +17,7 @@
 package de.medusalix.biblios.dialogs;
 
 import de.medusalix.biblios.controls.RestrictedTextField;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.database.objects.Student;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 
 public class StudentDialog extends FormDialog<Student>
 {
+    private Student student;
+
     private TextField nameField = (TextField)lookupNode(Consts.FxIds.NAME_FIELD);
     private RestrictedTextField gradeField = (RestrictedTextField)lookupNode(Consts.FxIds.GRADE_FIELD);
     
@@ -39,7 +41,7 @@ public class StudentDialog extends FormDialog<Student>
         gradeField.setInputRestriction(grade -> grade.length() <= 3);
         gradeField.setSubmitRestriction(grade -> gradeMatcher.reset(grade).matches());
         
-        addTextFields(new TextField[] { nameField, gradeField });
+        addTextFields(nameField, gradeField);
     }
     
     public StudentDialog()
@@ -50,7 +52,9 @@ public class StudentDialog extends FormDialog<Student>
     public StudentDialog(Student student)
     {
         this(Consts.Images.CHANGE_DIALOG_HEADER, Consts.Dialogs.CHANGE_STUDENT_TEXT);
-        
+
+        this.student = student;
+
         nameField.setText(student.getName());
         gradeField.setText(student.getGrade());
     }
@@ -64,6 +68,14 @@ public class StudentDialog extends FormDialog<Student>
     @Override
     protected Student getFormResult()
     {
-        return new Student(nameField.getText(), gradeField.getText());
+        if (student == null)
+        {
+            student = new Student();
+        }
+
+        student.setName(nameField.getText());
+        student.setGrade(gradeField.getText());
+
+        return student;
     }
 }

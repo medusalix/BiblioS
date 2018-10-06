@@ -16,9 +16,8 @@
 
 package de.medusalix.biblios.controls;
 
-import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.BorrowedBookDatabase;
+import de.medusalix.biblios.Consts;
+import de.medusalix.biblios.controllers.MainWindowController;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -27,44 +26,36 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.time.LocalDate;
 
 public class BorrowedBookRow extends TableRow<BorrowedBook>
 {
-    private static final Logger logger = LogManager.getLogger(BorrowedBookRow.class);
-
-    private MenuItem extendBookItem = new MenuItem(Consts.Strings.EXTEND_MENU_ITEM_TEXT, new ImageView(Consts.Images.EXTEND_MENU_ITEM));
+    private MenuItem extendBookItem = new MenuItem(
+        Consts.Strings.EXTEND_MENU_ITEM_TEXT,
+        new ImageView(Consts.Images.EXTEND_MENU_ITEM)
+    );
 
     private ContextMenu contextMenu = new ContextMenu(extendBookItem);
 
-    public BorrowedBookRow(UpdatableController controller, BorrowedBookDatabase borrowedBookDatabase)
+    public BorrowedBookRow(MainWindowController controller)
     {
         setOnDragDetected(event ->
         {
-            if (getItem() != null)
+            if (getItem() == null)
             {
-                Dragboard dragboard = startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-
-                content.putString(String.valueOf(getItem().getId()));
-
-                dragboard.setContent(content);
+                return;
             }
+
+            Dragboard dragboard = startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+
+            // Content is necessary for it to work
+            content.putString("");
+
+            dragboard.setContent(content);
+            dragboard.setDragView(Consts.Images.RETURN_BOOK);
         });
 
-        extendBookItem.setOnAction(event ->
-        {
-            String returnDate = LocalDate.parse(getItem().getReturnDate(), Consts.Misc.DATE_FORMATTER).plusDays(14).format(Consts.Misc.DATE_FORMATTER);
-            
-            borrowedBookDatabase.updateReturnDate(getItem().getId(), returnDate);
-
-            logger.info("Extended " + getItem());
-
-            controller.update();
-        });
+        extendBookItem.setOnAction(event -> controller.extendBorrowedBook(getItem()));
     }
 
     @Override
@@ -72,14 +63,13 @@ public class BorrowedBookRow extends TableRow<BorrowedBook>
     {
         super.updateItem(item, empty);
 
-        if (!empty)
-        {
-            setContextMenu(contextMenu);
-        }
-
-        else
+        if (empty)
         {
             setContextMenu(null);
+
+            return;
         }
+
+        setContextMenu(contextMenu);
     }
 }
