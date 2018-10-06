@@ -25,18 +25,18 @@ public class VolumeInfo
     private List<String> authors;
     
     private String publisher, publishedDate;
-    
+
     @Override
     public String toString()
     {
         return "VolumeInfo{" +
-                "title='" + title + '\'' +
-                ", authors=" + getAuthors() +
-                ", publisher='" + publisher + '\'' +
-                ", publishedDate='" + getPublishedDate() + '\'' +
-                '}';
+            "title='" + title + '\'' +
+            ", authors=" + authors +
+            ", publisher='" + publisher + '\'' +
+            ", publishedDate='" + publishedDate + '\'' +
+            '}';
     }
-    
+
     public String getTitle()
     {
         return title;
