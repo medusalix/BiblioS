@@ -1,15 +1,63 @@
-.list-cell
-{
-    -fx-font-size: 16px;
+.root {
+  -fx-font-family: Calibri;
+  -fx-font-size: 1.7em;
 }
 
-.table-view .table-column
-{
-	-fx-alignment: CENTER;
-    -fx-font-size: 16px;
+/* Main Window */
+.menu-bar {
+  -fx-font-size: 0.9em;
 }
 
-.chart-pie-label
-{
-	-fx-font-size: 20px;
+.table-view .column-header .label {
+  -fx-padding: 0.4em;
+}
+
+.book-not-borrowed {
+  -fx-background-color: #20BF6B;
+}
+
+.book-borrowed {
+  -fx-background-color: #E15554;
+}
+
+.list-view .list-cell:selected,
+.table-view .table-row-cell:selected {
+  -fx-background-color: #4B7BEC;
+}
+
+.list-view .list-cell,
+.table-view .table-column {
+  -fx-padding: 0.5em;
+}
+
+.table-view .table-column {
+  -fx-alignment: CENTER;
+}
+
+#studentLabel {
+  -fx-font-weight: bold;
+}
+
+#bookTableView .scroll-bar:horizontal .increment-arrow,
+#bookTableView .scroll-bar:horizontal .decrement-arrow,
+#bookTableView .scroll-bar:horizontal .increment-button,
+#bookTableView .scroll-bar:horizontal .decrement-button {
+  -fx-padding: 0;
+}
+
+/* About Window */
+#titleLabel {
+  -fx-font-family: Harrington;
+  -fx-font-size: 1.9em;
+}
+
+#attributionBox {
+  -fx-font-size: 1.1em;
+}
+
+#attributionBox .hyperlink {
+  -fx-padding: 0 0 0 0.15em;
+  -fx-border-width: 0;
+  -fx-text-fill: #0000EE;
+  -fx-underline: true;
 }

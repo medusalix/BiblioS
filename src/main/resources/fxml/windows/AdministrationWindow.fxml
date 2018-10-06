@@ -5,52 +5,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane prefHeight="400.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.AdministrationController">
+<GridPane prefHeight="400.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.AdministrationController">
    <columnConstraints>
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="300.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="300.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="300.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="300.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="246.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="246.0" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-       <Button fx:id="createBackupButton" mnemonicParsing="false" onAction="#onCreateBackupClick" text="Backup erstellen">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-       <Button fx:id="loadBackupButton" mnemonicParsing="false" onAction="#onLoadBackupClick" text="Backup laden" GridPane.columnIndex="2">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-       <Button mnemonicParsing="false" onAction="#onDeleteAllBackupsClick" text="Alle Backups LÖSCHEN" GridPane.columnIndex="1">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-       <ComboBox fx:id="backupBox" prefHeight="37.0" prefWidth="255.0" GridPane.columnIndex="3" />
-       <Button mnemonicParsing="false" onAction="#onOpenDataFolderClick" text="Datenordner öffnen" GridPane.rowIndex="1">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-       <Button mnemonicParsing="false" onAction="#onResetStatsClick" text="Statistik zurücksetzen" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-       <Button mnemonicParsing="false" onAction="#onStartOfSchoolClick" text="Schulbeginn (Alle Schüler eine Klasse nach oben)" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <TextField fx:id="apiKeyField" maxWidth="-Infinity" prefWidth="255.0" promptText="Google Books API-Key" GridPane.columnIndex="3" GridPane.rowIndex="1">
-         <font>
-            <Font size="16.0" />
-         </font></TextField>
+       <Button fx:id="createBackupButton" mnemonicParsing="false" onAction="#onCreateBackupClick" prefHeight="40.0" text="Backup erstellen" />
+       <Button fx:id="loadBackupButton" mnemonicParsing="false" onAction="#onLoadBackupClick" prefHeight="40.0" text="Backup laden" GridPane.columnIndex="2" />
+       <Button mnemonicParsing="false" onAction="#onDeleteAllBackupsClick" prefHeight="40.0" text="Alle Backups LÖSCHEN" GridPane.columnIndex="1" />
+       <ComboBox fx:id="backupBox" prefHeight="40.0" prefWidth="250.0" GridPane.columnIndex="3" />
+       <Button mnemonicParsing="false" onAction="#onOpenDataFolderClick" prefHeight="40.0" text="Datenordner öffnen" GridPane.rowIndex="1" />
+       <Button mnemonicParsing="false" onAction="#onResetStatsClick" prefHeight="40.0" text="Statistik zurücksetzen" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       <Button mnemonicParsing="false" onAction="#onStartOfSchoolClick" prefHeight="60.0" text="Schulbeginn (Alle Schüler eine Klasse nach oben)" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <TextField fx:id="apiKeyField" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Google Books API-Key" GridPane.columnIndex="3" GridPane.rowIndex="1" />
    </children>
 </GridPane>

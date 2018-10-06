@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.BorrowListController">
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.medusalix.biblios.controllers.BorrowListController">
    <children>
-      <TableView fx:id="borrowListTableView" prefHeight="408.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="borrowListTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn fx:id="bookColumn" prefWidth="75.0" text="Buch" />
-          <TableColumn fx:id="studentColumn" prefWidth="75.0" text="Schüler" />
-            <TableColumn fx:id="returnDateColumn" prefWidth="75.0" text="Rückgabedatum" />
-            <TableColumn fx:id="exceededColumn" prefWidth="75.0" />
+          <TableColumn fx:id="bookColumn" prefWidth="280.0" text="Buch" />
+          <TableColumn fx:id="studentColumn" prefWidth="280.0" text="Schüler" />
+            <TableColumn fx:id="returnDateColumn" prefWidth="160.0" text="Rückgabedatum" />
+            <TableColumn fx:id="exceededColumn" prefWidth="70.0" />
         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
       </TableView>
    </children>
 </AnchorPane>
