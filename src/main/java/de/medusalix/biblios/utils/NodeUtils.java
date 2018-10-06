@@ -25,25 +25,38 @@ import javafx.util.Duration;
 
 public class NodeUtils
 {
-    public static void blinkGreen(Node node, Node focusNode)
-    {
-        blink(node, "lime", focusNode);
-    }
-
     public static void blinkGreen(Node node)
     {
-        blinkGreen(node, null);
+        blink(node, "lime", null);
+    }
+
+    public static void blinkRed(Node node)
+    {
+        blink(node, "red", null);
     }
 
     public static void blinkRed(Node node, Node focusNode)
     {
         blink(node, "red", focusNode);
+    }
+
+    private static void blink(Node node, String color, Node focusNode)
+    {
+        node.setStyle(String.format("-fx-base: %s;", color));
+
+        Timeline timeline = new Timeline();
+
+        timeline.getKeyFrames().add(new KeyFrame(
+            Duration.seconds(0.5),
+            event -> node.setStyle(null))
+        );
+        timeline.play();
 
         if (focusNode == null)
         {
             return;
         }
-        
+
         if (focusNode instanceof TextField)
         {
             ((TextField)focusNode).selectAll();
@@ -53,18 +66,8 @@ public class NodeUtils
         {
             ((ComboBox<?>)focusNode).getEditor().selectAll();
         }
-    }
 
-    private static void blink(Node node, String color, Node focusNode)
-    {
-        node.setStyle(String.format("-fx-base: %s;", color));
-
-        Timeline timeline = new Timeline();
-
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.5), event -> node.setStyle(null)));
-        timeline.play();
-
-        if (focusNode != null)
+        else
         {
             focusNode.requestFocus();
         }
