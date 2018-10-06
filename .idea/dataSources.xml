@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="H2 - BiblioS" uuid="45a44527-b2e3-47b0-9fa6-e2b7b6fc4355">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:file:$PROJECT_DIR$/BiblioS/BiblioS;DATABASE_TO_UPPER=FALSE;TRACE_LEVEL_FILE=0</jdbc-url>
+    </data-source>
+  </component>
+</project>
