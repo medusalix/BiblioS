@@ -20,8 +20,10 @@ import de.medusalix.biblios.database.objects.Book;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import de.medusalix.biblios.database.objects.Stat;
 import de.medusalix.biblios.database.objects.Student;
-import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.exceptions.DBIException;
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.JdbiException;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -31,36 +33,44 @@ import java.util.List;
 
 public class DatabaseTests
 {
-    private DBI dbi;
+    private static final Student student = new Student("Max Mustermann", "7a");
+    private static final Book book = new Book(
+        "Java ist auch eine Insel",
+        "Christian Ullenboom",
+        3836228734L,
+        "Galileo Computing",
+        2014,
+        null
+    );
+    private static final BorrowedBook borrowedBook = new BorrowedBook(1, 1, "01.04.1985", "11.08.2016");
+    private static final Stat stat = new Stat(1, 7);
+
+    private Handle handle;
 
     private StudentDatabase studentDatabase;
     private BookDatabase bookDatabase;
     private BorrowedBookDatabase borrowedBookDatabase;
     private StatDatabase statDatabase;
-    
-    private Student testStudent = new Student("Max Mustermann", "7a");
-    private Book testBook = new Book("Java ist auch eine Insel", "Christian Ullenboom", 3836228734L, "Galileo Computing", (short)2014, null);
-    private BorrowedBook testBorrowedBook = new BorrowedBook(1, 1, "01.04.1985", "11.08.2016");
-    private Stat testStat = new Stat(1, 7);
 
     @BeforeClass
     private void beforeClass()
     {
-        dbi = new DBI("jdbc:h2:mem:temp;DATABASE_TO_UPPER=FALSE");
+        Jdbi jdbi = Jdbi.create("jdbc:h2:mem:temp;DATABASE_TO_UPPER=FALSE");
 
-        studentDatabase = dbi.open(StudentDatabase.class);
-        bookDatabase = dbi.open(BookDatabase.class);
-        borrowedBookDatabase = dbi.open(BorrowedBookDatabase.class);
-        statDatabase = dbi.open(StatDatabase.class);
+        jdbi.installPlugin(new SqlObjectPlugin());
+
+        handle = jdbi.open();
+
+        studentDatabase = handle.attach(StudentDatabase.class);
+        bookDatabase = handle.attach(BookDatabase.class);
+        borrowedBookDatabase = handle.attach(BorrowedBookDatabase.class);
+        statDatabase = handle.attach(StatDatabase.class);
     }
 
     @AfterClass
     private void afterClass()
     {
-        dbi.close(studentDatabase);
-        dbi.close(bookDatabase);
-        dbi.close(borrowedBookDatabase);
-        dbi.close(statDatabase);
+        handle.close();
     }
 
     @Test
@@ -75,9 +85,9 @@ public class DatabaseTests
     @Test(dependsOnMethods = "tablesShouldBeCreated")
     private void studentShouldBeSaved()
     {
-        studentDatabase.save(testStudent);
+        studentDatabase.save(student);
 
-        List<Student> studentResults = studentDatabase.findAllWithHasBorrowedBooks();
+        List<Student> studentResults = studentDatabase.findAllWithBorrows();
 
         Assert.assertNotNull(studentResults);
         Assert.assertEquals(studentResults.size(), 1);
@@ -85,14 +95,14 @@ public class DatabaseTests
         Student student = studentResults.get(0);
 
         Assert.assertEquals(student.getId(), 1);
-        Assert.assertEquals(student.getName(), testStudent.getName());
-        Assert.assertEquals(student.getGrade(), testStudent.getGrade());
+        Assert.assertEquals(student.getName(), DatabaseTests.student.getName());
+        Assert.assertEquals(student.getGrade(), DatabaseTests.student.getGrade());
     }
 
     @Test(dependsOnMethods = "tablesShouldBeCreated")
     private void bookShouldBeSaved()
     {
-        bookDatabase.save(testBook);
+        bookDatabase.save(book);
 
         List<Book> bookResults = bookDatabase.findAllWithBorrowedBy();
 
@@ -102,22 +112,22 @@ public class DatabaseTests
         Book book = bookResults.get(0);
 
         Assert.assertEquals(book.getId(), 1);
-        Assert.assertEquals(book.getTitle(), testBook.getTitle());
-        Assert.assertEquals(book.getAuthor(), testBook.getAuthor());
-        Assert.assertEquals(book.getIsbn(), testBook.getIsbn());
-        Assert.assertEquals(book.getPublisher(), testBook.getPublisher());
-        Assert.assertEquals(book.getPublishedDate(), testBook.getPublishedDate());
-        Assert.assertEquals(book.getAdditionalInfo(), testBook.getAdditionalInfo());
+        Assert.assertEquals(book.getTitle(), DatabaseTests.book.getTitle());
+        Assert.assertEquals(book.getAuthor(), DatabaseTests.book.getAuthor());
+        Assert.assertEquals(book.getIsbn(), DatabaseTests.book.getIsbn());
+        Assert.assertEquals(book.getPublisher(), DatabaseTests.book.getPublisher());
+        Assert.assertEquals(book.getPublishedDate(), DatabaseTests.book.getPublishedDate());
+        Assert.assertEquals(book.getAdditionalInfo(), DatabaseTests.book.getAdditionalInfo());
         
-        Assert.assertEquals(book.getBorrowedBy(), testStudent.getId());
+        Assert.assertEquals(book.getBorrowedBy(), student.getId());
     }
 
     @Test(dependsOnMethods = { "studentShouldBeSaved", "bookShouldBeSaved" })
     private void borrowedBookShouldBeSaved()
     {
-        borrowedBookDatabase.save(testBorrowedBook);
+        borrowedBookDatabase.save(borrowedBook);
         
-        List<BorrowedBook> borrowedBookResults = borrowedBookDatabase.findAllWithBookTitleFromStudentId(1);
+        List<BorrowedBook> borrowedBookResults = borrowedBookDatabase.findAllFromStudent(1);
 
         Assert.assertNotNull(borrowedBookResults);
         Assert.assertEquals(borrowedBookResults.size(), 1);
@@ -125,15 +135,15 @@ public class DatabaseTests
         BorrowedBook borrowedBook = borrowedBookResults.get(0);
 
         Assert.assertEquals(borrowedBook.getId(), 1);
-        Assert.assertEquals(borrowedBook.getBorrowDate(), testBorrowedBook.getBorrowDate());
-        Assert.assertEquals(borrowedBook.getReturnDate(), testBorrowedBook.getReturnDate());
-        Assert.assertEquals(borrowedBook.getBookTitle(), testBook.getTitle());
+        Assert.assertEquals(borrowedBook.getBorrowDate(), DatabaseTests.borrowedBook.getBorrowDate());
+        Assert.assertEquals(borrowedBook.getReturnDate(), DatabaseTests.borrowedBook.getReturnDate());
+        Assert.assertEquals(borrowedBook.getBookTitle(), book.getTitle());
     }
 
     @Test(dependsOnMethods = "bookShouldBeSaved")
     private void statShouldBeSaved()
     {
-        statDatabase.save(testStat);
+        statDatabase.save(stat);
 
         List<Stat> statResults = statDatabase.findAll();
 
@@ -142,17 +152,17 @@ public class DatabaseTests
 
         Stat stat = statResults.get(0);
 
-        Assert.assertEquals(stat.getBookId(), testStat.getBookId());
-        Assert.assertEquals(stat.getNumberOfBorrows(), testStat.getNumberOfBorrows());
+        Assert.assertEquals(stat.getBookId(), DatabaseTests.stat.getBookId());
+        Assert.assertEquals(stat.getNumberOfBorrows(), DatabaseTests.stat.getNumberOfBorrows());
     }
 
-    @Test(dependsOnMethods = "borrowedBookShouldBeSaved", expectedExceptions = DBIException.class)
+    @Test(dependsOnMethods = "borrowedBookShouldBeSaved", expectedExceptions = JdbiException.class)
     private void deletingStudentShouldThrowException()
     {
         studentDatabase.delete(1);
     }
     
-    @Test(dependsOnMethods = "borrowedBookShouldBeSaved", expectedExceptions = DBIException.class)
+    @Test(dependsOnMethods = "borrowedBookShouldBeSaved", expectedExceptions = JdbiException.class)
     private void deletingBookShouldThrowException()
     {
         bookDatabase.delete(1);
