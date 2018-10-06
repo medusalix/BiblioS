@@ -10,21 +10,23 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.logging.log4j:log4j-core:2.6.2'
-    compile 'org.apache.logging.log4j:log4j-api:2.6.2'
+    compile 'org.apache.logging.log4j:log4j-core:2.10.0'
+    compile 'org.apache.logging.log4j:log4j-api:2.10.0'
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.10.0'
 
-    compile 'com.h2database:h2:1.4.192'
-    compile 'org.jdbi:jdbi:2.73'
+    compile 'com.h2database:h2:1.4.196'
+    compile 'org.jdbi:jdbi3-core:3.1.0'
+    compile 'org.jdbi:jdbi3-sqlobject:3.1.0'
 
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.8.2'
 
-    testCompile 'org.testng:testng:6.9.10'
+    testCompile 'org.testng:testng:6.14.2'
 }
 
 jar {
     dependsOn check
 
-    manifest.attributes 'Main-Class': 'de.medusalix.biblios.core.BiblioS'
+    manifest.attributes 'Main-Class': 'de.medusalix.biblios.BiblioS'
 
     from {
         configurations.compile.collect {
