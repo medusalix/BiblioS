@@ -16,35 +16,43 @@
 
 package de.medusalix.biblios.utils;
 
-import de.medusalix.biblios.core.BiblioS;
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.BiblioS;
+import de.medusalix.biblios.Consts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class WindowUtils
 {
-    public static Stage openWindow(String title, String fxmlPath) throws IOException
+    public static void openWindow(String title, String fxmlPath) throws IOException
     {
-        Scene scene = new Scene(FXMLLoader.load(WindowUtils.class.getResource(fxmlPath)));
+        openWindow(title, fxmlPath, null);
+    }
 
-        scene.getStylesheets().add(BiblioS.class.getResource(Consts.Paths.STYLESHEET).toExternalForm());
+    public static <T> void openWindow(String title, String fxmlPath, T controller) throws IOException
+    {
+        FXMLLoader loader = new FXMLLoader(WindowUtils.class.getResource(fxmlPath));
+
+        if (controller != null)
+        {
+            loader.setController(controller);
+        }
+
+        Scene scene = new Scene(loader.load());
+
+        scene.getStylesheets()
+            .add(BiblioS.class.getResource(Consts.Paths.STYLESHEET).toExternalForm());
 
         Stage stage = new Stage();
         
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(title);
-        stage.getIcons().add(Consts.Images.FAVICON);
+        stage.getIcons().add(Consts.Images.ICON);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-
-        return stage;
     }
 }

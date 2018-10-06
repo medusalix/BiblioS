@@ -16,7 +16,8 @@
 
 package de.medusalix.biblios.utils;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.BiblioS;
+import de.medusalix.biblios.Consts;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
@@ -31,19 +32,26 @@ public class AlertUtils
     public static void showConfirmation(String title, String message, Runnable success)
     {
         createAlert(Alert.AlertType.CONFIRMATION, title, message, ButtonType.YES, ButtonType.NO)
-                .showAndWait()
-                .filter(buttonType -> buttonType == ButtonType.YES)
-                .ifPresent(buttonType -> success.run());
+            .showAndWait()
+            .filter(buttonType -> buttonType == ButtonType.YES)
+            .ifPresent(buttonType -> success.run());
     }
     
     private static Alert createAlert(Alert.AlertType type, String title, String message, ButtonType... buttons)
     {
         Alert alert = new Alert(type, message, buttons);
-        
+
+        alert.getDialogPane()
+            .getStylesheets()
+            .add(BiblioS.class.getResource(Consts.Paths.STYLESHEET).toExternalForm());
         alert.setTitle(title);
         alert.setHeaderText(title);
         
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(Consts.Images.FAVICON);
+        ((Stage)alert.getDialogPane()
+            .getScene()
+            .getWindow())
+            .getIcons()
+            .add(Consts.Images.ICON);
         
         return alert;
     }

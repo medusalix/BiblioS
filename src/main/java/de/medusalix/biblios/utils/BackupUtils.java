@@ -16,156 +16,165 @@
 
 package de.medusalix.biblios.utils;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BackupUtils
 {
     public static List<Backup> findBackups() throws IOException
     {
-        return Files
-                .list(Paths.get(Consts.Paths.BACKUP_FOLDER))
-                .filter(path -> path.getFileName().toString().endsWith(Consts.Database.EXTENSION))
-                .map(path ->
+        return Files.list(Consts.Paths.BACKUP_FOLDER)
+            .filter(path -> path.getFileName().toString().endsWith(Consts.Database.EXTENSION))
+            .map(path ->
+            {
+                String fileName = path.getFileName()
+                    .toString()
+                    .replace(Consts.Database.BACKUP_PREFIX, "")
+                    .replace(Consts.Database.EXTENSION, "");
+
+                int separatorCount = fileName.length() - fileName.replace("-", "").length();
+
+                // No suffix appended
+                if (separatorCount == 3)
                 {
-                    String fileName = path
-                            .getFileName()
-                            .toString()
-                            .replace(Consts.Database.BACKUP_PREFIX, "")
-                            .replace(Consts.Database.EXTENSION, "");
-                    
-                    int separatorCount = fileName.length() - fileName.replace("-", "").length();
-    
-                    // No suffix appended
-                    if (separatorCount == 3)
-                    {
-                        return new Backup(path, fileName, LocalDateTime.parse(fileName, Consts.Misc.DATE_TIME_FORMATTER));
-                    }
-    
-                    else
-                    {
-                        int separatorIndex = fileName.lastIndexOf('-');
-    
-                        LocalDateTime time = LocalDateTime.parse(fileName.substring(0, separatorIndex), Consts.Misc.DATE_TIME_FORMATTER);
-                        String suffix = fileName.substring(separatorIndex);
-                        
-                        return new Backup(path, fileName, time, suffix);
-                    }
-                })
-                .collect(Collectors.toList());
+                    return new Backup(
+                        path,
+                        fileName,
+                        LocalDateTime.parse(fileName, Consts.Misc.DATE_TIME_FORMATTER)
+                    );
+                }
+
+                else
+                {
+                    int separatorIndex = fileName.lastIndexOf('-');
+
+                    LocalDateTime time = LocalDateTime.parse(
+                        fileName.substring(0, separatorIndex),
+                        Consts.Misc.DATE_TIME_FORMATTER
+                    );
+                    String suffix = fileName.substring(separatorIndex);
+
+                    return new Backup(path, fileName, time, suffix);
+                }
+            })
+            .collect(Collectors.toList());
     }
-    
+
     public static void createBackup(String suffix) throws IOException
     {
-        Path backupPath = Paths.get(Consts.Paths.BACKUP_FOLDER
-                + File.separator
-                + Consts.Database.BACKUP_PREFIX
-                + LocalDateTime.now().format(Consts.Misc.DATE_TIME_FORMATTER)
-                + suffix
-                + Consts.Database.EXTENSION);
-        
+        String name = Consts.Database.BACKUP_PREFIX
+            + LocalDateTime.now().format(Consts.Misc.DATE_TIME_FORMATTER)
+            + suffix
+            + Consts.Database.EXTENSION;
+
+        Path backupPath = Consts.Paths.BACKUP_FOLDER.resolve(name);
+
         // If two backups are created in the same second, this can occur
         if (Files.exists(backupPath))
         {
             return;
         }
-        
-        Files.createDirectories(Paths.get(Consts.Paths.BACKUP_FOLDER));
-        Files.copy(Paths.get(Consts.Paths.DATABASE), backupPath);
+
+        Files.createDirectories(Consts.Paths.BACKUP_FOLDER);
+        Files.copy(Consts.Paths.DATABASE, backupPath);
     }
-    
+
     public static void createBackup() throws IOException
     {
         createBackup("");
     }
-    
+
     public static void deleteObsoleteBackups() throws IOException
     {
         // Sorted from oldest to newest
         Iterator<Backup> iterator = findBackups()
-                .stream()
-                .filter(backup -> backup.getSuffix() == null)
-                .sorted()
-                .skip(Consts.Database.BACKUP_LIMIT)
-                .iterator();
-        
+            .stream()
+            .filter(backup -> backup.getSuffix() == null)
+            .sorted()
+            .skip(Consts.Database.BACKUP_LIMIT)
+            .iterator();
+
         // We cannot use forEach, because of the exceptions
         while (iterator.hasNext())
         {
             iterator.next().delete();
         }
     }
-    
+
     public static void deleteAllBackups() throws IOException
     {
+        List<Backup> backups = findBackups();
+
         // We cannot use forEach, because of the exceptions
-        for (Backup backup : findBackups())
+        for (Backup backup : backups)
         {
             backup.delete();
         }
     }
-    
+
     public static class Backup implements Comparable<Backup>
     {
         private Path path;
         private String name;
-        
+
         private LocalDateTime time;
         private String suffix;
-        
+
         public Backup(Path path, String name, LocalDateTime time, String suffix)
         {
             this.path = path;
             this.name = name;
-            
+
             this.time = time;
             this.suffix = suffix;
         }
-        
+
         public Backup(Path path, String name, LocalDateTime time)
         {
             this(path, name, time, null);
         }
-    
+
+        @Override
+        public String toString()
+        {
+            return name;
+        }
+
         @Override
         public int compareTo(Backup o)
         {
             // From oldest to newest
             return o.getTime().compareTo(time);
         }
-        
+
         public String getName()
         {
             return name;
         }
-        
+
         public LocalDateTime getTime()
         {
             return time;
         }
-        
+
         public String getSuffix()
         {
             return suffix;
         }
-        
+
         public void restoreDatabase() throws IOException
         {
-            Files.move(path, Paths.get(Consts.Paths.DATABASE), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(path, Consts.Paths.DATABASE, StandardCopyOption.REPLACE_EXISTING);
         }
-        
+
         public void delete() throws IOException
         {
             Files.delete(path);
