@@ -16,12 +16,13 @@
 
 package de.medusalix.biblios.controllers;
 
-import de.medusalix.biblios.core.Consts;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
@@ -32,11 +33,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AboutController
 {
     private static final Logger logger = LogManager.getLogger(AboutController.class);
-    
+
+    private static final Map<String, String> attributions = new HashMap<>();
+
     @FXML
     private ImageView faviconView;
 
@@ -44,11 +49,18 @@ public class AboutController
     private Label titleLabel, mainLabel;
 
     @FXML
-    private TextFlow iconPackText;
+    private TextFlow attributionText;
 
     @FXML
     private void initialize()
     {
+        attributions.put("Log4j 2", "https://github.com/apache/logging-log4j2");
+        attributions.put("Jdbi", "https://github.com/jdbi/jdbi");
+        attributions.put("Gson", "https://github.com/google/gson");
+        attributions.put("TestNG", "https://github.com/cbeust/testng");
+        attributions.put("H2 Database", "https://github.com/h2database/h2database");
+        attributions.put("Paomedia", "https://github.com/paomedia/small-n-flat");
+
         FadeTransition faviconFadeTransition = new FadeTransition(Duration.seconds(1), faviconView);
         ScaleTransition faviconScaleTransition = new ScaleTransition(Duration.seconds(1), faviconView);
 
@@ -74,19 +86,22 @@ public class AboutController
         mainFadeTransition.setToValue(1);
         mainFadeTransition.play();
 
-        FadeTransition iconPackTransition = new FadeTransition(Duration.seconds(1), iconPackText);
+        FadeTransition attributionTransition = new FadeTransition(Duration.seconds(1), attributionText);
 
-        iconPackTransition.setFromValue(0);
-        iconPackTransition.setToValue(1);
-        iconPackTransition.play();
+        attributionTransition.setFromValue(0);
+        attributionTransition.setToValue(1);
+        attributionTransition.play();
     }
 
     @FXML
-    private void onIconPackClick()
+    private void onAttributionClick(ActionEvent event)
     {
+        String attribution = ((Labeled)event.getSource()).getText();
+        String url = attributions.get(attribution);
+
         try
         {
-            Desktop.getDesktop().browse(new URI(Consts.Paths.ICON_PACKAGE_URL));
+            Desktop.getDesktop().browse(new URI(url));
         }
 
         catch (URISyntaxException | IOException e)

@@ -16,7 +16,7 @@
 
 package de.medusalix.biblios.controls;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 import de.medusalix.biblios.database.objects.BorrowedBook;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.ImageView;
@@ -30,16 +30,15 @@ public class BorrowedBookExceededCell extends TableCell<BorrowedBook, Boolean>
     {
         super.updateItem(item, empty);
 
-        if (!empty)
-        {
-            setGraphic(imageView);
-
-            imageView.setImage(item ? Consts.Images.EXCEEDED : Consts.Images.NOT_EXCEEDED);
-        }
-
-        else
+        if (empty)
         {
             setGraphic(null);
+
+            return;
         }
+
+        setGraphic(imageView);
+
+        imageView.setImage(item ? Consts.Images.EXCEEDED : Consts.Images.NOT_EXCEEDED);
     }
 }

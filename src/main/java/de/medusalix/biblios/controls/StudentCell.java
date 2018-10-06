@@ -16,66 +16,34 @@
 
 package de.medusalix.biblios.controls;
 
-import de.medusalix.biblios.controllers.UpdatableController;
-import de.medusalix.biblios.core.Consts;
-import de.medusalix.biblios.database.access.StudentDatabase;
+import de.medusalix.biblios.Consts;
+import de.medusalix.biblios.controllers.MainWindowController;
 import de.medusalix.biblios.database.objects.Student;
-import de.medusalix.biblios.dialogs.StudentDialog;
-import de.medusalix.biblios.utils.AlertUtils;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class StudentCell extends ListCell<Student>
 {
-    private static final Logger logger = LogManager.getLogger(StudentCell.class);
+    private MenuItem changeStudentItem = new MenuItem(
+        Consts.Strings.CHANGE_MENU_ITEM_TEXT,
+        new ImageView(Consts.Images.CHANGE_MENU_ITEM)
+    );
+    private MenuItem deleteStudentItem = new MenuItem(
+        Consts.Strings.DELETE_MENU_ITEM_TEXT,
+        new ImageView(Consts.Images.DELETE_MENU_ITEM)
+    );
 
-    private UpdatableController controller;
-    private StudentDatabase studentDatabase;
-    
-    private MenuItem changeStudentItem = new MenuItem(Consts.Strings.CHANGE_MENU_ITEM_TEXT, new ImageView(Consts.Images.CHANGE_MENU_ITEM));
-    private MenuItem deleteStudentItem = new MenuItem(Consts.Strings.DELETE_MENU_ITEM_TEXT, new ImageView(Consts.Images.DELETE_MENU_ITEM));
+    private ContextMenu contextMenu = new ContextMenu(
+        changeStudentItem,
+        deleteStudentItem
+    );
 
-    private ContextMenu contextMenu = new ContextMenu(changeStudentItem, deleteStudentItem);
-
-    public StudentCell(UpdatableController controller, StudentDatabase studentDatabase)
+    public StudentCell(MainWindowController controller)
     {
-        this.controller = controller;
-        this.studentDatabase = studentDatabase;
-        
-        changeStudentItem.setOnAction(event -> change());
-        deleteStudentItem.setOnAction(event -> delete());
-    }
-    
-    private void change()
-    {
-        new StudentDialog(getItem()).showAndWait().ifPresent(student ->
-        {
-            studentDatabase.update(getItem().getId(), student);
-            
-            logger.info("Changed " + getItem());
-            
-            controller.update();
-        });
-    }
-    
-    private void delete()
-    {
-        AlertUtils.showConfirmation(
-                Consts.Dialogs.DELETE_STUDENT_TITLE,
-                Consts.Dialogs.DELETE_STUDENT_MESSAGE,
-                () ->
-                {
-                    studentDatabase.delete(getItem().getId());
-            
-                    logger.info("Deleted " + getItem());
-            
-                    controller.update();
-                }
-        );
+        changeStudentItem.setOnAction(event -> controller.changeStudent(getItem()));
+        deleteStudentItem.setOnAction(event -> controller.deleteStudent(getItem()));
     }
     
     @Override
@@ -83,19 +51,18 @@ public class StudentCell extends ListCell<Student>
     {
         super.updateItem(item, empty);
 
-        if (!empty)
-        {
-            setText(item.getName());
-
-            deleteStudentItem.setDisable(item.hasBorrowedBooks());
-
-            setContextMenu(contextMenu);
-        }
-
-        else
+        if (empty)
         {
             setText(null);
             setContextMenu(null);
+
+            return;
         }
+
+        setText(item.getName());
+
+        deleteStudentItem.setDisable(item.getHasBorrows());
+
+        setContextMenu(contextMenu);
     }
 }

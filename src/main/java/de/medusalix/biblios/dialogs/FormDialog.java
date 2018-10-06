@@ -16,13 +16,10 @@
 
 package de.medusalix.biblios.dialogs;
 
-import de.medusalix.biblios.core.Consts;
+import de.medusalix.biblios.Consts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -47,11 +44,18 @@ public abstract class FormDialog<R> extends Dialog<R>
         initResultConverter();
     }
     
+    protected abstract boolean isFilled();
+    protected abstract R getFormResult();
+    
     private void initLayout(String fxmlFileName)
     {
         try
         {
-            getDialogPane().setContent(FXMLLoader.load(getClass().getResource(fxmlFileName)));
+            DialogPane pane = getDialogPane();
+
+            pane.setContent(FXMLLoader.load(getClass().getResource(fxmlFileName)));
+            pane.getStylesheets()
+                .add(getClass().getResource(Consts.Paths.STYLESHEET).toExternalForm());
         }
     
         catch (IOException e)
@@ -62,8 +66,10 @@ public abstract class FormDialog<R> extends Dialog<R>
     
     private void initContent(Image image, String text)
     {
+        Stage stage = (Stage)getDialogPane().getScene().getWindow();
+
         // Set the favicon
-        ((Stage)getDialogPane().getScene().getWindow()).getIcons().add(Consts.Images.FAVICON);
+        stage.getIcons().add(Consts.Images.ICON);
     
         setGraphic(new ImageView(image));
         setTitle(text);
@@ -94,17 +100,15 @@ public abstract class FormDialog<R> extends Dialog<R>
         return okButton;
     }
     
-    protected abstract boolean isFilled();
-    
-    protected void addTextFields(TextField[] textFields)
+    protected void addTextFields(TextField... textFields)
     {
         for (TextField textField : textFields)
         {
-            textField.textProperty().addListener((observable, oldValue, newValue) -> okButton.setDisable(!isFilled()));
+            textField.textProperty().addListener((observable, oldValue, newValue) ->
+                okButton.setDisable(!isFilled())
+            );
         }
     
         textFields[0].requestFocus();
     }
-    
-    protected abstract R getFormResult();
 }
