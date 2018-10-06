@@ -1,7 +1,7 @@
-Apache Log4j 2 (http://logging.apache.org/log4j/2.x/)
-jDBI (http://jdbi.org/)
+Log4j 2 (https://github.com/apache/logging-log4j2)
+Jdbi (https://github.com/jdbi/jdbi)
 Gson (https://github.com/google/gson)
-TestNG (http://testng.org/)
+TestNG (https://github.com/cbeust/testng)
 
 ===========================================================================
 
@@ -209,7 +209,7 @@ TestNG (http://testng.org/)
 
 
 
-H2 Database (http://www.h2database.com/)
+H2 Database (https://github.com/h2database/h2database)
 
 ===========================================================================
 
