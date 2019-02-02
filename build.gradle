@@ -23,7 +23,7 @@ dependencies {
     compile 'org.jdbi:jdbi3-core:3.6.0'
     compile 'org.jdbi:jdbi3-sqlobject:3.6.0'
 
-    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.google.code.gson:gson:2.8.5'
 
     testCompile 'org.testng:testng:6.14.3'
 }
