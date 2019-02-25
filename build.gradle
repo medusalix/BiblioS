@@ -19,7 +19,7 @@ dependencies {
     compile 'org.openjfx:javafx-controls:11:win'
     compile 'org.openjfx:javafx-fxml:11:win'
 
-    compile 'com.h2database:h2:1.4.197'
+    compile 'com.h2database:h2:1.4.198'
     compile 'org.jdbi:jdbi3-core:3.6.0'
     compile 'org.jdbi:jdbi3-sqlobject:3.6.0'
 
